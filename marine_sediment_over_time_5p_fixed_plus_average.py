@@ -26,15 +26,15 @@ base = r"/Users/acglerum/Documents/Postdoc/SB_CRYSTALS/HLRN/HLRN/FastScapeASPECT
 
 # Model names
 models = [
-'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_craton450km_notopopert_RBIPS5kmnosubres_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_craton450km_notopopert_RBIPS5kmnosubres_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_craton450km_notopopert_RBIPS5kmnosubres_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
@@ -53,9 +53,18 @@ models = [
 #'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton425000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton425000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton425000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton425000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel5_tmax25000000.0',
+'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton425000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton425000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton425000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton425000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton425000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
          ]
 
-output_name = '5p_fixed_craton400km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
+output_name = '5p_fixed_craton425km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 
 n_models = len(models)
 print ("Plotting " + str(n_models) + " models plus their average")
@@ -64,7 +73,7 @@ labels = [
           'NA-1',
           'NA-2',
           'NA-3',
-          'NA-4',
+#          'NA-4',
           'NA-5',
           'NA-6',
           'NA-7',
@@ -88,7 +97,7 @@ colors = [
           color1, 
           color2, 
           color3, 
-          color4, 
+#          color4, 
           color5, 
           color6, 
           color7, 
@@ -154,12 +163,14 @@ for p in paths:
     # statistics file. 
     with open(p) as f:
         clean_lines = (re.sub('\s+',' ',line) for line in f)
-        t,sediment_area,marine_area = np.genfromtxt(clean_lines, comments='#', usecols=(1,43,55), delimiter=' ', unpack=True)
+        t,sediment_area,marine_sediment_area = np.genfromtxt(clean_lines, comments='#', usecols=(1,43,55), delimiter=' ', unpack=True)
+        # For runs >=425km timewise
+        #t,sediment_area,marine_sediment_area = np.genfromtxt(clean_lines, comments='#', usecols=(1,43,66), delimiter=' ', unpack=True)
 
     # Interpolate to a predefined set of timesteps, as not all runs have the same number
     # of timesteps.
     interpolated_sediment_area = np.interp(mean_t, t, sediment_area)
-    interpolated_marine_sediment_area = np.interp(mean_t, t, marine_area)
+    interpolated_marine_sediment_area = np.interp(mean_t, t, marine_sediment_area)
 
     average_sediment_area += interpolated_sediment_area
     average_marine_sediment_area += interpolated_marine_sediment_area
@@ -170,8 +181,8 @@ for p in paths:
 
     max_sediment = max(sediment_area.max(),max_sediment)
     average_max_sediment += sediment_area.max()
-    max_marine_sediment = max(marine_area.max(),max_marine_sediment)
-    average_max_marine_sediment += marine_area.max()
+    max_marine_sediment = max(marine_sediment_area.max(),max_marine_sediment)
+    average_max_marine_sediment += marine_sediment_area.max()
 
     counter += 1
 
@@ -181,7 +192,10 @@ print ("Max marine_sediment area:", max_marine_sediment/1e6, "km2")
 print ("Average max marine_sediment area:", average_max_marine_sediment/n_models/1e6, "km2")
 
 # Plot the average sediment area over time (divide by nine to get the average)
-plt.plot(mean_t/1e6,average_marine_sediment_area/n_models/1e6,color=colors[counter],linestyle='solid',label=labels[counter],marker=markers[counter],markevery=dmark,fillstyle='none',linewidth=3)
+##plt.plot(mean_t/1e6,average_marine_sediment_area/n_models/1e6,color=colors[counter],linestyle='solid',label=labels[counter],marker=markers[counter],markevery=dmark,fillstyle='none',linewidth=3)
+
+# Plot the prescribed max sediment area over time 
+plt.plot(mean_t/1e6,0.0001*mean_t*700000/1e6,color='black',linestyle='dashed',label='Max prescribed',marker=markers[counter],markevery=dmark,fillstyle='none',linewidth=1)
 
 # add in time range onset of stable spreading
 #plt.axvspan(17.5, 25.25, color='lightgrey', alpha=0.5, lw=0)
@@ -212,6 +226,6 @@ fig.tight_layout()
 
 # Name the png according to the plotted field
 # Change as needed
-field='average_marine_sediment_area_'
+field='average_marine_sediment_area_old_'
 plt.savefig(output_name + '_CERI_' + str(field) + '.png',dpi=300,bbox_inches='tight')    
 print ("Output in: ", output_name + '_CERI_' + str(field) + '.png')
