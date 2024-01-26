@@ -16,8 +16,16 @@ from os.path import exists
 from os import mkdir
 
 # Path to models
-base = r"/Users/acglerum/Documents/Postdoc/SB_CRYSTALS/HLRN/HLRN/FastScapeASPECT_cratons/"
+#base = r"/Users/acglerum/Documents/Postdoc/SB_CRYSTALS/HLRN/HLRN/FastScapeASPECT_cratons/"
+#base = r"/Users/acglerum/Documents/Postdoc/SB_CRYSTALS/HLRN/HLRN/FastScapeASPECT/"
+base = r"./"
 model = "5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
+#model = "5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
+#model = "5p_fixed_CERI_craton450km_notopopert_RBIPS5kmnosubres_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
+#model = "5p_fixed_CERI_craton450km_notopopert_RBIPS5kmnosubres_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
+#model = "5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel5_tmax25000000.0"
+#model = "5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel5_tmax25000000.0"
+
 path = base + model
 if not exists(model):
    print ("Creating new model dir")
@@ -32,18 +40,32 @@ searange = np.linspace(topo_min,topo_SL,128, endpoint=True)
 landrange = np.linspace(topo_SL,topo_max,128, endpoint=True)
 fullrange = np.append(searange,landrange)
 print ("Size fullrange", np.size(fullrange))
-print ("fullrange", fullrange)
+#print ("fullrange", fullrange)
 
 # the topography exaggeration
 topo_exag = 5
 
-plot_topo = True
+plot_topo = False
 plot_catchment = False
-plot_erosionrate = True
+plot_erosionrate = False
 plot_drainage = False
 plot_erosion = True
-plot_labels = False
-plot_every = 5
+plot_labels = True
+plot_every = 1
+
+# catchment range color bar
+catchment_min = 400000
+catchment_max = 40000000000
+# erosion rate range color bar
+erosion_rate_min = 0
+erosion_rate_max = 0.0015
+# drainage range color bar
+drainage_min = 400000
+drainage_max = 40000000000
+# erosion range color bar
+erosion_min = 0
+erosion_max = 3000
+
 
 cm_data = [[0.10105, 0.15003, 0.35027],      
            [0.10721, 0.15579, 0.35609],      
@@ -327,10 +349,10 @@ materialLibrary1 = GetMaterialLibrary()
 #   print(f.name)
 #   filename = path + "/" + f.name
 filenames = sorted(glob.glob(path+"/VTK/Topography*"))
-filenames = filenames[plot_every - 1::plot_every]
 print (len(filenames), " files available.")
 filenames = filenames[plot_every - 1::plot_every]
 print ("Creating ", len(filenames), " pngs.")
+print ("First file ", filenames[0])
 
 # create a new 'Legacy VTK Reader'
 topography000 = LegacyVTKReader(FileNames=filenames)
@@ -492,10 +514,10 @@ drainage_areaLUTColorBar.WindowLocation = 'UpperCenter'
 drainage_areaLUTColorBar.Title = 'Drainage area [m2]'
 
 # Rescale transfer function
-drainage_areaLUT.RescaleTransferFunction(400000.0, 40000000000.0)
+drainage_areaLUT.RescaleTransferFunction(drainage_min,drainage_max)
 
 # Rescale transfer function
-drainage_areaPWF.RescaleTransferFunction(400000.0, 40000000000.0)
+drainage_areaPWF.RescaleTransferFunction(drainage_min,drainage_max)
 
 # Properties modified on drainage_areaLUTColorBar
 drainage_areaLUTColorBar.UseCustomLabels = 1
@@ -533,131 +555,113 @@ if plot_drainage:
   SaveAnimation(model + '/FastScape_drainagearea_' + str(topo_exag) + '_nolabels_.png', renderView1, ImageResolution=[1551, 810],
       FrameWindow=[0, 51])
 
-# set scalar coloring
-ColorBy(topography000Display, ('POINTS', 'erosion_rate'))
-
-# Hide the scalar bar for this color map if no visible data is colored by it.
-HideScalarBarIfNotNeeded(drainage_areaLUT, renderView1)
-
-# rescale color and/or opacity maps used to include current data range
-topography000Display.RescaleTransferFunctionToDataRange(True, False)
-
-# show color bar/color legend
-topography000Display.SetScalarBarVisibility(renderView1, True)
-
-# get color transfer function/color map for 'erosion_rate'
-erosion_rateLUT = GetColorTransferFunction('erosion_rate')
-
-# get opacity transfer function/opacity map for 'erosion_rate'
-erosion_ratePWF = GetOpacityTransferFunction('erosion_rate')
-
-# rescale color and/or opacity maps used to exactly fit the current data range
-topography000Display.RescaleTransferFunctionToDataRange(False, True)
-
-# set scalar coloring using an separate color/opacity maps
-ColorBy(topography000Display, ('POINTS', 'erosion_rate'), True)
-
-# Hide the scalar bar for this color map if no visible data is colored by it.
-HideScalarBarIfNotNeeded(erosion_rateLUT, renderView1)
-
-# rescale color and/or opacity maps used to include current data range
-topography000Display.RescaleTransferFunctionToDataRange(True, False)
-
-# show color bar/color legend
-topography000Display.SetScalarBarVisibility(renderView1, True)
-
-# get separate color transfer function/color map for 'erosion_rate'
-separate_topography000Display_erosion_rateLUT = GetColorTransferFunction('erosion_rate', topography000Display, separate=True)
-
-# get separate opacity transfer function/opacity map for 'erosion_rate'
-separate_topography000Display_erosion_ratePWF = GetOpacityTransferFunction('erosion_rate', topography000Display, separate=True)
-
-# set scalar coloring
-ColorBy(topography000Display, ('POINTS', 'erosion_rate'))
-
-# Hide the scalar bar for this color map if no visible data is colored by it.
-HideScalarBarIfNotNeeded(separate_topography000Display_erosion_rateLUT, renderView1)
-
-# rescale color and/or opacity maps used to include current data range
-topography000Display.RescaleTransferFunctionToDataRange(True, False)
-
-# show color bar/color legend
-topography000Display.SetScalarBarVisibility(renderView1, True)
-
-animationScene1.GoToLast()
-
-# rescale color and/or opacity maps used to exactly fit the current data range
-topography000Display.RescaleTransferFunctionToDataRange(False, True)
-
-# Properties modified on animationScene1
-animationScene1.AnimationTime = 20.0
-
-# Properties modified on timeKeeper1
-timeKeeper1.Time = 20.0
-
-# Rescale transfer function
-erosion_rateLUT.RescaleTransferFunction(0.0, 0.000487613055157)
-
-# Rescale transfer function
-erosion_ratePWF.RescaleTransferFunction(0.0, 0.000487613055157)
-
-# Rescale transfer function
-erosion_rateLUT.RescaleTransferFunction(0.0, 0.0005)
-
-# Rescale transfer function
-erosion_ratePWF.RescaleTransferFunction(0.0, 0.0005)
-
-# Apply a preset using its name. Note this may not work as expected when presets have duplicate names.
-erosion_rateLUT.ApplyPreset('lajolla', True)
-
-# get color legend/bar for erosion_rateLUT in view renderView1
-erosion_rateLUTColorBar = GetScalarBar(erosion_rateLUT, renderView1)
-
-# Properties modified on erosion_rateLUTColorBar
-erosion_rateLUTColorBar.Title = 'Erosion rate [m/yr]'
-
-# Properties modified on erosion_rateLUTColorBar
-erosion_rateLUTColorBar.AutoOrient = 0
-erosion_rateLUTColorBar.Orientation = 'Horizontal'
-erosion_rateLUTColorBar.WindowLocation = 'UpperCenter'
-
-# Properties modified on erosion_rateLUTColorBar
-erosion_rateLUTColorBar.AutomaticLabelFormat = 0
-erosion_rateLUTColorBar.LabelFormat = '%-#6.e'
-
-# Properties modified on erosion_rateLUTColorBar
-erosion_rateLUTColorBar.LabelFormat = '%-#6.1e'
-
-# current camera placement for renderView1
-renderView1.CameraPosition = [384380.5030903542, -526868.7089745248, 530565.0653625994]
-renderView1.CameraFocalPoint = [350625.0, 25625.0, 0.04999995231662449]
-renderView1.CameraViewUp = [0.0, 0.6929298137240902, 0.7210050438466415]
-renderView1.CameraParallelScale = 351560.1389158084
-
-# save animation
-if plot_erosionrate and plot_labels: 
-  SaveAnimation(model + '/FastScape_erosionrate_' + str(topo_exag) + '.png', renderView1, ImageResolution=[1551, 810],
-      FrameWindow=[0, 51])
-
-# hide color bar/color legend
-topography000Display.SetScalarBarVisibility(renderView1, False)
-
-# current camera placement for renderView1
-renderView1.CameraPosition = [384380.5030903542, -526868.7089745248, 530565.0653625994]
-renderView1.CameraFocalPoint = [350625.0, 25625.0, 0.04999995231662449]
-renderView1.CameraViewUp = [0.0, 0.6929298137240902, 0.7210050438466415]
-renderView1.CameraParallelScale = 351560.1389158084
-
-# save animation
-if plot_erosionrate: 
-  SaveAnimation(model + '/FastScape_erosionrate_' + str(topo_exag) + '_nolabels_.png', renderView1, ImageResolution=[1551, 810],
-      FrameWindow=[0, 51])
+## set scalar coloring
+#ColorBy(topography000Display, ('POINTS', 'erosion_rate'))
+#
+## Hide the scalar bar for this color map if no visible data is colored by it.
+#HideScalarBarIfNotNeeded(drainage_areaLUT, renderView1)
+#
+## rescale color and/or opacity maps used to include current data range
+#topography000Display.RescaleTransferFunctionToDataRange(True, False)
+#
+## show color bar/color legend
+#topography000Display.SetScalarBarVisibility(renderView1, True)
+#
+## get color transfer function/color map for 'erosion_rate'
+#erosion_rateLUT = GetColorTransferFunction('erosion_rate')
+#
+## get opacity transfer function/opacity map for 'erosion_rate'
+#erosion_ratePWF = GetOpacityTransferFunction('erosion_rate')
+#
+## set scalar coloring using an separate color/opacity maps
+#ColorBy(topography000Display, ('POINTS', 'erosion_rate'), True)
+#
+## show color bar/color legend
+#topography000Display.SetScalarBarVisibility(renderView1, True)
+#
+## get separate color transfer function/color map for 'erosion_rate'
+#separate_topography000Display_erosion_rateLUT = GetColorTransferFunction('erosion_rate', topography000Display, separate=True)
+#
+## get separate opacity transfer function/opacity map for 'erosion_rate'
+#separate_topography000Display_erosion_ratePWF = GetOpacityTransferFunction('erosion_rate', topography000Display, separate=True)
+#
+## set scalar coloring
+#ColorBy(topography000Display, ('POINTS', 'erosion_rate'))
+#
+## Hide the scalar bar for this color map if no visible data is colored by it.
+#HideScalarBarIfNotNeeded(separate_topography000Display_erosion_rateLUT, renderView1)
+#
+## rescale color and/or opacity maps used to include current data range
+#topography000Display.RescaleTransferFunctionToDataRange(True, False)
+#
+## show color bar/color legend
+#topography000Display.SetScalarBarVisibility(renderView1, True)
+#
+#animationScene1.GoToLast()
+#
+## Properties modified on animationScene1
+#animationScene1.AnimationTime = 20.0
+#
+## Properties modified on timeKeeper1
+#timeKeeper1.Time = 20.0
+#
+## Rescale transfer function
+#erosion_rateLUT.RescaleTransferFunction(erosion_rate_min,erosion_rate_max)
+#
+## Rescale transfer function
+#erosion_ratePWF.RescaleTransferFunction(erosion_rate_min,erosion_rate_max)
+#
+## Apply a preset using its name. Note this may not work as expected when presets have duplicate names.
+#erosion_rateLUT.ApplyPreset('lajolla', True)
+#
+## get color legend/bar for erosion_rateLUT in view renderView1
+#erosion_rateLUTColorBar = GetScalarBar(erosion_rateLUT, renderView1)
+#
+## Properties modified on erosion_rateLUTColorBar
+#erosion_rateLUTColorBar.Title = 'Erosion rate [m/yr]'
+#
+## Properties modified on erosion_rateLUTColorBar
+#erosion_rateLUTColorBar.AutoOrient = 0
+#erosion_rateLUTColorBar.Orientation = 'Horizontal'
+#erosion_rateLUTColorBar.WindowLocation = 'UpperCenter'
+#
+## Properties modified on erosion_rateLUTColorBar
+#erosion_rateLUTColorBar.AutomaticLabelFormat = 0
+#erosion_rateLUTColorBar.LabelFormat = '%-#6.e'
+#
+## Properties modified on erosion_rateLUTColorBar
+#erosion_rateLUTColorBar.LabelFormat = '%-#6.1e'
+#
+## current camera placement for renderView1
+#renderView1.CameraPosition = [384380.5030903542, -526868.7089745248, 530565.0653625994]
+#renderView1.CameraFocalPoint = [350625.0, 25625.0, 0.04999995231662449]
+#renderView1.CameraViewUp = [0.0, 0.6929298137240902, 0.7210050438466415]
+#renderView1.CameraParallelScale = 351560.1389158084
+#
+## save animation
+#if plot_erosionrate and plot_labels: 
+#  SaveAnimation(model + '/FastScape_erosionrate_' + str(topo_exag) + '.png', renderView1, ImageResolution=[1551, 810],
+#      FrameWindow=[0, 51])
+#
+## hide color bar/color legend
+#topography000Display.SetScalarBarVisibility(renderView1, False)
+#
+## current camera placement for renderView1
+#renderView1.CameraPosition = [384380.5030903542, -526868.7089745248, 530565.0653625994]
+#renderView1.CameraFocalPoint = [350625.0, 25625.0, 0.04999995231662449]
+#renderView1.CameraViewUp = [0.0, 0.6929298137240902, 0.7210050438466415]
+#renderView1.CameraParallelScale = 351560.1389158084
+#
+## save animation
+#if plot_erosionrate: 
+#  SaveAnimation(model + '/FastScape_erosionrate_' + str(topo_exag) + '_nolabels_.png', renderView1, ImageResolution=[1551, 810],
+#      FrameWindow=[0, 51])
 
 # set scalar coloring
 ColorBy(topography000Display, ('POINTS', 'catchment'))
 
 # Hide the scalar bar for this color map if no visible data is colored by it.
-HideScalarBarIfNotNeeded(erosion_rateLUT, renderView1)
+HideScalarBarIfNotNeeded(drainage_areaLUT, renderView1)
 
 # rescale color and/or opacity maps used to include current data range
 topography000Display.RescaleTransferFunctionToDataRange(True, False)
@@ -684,10 +688,10 @@ catchmentLUTColorBar.WindowLocation = 'UpperCenter'
 catchmentLUTColorBar.Title = 'Catchment area [m2]'
 
 # Rescale transfer function
-catchmentLUT.RescaleTransferFunction(0.0, 1.0)
+catchmentLUT.RescaleTransferFunction(catchment_min, catchment_max)
 
 # Rescale transfer function
-catchmentPWF.RescaleTransferFunction(0.0, 1.0)
+catchmentPWF.RescaleTransferFunction(catchment_min, catchment_max)
 
 # Properties modified on catchmentLUTColorBar
 catchmentLUTColorBar.RangeLabelFormat = '%-#6.3g'
@@ -718,6 +722,143 @@ renderView1.CameraParallelScale = 351560.1389158084
 # save animation
 if plot_catchment: 
   SaveAnimation(model + '/FastScape_catchment_' + str(topo_exag) + '_nolabels_.png', renderView1, ImageResolution=[1512, 810],
+      FrameWindow=[0, 51])
+
+# set scalar coloring
+ColorBy(topography000Display, ('POINTS', 'erosion_rate'))
+
+# Hide the scalar bar for this color map if no visible data is colored by it.
+HideScalarBarIfNotNeeded(catchmentLUT, renderView1)
+
+# rescale color and/or opacity maps used to include current data range
+topography000Display.RescaleTransferFunctionToDataRange(True, False)
+
+# show color bar/color legend
+topography000Display.SetScalarBarVisibility(renderView1, True)
+
+# get color transfer function/color map for 'erosion_rate'
+erosion_rateLUT = GetColorTransferFunction('erosion_rate')
+
+# get opacity transfer function/opacity map for 'erosion_rate'
+erosion_ratePWF = GetOpacityTransferFunction('erosion_rate')
+
+# Apply a preset using its name. Note this may not work as expected when presets have duplicate names.
+erosion_rateLUT.ApplyPreset('acton', True)
+
+# get color legend/bar for erosion_rateLUT in view renderView1
+erosion_rateLUTColorBar = GetScalarBar(erosion_rateLUT, renderView1)
+
+# Properties modified on erosion_rateLUTColorBar
+erosion_rateLUTColorBar.AutoOrient = 0
+erosion_rateLUTColorBar.Orientation = 'Horizontal'
+erosion_rateLUTColorBar.WindowLocation = 'UpperCenter'
+erosion_rateLUTColorBar.Title = 'Erosion rate [m/yr]'
+
+# Rescale transfer function
+erosion_rateLUT.RescaleTransferFunction(erosion_rate_min, erosion_rate_max)
+
+# Rescale transfer function
+erosion_ratePWF.RescaleTransferFunction(erosion_rate_min, erosion_rate_max)
+
+# Properties modified on erosion_rateLUTColorBar
+erosion_rateLUTColorBar.RangeLabelFormat = '%-#6.5f'
+
+# invert the transfer function
+erosion_rateLUT.InvertTransferFunction()
+
+# current camera placement for renderView1
+renderView1.CameraPosition = [384380.5030903542, -526868.7089745248, 530565.0653625994]
+renderView1.CameraFocalPoint = [350625.0, 25625.0, 0.04999995231662449]
+renderView1.CameraViewUp = [0.0, 0.6929298137240902, 0.7210050438466415]
+renderView1.CameraParallelScale = 351560.1389158084
+
+# save animation
+if plot_erosionrate and plot_labels: 
+  SaveAnimation(model + '/FastScape_erosion_rate_' + str(topo_exag) + '.png', renderView1, ImageResolution=[1512, 810],
+      FrameWindow=[0, 51])
+
+# hide color bar/color legend
+topography000Display.SetScalarBarVisibility(renderView1, False)
+
+# current camera placement for renderView1
+renderView1.CameraPosition = [384380.5030903542, -526868.7089745248, 530565.0653625994]
+renderView1.CameraFocalPoint = [350625.0, 25625.0, 0.04999995231662449]
+renderView1.CameraViewUp = [0.0, 0.6929298137240902, 0.7210050438466415]
+renderView1.CameraParallelScale = 351560.1389158084
+
+# save animation
+if plot_erosionrate: 
+  SaveAnimation(model + '/FastScape_erosion_rate_' + str(topo_exag) + '_nolabels_.png', renderView1, ImageResolution=[1512, 810],
+      FrameWindow=[0, 51])
+
+# set scalar coloring
+ColorBy(topography000Display, ('POINTS', 'total_erosion'))
+
+# Hide the scalar bar for this color map if no visible data is colored by it.
+HideScalarBarIfNotNeeded(erosion_rateLUT, renderView1)
+
+# rescale color and/or opacity maps used to include current data range
+topography000Display.RescaleTransferFunctionToDataRange(True, False)
+
+# show color bar/color legend
+topography000Display.SetScalarBarVisibility(renderView1, True)
+
+# get color transfer function/color map for 'total_erosion'
+total_erosionLUT = GetColorTransferFunction('total_erosion')
+
+# get opacity transfer function/opacity map for 'total_erosion'
+total_erosionPWF = GetOpacityTransferFunction('total_erosion')
+
+# Apply a preset using its name. Note this may not work as expected when presets have duplicate names.
+total_erosionLUT.ApplyPreset('acton', True)
+
+# get color legend/bar for total_erosionLUT in view renderView1
+total_erosionLUTColorBar = GetScalarBar(total_erosionLUT, renderView1)
+
+# Properties modified on total_erosionLUTColorBar
+total_erosionLUTColorBar.AutoOrient = 0
+total_erosionLUTColorBar.Orientation = 'Horizontal'
+total_erosionLUTColorBar.WindowLocation = 'UpperCenter'
+total_erosionLUTColorBar.Title = 'Total erosion [m]'
+
+# Rescale transfer function
+total_erosionLUT.RescaleTransferFunction(erosion_min,erosion_max)
+
+# Rescale transfer function
+total_erosionPWF.RescaleTransferFunction(erosion_min,erosion_max)
+
+# Properties modified on total_erosionLUTColorBar
+total_erosionLUTColorBar.RangeLabelFormat = '%-#6.3g'
+
+# Properties modified on total_erosionLUTColorBar
+total_erosionLUTColorBar.RangeLabelFormat = '%-#6.1f'
+
+# invert the transfer function
+total_erosionLUT.InvertTransferFunction()
+
+# current camera placement for renderView1
+renderView1.CameraPosition = [384380.5030903542, -526868.7089745248, 530565.0653625994]
+renderView1.CameraFocalPoint = [350625.0, 25625.0, 0.04999995231662449]
+renderView1.CameraViewUp = [0.0, 0.6929298137240902, 0.7210050438466415]
+renderView1.CameraParallelScale = 351560.1389158084
+
+# save animation
+if plot_erosion and plot_labels: 
+  SaveAnimation(model + '/FastScape_total_erosion_' + str(topo_exag) + '.png', renderView1, ImageResolution=[1512, 810],
+      FrameWindow=[0, 51])
+
+# hide color bar/color legend
+topography000Display.SetScalarBarVisibility(renderView1, False)
+
+# current camera placement for renderView1
+renderView1.CameraPosition = [384380.5030903542, -526868.7089745248, 530565.0653625994]
+renderView1.CameraFocalPoint = [350625.0, 25625.0, 0.04999995231662449]
+renderView1.CameraViewUp = [0.0, 0.6929298137240902, 0.7210050438466415]
+renderView1.CameraParallelScale = 351560.1389158084
+
+# save animation
+if plot_erosion: 
+  SaveAnimation(model + '/FastScape_total_erosion_' + str(topo_exag) + '_nolabels_.png', renderView1, ImageResolution=[1512, 810],
       FrameWindow=[0, 51])
 
 #### saving camera placements for all active views
