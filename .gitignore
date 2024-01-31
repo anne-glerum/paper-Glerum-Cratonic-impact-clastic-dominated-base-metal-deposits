@@ -1,0 +1,7 @@
+tmp*
+*.png
+*.txt
+*.tiff
+
+# OS generated files
+.DS_Store
