@@ -17,15 +17,10 @@ rc("legend", fontsize=10)
 # Path to models
 base = r"/Users/acglerum/Documents/Postdoc/SB_CRYSTALS/HLRN/HLRN/FastScapeASPECT_cratons/"
 
-# Model names
-models = [
-'5p_fixed_CERI_craton450km_SWI2_minvisc5e18_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-         ]
-
 # Normal lithosphere densities
-rho_UC_normal = 2689.5 #2692.26 #2758 # kg/m3
-rho_LC_normal = 2821 #2823.185 #2758 # kg/m3
-rho_ML_normal = 3197.5 #3200.27 #3163 # kg/m3
+rho_UC_normal = 2689.5 # kg/m3
+rho_LC_normal = 2821 # kg/m3
+rho_ML_normal = 3197.5 # kg/m3
 
 # Normal lithosphere thicknesses
 z_UC_normal = 20e3 # m
@@ -35,22 +30,22 @@ z_normal_lithosphere = z_UC_normal + z_LC_normal + z_ML_normal # m
 print ("Thickness normal lithosphere", z_normal_lithosphere)
 
 # Craton lithosphere densities
-rho_UC_craton = 2692 #2690 #2693 #2758 # kg/m3
-rho_LC_craton = 2825.5 #2823 #2828 #2758 # kg/m3
-rho_ML_craton = 3203 #3202 #3210 #3163 # kg/m3
+rho_UC_craton = 2692 # kg/m3
+rho_LC_craton = 2825.5 # kg/m3
+rho_ML_craton = 3203 #3163 # kg/m3
 rho_asthenosphere = 3182 # kg/m3
 
 # Craton lithosphere thicknesses
-z_UC_craton = 23e3 #25e3 # m
+z_UC_craton = 23e3 # m
 z_LC_craton = 20e3 # m
 z_ML_craton = 157e3 # m
 z_craton_lithosphere = z_UC_craton + z_LC_craton + z_ML_craton # m
 print ("Thickness craton lithosphere", z_craton_lithosphere)
 
 # Perturbed lithosphere densities
-rho_UC_perturbed = 2686.15 #2689.5 # kg/m3
-rho_LC_perturbed = 2812.2 #2821 # kg/m3
-rho_ML_perturbed = 3191.8 #3197.5 # kg/m3
+rho_UC_perturbed = 2686.15 # kg/m3
+rho_LC_perturbed = 2812.2 # kg/m3
+rho_ML_perturbed = 3191.8 # kg/m3
 
 # Perturbed lithosphere thicknesses
 z_UC_perturbed = 25e3 # m
@@ -69,16 +64,6 @@ print ("Rho*z normal lithosphere", rho_z_normal_lithosphere)
 # Lithostatic pressure (/g) at bottom of perturbed lithosphere
 rho_z_perturbed_lithosphere = z_UC_perturbed*rho_UC_perturbed + z_LC_perturbed*rho_LC_perturbed + z_ML_perturbed*rho_ML_perturbed
 print ("Rho*z perturbed lithosphere", rho_z_perturbed_lithosphere)
-
-
-#rho_z_craton = z_UC_craton*rho_UC_craton + z_LC_craton*rho_LC_craton + (200e3 - z_UC_craton - z_LC_craton)*rho_ML_craton
-#rho_z_craton = z_UC_craton*rho_UC_craton + z_LC_craton*rho_LC_craton + 200e3*rho_ML_craton - z_UC_craton*rho_ML_craton - z_LC_craton*rho_ML_craton
-#rho_z_craton == rho_z_normal
-#z_LC_craton*rho_LC_craton - z_LC_craton*rho_ML_craton = rho_z_normal - z_UC_craton*rho_UC_craton - 200e3*rho_ML_craton + z_UC_craton*rho_ML_craton
-#z_LC_craton*(rho_LC_craton - rho_ML_craton) = rho_z_normal - z_UC_craton*rho_UC_craton - 200e3*rho_ML_craton + z_UC_craton*rho_ML_craton
-#z_LC_craton = (rho_z_normal - z_UC_craton*rho_UC_craton - 200e3*rho_ML_craton + z_UC_craton*rho_ML_craton) / (rho_LC_craton - rho_ML_craton)
-
-#print ("Craton lower crust thickness", z_LC_craton, "m")
 
 # Assume normal continental lithosphere elevation is 0 m
 # Lithostatic pressure (/g) at compensation depth for normal lithosphere
