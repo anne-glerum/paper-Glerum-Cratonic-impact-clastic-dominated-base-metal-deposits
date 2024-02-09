@@ -18,38 +18,38 @@ rc("legend", fontsize=10)
 base = r"/Users/acglerum/Documents/Postdoc/SB_CRYSTALS/HLRN/HLRN/FastScapeASPECT_cratons/"
 
 # Normal lithosphere densities
-rho_UC_normal = 2689.5 # kg/m3
-rho_LC_normal = 2821 # kg/m3
-rho_ML_normal = 3197.5 # kg/m3
+rho_UC_normal = 2687 # kg/m3
+rho_LC_normal = 2813 # kg/m3
+rho_ML_normal = 3191 # kg/m3
 
 # Normal lithosphere thicknesses
-z_UC_normal = 20e3 # m
-z_LC_normal = 15e3 # m
-z_ML_normal = 85e3 # m
+z_UC_normal = 25e3 # m
+z_LC_normal = 20e3 # m
+z_ML_normal = 75e3 # m
 z_normal_lithosphere = z_UC_normal + z_LC_normal + z_ML_normal # m
 print ("Thickness normal lithosphere", z_normal_lithosphere)
 
 # Craton lithosphere densities
-rho_UC_craton = 2692 # kg/m3
-rho_LC_craton = 2825.5 # kg/m3
-rho_ML_craton = 3203 #3163 # kg/m3
+rho_UC_craton = 2689 # kg/m3
+rho_LC_craton = 2819 # kg/m3
+rho_ML_craton = 3199 #3163 # kg/m3
 rho_asthenosphere = 3182 # kg/m3
 
 # Craton lithosphere thicknesses
-z_UC_craton = 23e3 # m
-z_LC_craton = 20e3 # m
-z_ML_craton = 157e3 # m
+z_UC_craton = 27.7e3 # m
+z_LC_craton = 25e3 # m
+z_ML_craton = 147.3e3 # m
 z_craton_lithosphere = z_UC_craton + z_LC_craton + z_ML_craton # m
 print ("Thickness craton lithosphere", z_craton_lithosphere)
 
 # Perturbed lithosphere densities
-rho_UC_perturbed = 2686.15 # kg/m3
-rho_LC_perturbed = 2812.2 # kg/m3
-rho_ML_perturbed = 3191.8 # kg/m3
+rho_UC_perturbed = 2685 # kg/m3
+rho_LC_perturbed = 2808 # kg/m3
+rho_ML_perturbed = 3190 # kg/m3
 
 # Perturbed lithosphere thicknesses
-z_UC_perturbed = 25e3 # m
-z_LC_perturbed = 15e3 # m
+z_UC_perturbed = 30e3 # m
+z_LC_perturbed = 20e3 # m
 z_ML_perturbed = 70e3 # m
 z_perturbed_lithosphere = z_UC_perturbed + z_LC_perturbed + z_ML_perturbed # m
 
