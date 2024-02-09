@@ -19,12 +19,16 @@ from os import mkdir
 #base = r"/Users/acglerum/Documents/Postdoc/SB_CRYSTALS/HLRN/HLRN/FastScapeASPECT_cratons/"
 #base = r"/Users/acglerum/Documents/Postdoc/SB_CRYSTALS/HLRN/HLRN/FastScapeASPECT/"
 base = r"./"
-model = "5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
+#model = "5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
 #model = "5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
 #model = "5p_fixed_CERI_craton450km_notopopert_RBIPS5kmnosubres_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
 #model = "5p_fixed_CERI_craton450km_notopopert_RBIPS5kmnosubres_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
-#model = "5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel5_tmax25000000.0"
+#model = "5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
 #model = "5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel5_tmax25000000.0"
+# CERI
+#model = "5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200"
+#model = "5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200"
+model = "5p_fixed_CERI_flatsurfacet0_craton450000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
 
 path = base + model
 if not exists(model):
@@ -47,10 +51,10 @@ topo_exag = 5
 
 plot_topo = False
 plot_catchment = False
-plot_erosionrate = False
+plot_erosionrate = True
 plot_drainage = False
-plot_erosion = True
-plot_labels = True
+plot_erosion = False
+plot_labels = False
 plot_every = 1
 
 # catchment range color bar
