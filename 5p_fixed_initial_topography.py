@@ -19,20 +19,25 @@ x_width = 700e3
 x = np.arange(0,x_width+dx,dx)
 
 topo_craton = 360 #450 #750 #m
-topo_pert = 0 #1040 #m
+topo_rift = 0 #1040 #m
 topo_normal = 0 #m
 rift_axis = 350e3 #m
 craton_edge = 400e3 #m
-sigma_polygon = 10e3 #m 
+sigma_craton = 10e3 #m 
 sigma_rift = 60e3 #m
 
 # delete old file if it exists
-total_file_name = base_file_name + "_edge" + str(craton_edge) + "_sigma" + str(sigma_polygon) + ".txt"
+total_file_name = base_file_name + "_edge" + str(craton_edge) + "_sigma" + str(sigma_craton) + ".txt"
 file_exists = os.path.exists(total_file_name)
 if file_exists:
   os.remove(total_file_name)
 
-topo = (1-np.exp(-((x-rift_axis)**2)/(2.0*(sigma_rift**2)))) *((0.5+0.5*np.tanh((x-craton_edge)/sigma_polygon))*topo_craton +(0.5-0.5*np.tanh((x-craton_edge)/sigma_polygon))*topo_normal)+(topo_pert * (np.exp(-((x-rift_axis)**2)/(2.0*(sigma_rift**2)))))
+d_craton = x-craton_edge
+d_rift = x-rift_axis
+craton_contribution = ((0.5+0.5*np.tanh(d_craton/sigma_craton))*topo_craton) + ((0.5-0.5*np.tanh(d_craton/sigma_craton))*topo_normal)
+rift_contribution = (1.0-topo_rift*np.exp(-(d_rift**2)/(2.0*(sigma_rift**2))))
+
+topo = craton_contribution * rift_contribution
 
 data = {'X': x, 'Topo': topo}
 
