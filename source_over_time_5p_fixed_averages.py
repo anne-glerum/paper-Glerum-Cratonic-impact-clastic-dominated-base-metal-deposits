@@ -22,8 +22,8 @@ rc("axes", titlesize=15, labelsize=12)
 rc("legend", fontsize=8)
 
 # Path to models
-base = r"./"
 base = r"/Users/acglerum/Documents/Postdoc/SB_CRYSTALS/HLRN/HLRN/FastScapeASPECT_cratons/"
+base = r"./"
 
 # Model names
 models = [
@@ -45,15 +45,15 @@ models = [
 #'5p_fixed_CERI_craton450km_notopopert_RBIPS5kmnosubres_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_craton450km_notopopert_RBIPS5kmnosubres_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_craton450km_notopopert_RBIPS5kmnosubres_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel5_tmax25000000.0',
-#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel5_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton425000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton425000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton425000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
@@ -98,10 +98,29 @@ models = [
 #'5p_fixed_CERI_flatsurfacet0_craton500000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_flatsurfacet0_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_flatsurfacet0_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_correctinittopo_craton400000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_correctinittopo_craton400000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_correctinittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_correctinittopo_craton400000.0_A0.25_seed292846_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_correctinittopo_craton400000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_correctinittopo_craton400000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_correctinittopo_craton400000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_correctinittopo_craton400000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_correctinittopo_craton400000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_correctinittopo_craton500000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_correctinittopo_craton500000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_correctinittopo_craton500000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_correctinittopo_craton500000.0_A0.25_seed292846_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_correctinittopo_craton500000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_correctinittopo_craton500000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_correctinittopo_craton500000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_correctinittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_correctinittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
          ]
 
+#output_name = '5p_fixed_correctinittopo_craton500km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 output_name = '5p_fixed_flatsurfacet0_craton450km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
-#output_name = '5p_fixed_craton400km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
+#output_name = '5p_fixed_craton500km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5p_fixed_steepedge_craton400km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 
 
@@ -191,7 +210,8 @@ for p in paths:
       with open(p) as f:
           clean_lines = (re.sub('\s+',' ',line) for line in f)
           #t,source_area = np.genfromtxt(clean_lines, comments='#', usecols=(1,65), delimiter=' ', unpack=True)
-          t,source_area = np.genfromtxt(clean_lines, comments='#', usecols=(0,1), delimiter=' ', unpack=True)
+          t,source_area = np.genfromtxt(clean_lines, comments='#', usecols=(1,62), delimiter=' ', unpack=True)
+          #t,source_area = np.genfromtxt(clean_lines, comments='#', usecols=(0,1), delimiter=' ', unpack=True)
   
       # Interpolate to a predefined set of timesteps, as not all runs have the same number
       # of timesteps.
