@@ -17,32 +17,32 @@ output_name = "5p_fixed_sourcearea_"
 # break-up
 # The average of the maximum source area [km2]
 average_source_area = [
-18.98,18.98,18.98,18.98,
-34.43,34.43,34.43,34.43,
-18.25,18.25,18.25,18.25,
-31.40, 31.40, 31.40, 31.40
+12.34,19.71,26.06,12.34,
+19.71,19.71,19.71,19.71,
+26.06,26.06,26.06,26.06,
+0.00, 0.00, 0.0, 0.
 ]
 
 # The max of the average source area
 max_average_source_area = [
-16.81,16.81,16.81,16.81,
-31.85,31.85,31.85,31.85,
-13.56,13.56,13.56,13.56,
-29.80,29.80,29.80,29.80
+11.92,11.92,11.92,11.92,
+18.53,18.53,18.53,18.53,
+23.37,23.37,23.37,23.37,
+0.00,0.00,0.00,0.00
 ]
 
 # Only considering basins not in OSC
 # 5p_fixed_surfPnorm_htanriftcraton_inittopo
 fav_basins = [
-[2,2,0,0,1,1,0,1,4,3,1,1,0,0,0,0],
-[2,2,1,0,1,1,0,1,3,2,1,0,0,0,0,0],
-[3,3,0,0,3,2,1,1,4,4,0,2,0,0,0,0],
-[3,3,1,0,1,1,1,1,3,2,1,0,0,0,0,0],
-[4,2,0,0,5,2,1,2,2,2,1,1,0,0,0,0],
-[4,2,0,0,2,2,1,0,1,1,0,1,0,0,0,0],
-[5,5,0,1,5,3,0,2,1,1,0,0,0,0,0,0],
-[4,4,0,0,1,1,1,1,2,2,1,0,0,0,0,0],
-[3,2,0,0,4,1,0,1,1,1,0,1,0,0,0,0],
+[3,2,0,0,5,2,1,1,5,2,2,1,0,0,0,0],
+[3,1,0,0,3,2,1,0,5,1,1,1,0,0,0,0],
+[3,3,0,0,1,1,1,0,2,1,1,1,0,0,0,0],
+[3,3,1,1,2,2,1,0,4,4,1,4,0,0,0,0],
+[3,3,0,1,2,1,1,1,4,1,0,1,0,0,0,0],
+[3,2,1,1,4,1,1,0,5,3,1,2,0,0,0,0],
+[2,2,0,0,6,3,1,0,6,6,0,3,0,0,0,0],
+[2,2,0,0,3,2,1,0,5,3,0,3,0,0,0,0],
+[2,2,0,1,4,1,1,1,3,1,0,0,0,0,0,0],
        ]
 # 5p_fixed_craton correct edge and surfPnorm
 #fav_basins = [
@@ -57,8 +57,8 @@ fav_basins = [
 #[3,2,0,0,4,1,0,1,1,1,0,1,0,0,0,0],
 #       ]
 
-rift_types = ('400', '450', '500', '550')
-columns = ('', '400', '', '', '', '450', '', '', '', '500', '', '', '', '550', '', '')
+rift_types = ('50', '100', '150', '200')
+columns = ('', '50', '', '', '', '100', '', '', '', '150', '', '', '', '200', '', '')
 
 rift_types_locations = [2.5, 7.5, 12.5, 17.5]
 
@@ -154,7 +154,7 @@ ax.set_ylabel("Average maximum number of basins", weight="bold")
 ax.set_xlim(0., max(index)+1.0)
 ax.set_xticks(rift_types_locations)
 ax.set_xticklabels(rift_types)
-ax.set_xlabel("Craton edge [km]", weight="bold")
+ax.set_xlabel("Craton distance [km]", weight="bold")
 
 # Plot title
 #plt.title('Number of favorable basins per ICRD')
@@ -164,10 +164,10 @@ ax.set_xlabel("Craton edge [km]", weight="bold")
 #ax.text(7.0,1.2,'source and host',rotation='vertical',ha='center',fontsize=15)
 #ax.text(8.0,1.2,'source, host, inactive fault',rotation='vertical',ha='center',fontsize=15)
 #ax.text(9.0,1.2,'source, host, active fault',rotation='vertical',ha='center',fontsize=15)
-ax.text(6.1,3.15,'S',rotation='vertical',ha='center',fontsize=15)
-ax.text(7.1,3.15,'S+H',rotation='vertical',ha='center',fontsize=15)
-ax.text(8.1,3.15,'S+H+IF',rotation='vertical',ha='center',fontsize=15)
-ax.text(9.1,3.15,'S+H+AF',rotation='vertical',ha='center',fontsize=15)
+ax.text(6.1,3.85,'S',rotation='vertical',ha='center',fontsize=15)
+ax.text(7.1,3.85,'S+H',rotation='vertical',ha='center',fontsize=15)
+ax.text(8.1,3.85,'S+H+IF',rotation='vertical',ha='center',fontsize=15)
+ax.text(9.1,3.85,'S+H+AF',rotation='vertical',ha='center',fontsize=15)
 #ax.legend(loc='upper left', ncol=1)
 
 # Second subplot
