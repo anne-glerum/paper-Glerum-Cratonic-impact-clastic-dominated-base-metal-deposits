@@ -16,16 +16,35 @@ print("Image rows, columns and channels:", img.shape)
 
 # Build a mask where all dark green pixels are 255 and other colors are 0.
 # The two tuples provide the lower and upper bounds for dark green (0,83,0).
-thresh = cv2.inRange(img, (0, 80, 0), (5, 86, 5))  
+source_rock = cv2.inRange(img, (0, 80, 0), (5, 86, 5))  
 
-#dilated_thresh = cv2.dilate(thresh, np.ones((3, 3), np.uint8))  # Dilate thresh because the blobs has green border that splits small blobs
+# Build a mask where all light green pixels are 255 and other colors are 0.
+# The two tuples provide the lower and upper bounds in BGR.
+host_rock_1 = cv2.inRange(img, (165, 217, 179), (171, 223, 185))  
+host_rock_2 = cv2.inRange(img, (108, 187, 160), (114, 193, 166))  
+host_rock_3 = cv2.inRange(img, (62, 132, 31), (68, 138, 37))  
+tmp_host_rock = cv2.bitwise_or(host_rock_1,host_rock_2)
+host_rock = cv2.bitwise_or(tmp_host_rock,host_rock_3)
+
 
 # Subtract 1, because the background is counted.
-n_labels = cv2.connectedComponents(thresh)[0] - 1
+n_source_rock = cv2.connectedComponents(source_rock)[0] - 1
 
 # Retrieve the locations of the dark green pixels
-locations = cv2.findNonZero(thresh)
+locations = cv2.findNonZero(source_rock)
+
+# Plot the thresholded image
+#plt.imshow(source_rock,'gray',vmin=0,vmax=255)
+#plt.imshow(host_rock,'gray',vmin=0,vmax=255)
+plt.subplot(2,3,1),plt.imshow(source_rock,'gray',vmin=0,vmax=255)
+plt.subplot(2,3,2),plt.imshow(host_rock,'gray',vmin=0,vmax=255)
+plt.subplot(2,3,4),plt.imshow(host_rock_1,'gray',vmin=0,vmax=255)
+plt.subplot(2,3,5),plt.imshow(host_rock_2,'gray',vmin=0,vmax=255)
+plt.subplot(2,3,6),plt.imshow(host_rock_3,'gray',vmin=0,vmax=255)
+
+plt.show()
+
 
 # Print the number of green blobs identified
-print(f'n_labels = {n_labels}')
+print(f'n_labels = {n_source_rock}')
 
