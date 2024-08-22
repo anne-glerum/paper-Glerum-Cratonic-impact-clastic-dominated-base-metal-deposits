@@ -14,6 +14,7 @@ assert img is not None, "File could not be read, check with os.path.exists()"
 # Print the rows, columns and RGB/BGR channels of the image
 print("Input image rows, columns and channels:", img.shape)
 
+###### Mask OFM ingredients ######
 # Build a mask where all dark green pixels are 255 and other colors are 0.
 # The two tuples provide the lower and upper bounds for dark green (0,83,0).
 source_rock = cv2.inRange(img, (0, 80, 0), (5, 86, 5))  
@@ -35,10 +36,63 @@ active_fault_zone = cv2.inRange(img, (0, 0, 0), (80, 80, 80))
 # The two tuples provide the lower and upper bounds for blue (14,50,98).
 inactive_fault_zone = cv2.inRange(img, (95, 47, 11), (101, 53, 17))  
 
-# Get the contours of source area
+###### Get contours ######
+# Get the contours of source rock area
 #source_rock_contours, source_rock_hierarchy = cv2.findContours(source_rock, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 source_rock_contours, source_rock_hierarchy = cv2.findContours(source_rock, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-print("Number of Contours found = " + str(len(source_rock_contours)))
+print("Number of source rock Contours found = " + str(len(source_rock_contours)))
+# Get the contours of host rock area
+host_rock_contours, host_rock_hierarchy = cv2.findContours(host_rock, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+print("Number of host rock Contours found = " + str(len(host_rock_contours)))
+# Get the contours of active fault zone area
+fault_contours, fault_hierarchy = cv2.findContours(active_fault_zone, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+print("Number of fault rock Contours found = " + str(len(fault_contours)))
+# Get the contours of inactive fault zone area
+inactive_fault_contours, inactive_fault_hierarchy = cv2.findContours(inactive_fault_zone, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+print("Number of inactive_fault rock Contours found = " + str(len(inactive_fault_contours)))
+
+###### Add bounding box or circle around contours ######
+# Bounding circle source rock areas
+source_rock_bounding_image = cv2.cvtColor(source_rock.copy(), cv2.COLOR_GRAY2RGB)
+source_rock_bounding_circle_centers = np.full(len(source_rock_contours), 0., dtype='i,i')
+source_rock_bounding_circle_radii = np.full(len(source_rock_contours), 0., dtype='i')
+for i, i_source_rock_contours in enumerate(source_rock_contours):
+  (x_source_rock,y_source_rock),radius_source_rock = cv2.minEnclosingCircle(i_source_rock_contours)
+  source_rock_bounding_circle_centers[i] = (int(x_source_rock),int(y_source_rock))
+  source_rock_bounding_circle_radii[i] = int(radius_source_rock)
+  cv2.circle(source_rock_bounding_image,source_rock_bounding_circle_centers[i],source_rock_bounding_circle_radii[i],(0,255,0),2)
+#plt.imshow(source_rock_bounding_image)
+# Bounding circle host rock areas
+host_rock_bounding_image = cv2.cvtColor(host_rock.copy(), cv2.COLOR_GRAY2RGB)
+host_rock_bounding_circle_centers = np.full(len(host_rock_contours), 0., dtype='i,i')
+host_rock_bounding_circle_radii = np.full(len(host_rock_contours), 0., dtype='i')
+for i, i_host_rock_contours in enumerate(host_rock_contours):
+  (x_host_rock,y_host_rock),radius_host_rock = cv2.minEnclosingCircle(i_host_rock_contours)
+  host_rock_bounding_circle_centers[i] = (int(x_host_rock),int(y_host_rock))
+  host_rock_bounding_circle_radii[i] = int(radius_host_rock)
+  cv2.circle(host_rock_bounding_image,host_rock_bounding_circle_centers[i],host_rock_bounding_circle_radii[i],(0,255,0),2)
+plt.imshow(host_rock_bounding_image)
+# Bounding circle active fault areas
+fault_bounding_image = cv2.cvtColor(active_fault_zone.copy(), cv2.COLOR_GRAY2RGB)
+fault_bounding_circle_centers = np.full(len(fault_contours), 0., dtype='i,i')
+fault_bounding_circle_radii = np.full(len(fault_contours), 0., dtype='i')
+for i, i_fault_contours in enumerate(fault_contours):
+  (x_fault,y_fault),radius_fault = cv2.minEnclosingCircle(i_fault_contours)
+  fault_bounding_circle_centers[i] = (int(x_fault),int(y_fault))
+  fault_bounding_circle_radii[i] = int(radius_fault)
+  cv2.circle(fault_bounding_image,fault_bounding_circle_centers[i],fault_bounding_circle_radii[i],(0,255,0),2)
+plt.imshow(fault_bounding_image)
+# Bounding circle inactive fault areas
+inactive_fault_bounding_image = cv2.cvtColor(inactive_fault_zone.copy(), cv2.COLOR_GRAY2RGB)
+inactive_fault_bounding_circle_centers = np.full(len(inactive_fault_contours), 0., dtype='i,i')
+inactive_fault_bounding_circle_radii = np.full(len(inactive_fault_contours), 0., dtype='i')
+for i, i_inactive_fault_contours in enumerate(inactive_fault_contours):
+  (x_inactive_fault,y_inactive_fault),radius_inactive_fault = cv2.minEnclosingCircle(i_inactive_fault_contours)
+  inactive_fault_bounding_circle_centers[i] = (int(x_inactive_fault),int(y_inactive_fault))
+  inactive_fault_bounding_circle_radii[i] = int(radius_inactive_fault)
+  cv2.circle(inactive_fault_bounding_image,inactive_fault_bounding_circle_centers[i],inactive_fault_bounding_circle_radii[i],(0,255,0),2)
+plt.imshow(inactive_fault_bounding_image)
+
 
 # Subtract 1, because the background is counted.
 n_source_rock = cv2.connectedComponents(source_rock)[0] - 1
@@ -53,7 +107,7 @@ print("Source rock image rows, columns and channels:", source_rock.shape)
 source_rock_contours_image = cv2.cvtColor(source_rock.copy(), cv2.COLOR_GRAY2RGB)
 print("Source rock contour image rows, columns and channels:", source_rock_contours_image.shape)
 cv2.drawContours(source_rock_contours_image, source_rock_contours, -1, (0,255,0), 3)
-plt.imshow(source_rock_contours_image)
+#plt.imshow(source_rock_contours_image)
 
 
 # Retrieve the locations of the dark green pixels
