@@ -119,14 +119,12 @@ for i,i_fault_rectangle in enumerate(fault_bounding_rectangle):
     intersecting, intersection = (cv2.rotatedRectangleIntersection(i_fault_rectangle, j_source_rectangle))
     if intersecting:
       # drawContours expects integers, so convert floats to ints
-      fault_host_intersections.append(intersection.astype(np.int32))
-      print ("Fault and source intersect")
-  for j,j_host_rectangle in enumerate(host_rock_bounding_rectangle):
+      fault_source_intersections.append(intersection.astype(np.int32))
+  for p,j_host_rectangle in enumerate(host_rock_bounding_rectangle):
     intersecting, intersection = (cv2.rotatedRectangleIntersection(i_fault_rectangle, j_host_rectangle))
     if intersecting:
       # drawContours expects integers, so convert floats to ints
       fault_host_intersections.append(intersection.astype(np.int32))
-      print ("Fault and host intersect")
 fault_source_intersections = np.asarray(fault_source_intersections, dtype=object)
 fault_host_intersections = np.asarray(fault_host_intersections, dtype=object)
 
@@ -134,46 +132,32 @@ fault_host_intersections = np.asarray(fault_host_intersections, dtype=object)
 intersection_image = img.copy()
 #for fault_source_intersection in fault_source_intersections:
 if (len(fault_source_intersections) > 0):
-  cv2.drawContours(intersection_image,fault_source_intersections,-1,(0,255,0),3)
-if (len(fault_host_intersections) > 0):
-  cv2.drawContours(intersection_image,fault_host_intersections,-1,(0,0,255),3)
+  cv2.drawContours(intersection_image,fault_source_intersections,-1,(0,255,0),2)
+#if (len(fault_host_intersections) > 0):
+  # TODO somehow the fault_host_intersections get another type as the fault_source_intersections,
+  # so drawContours fails.
+#  cv2.drawContours(intersection_image,fault_host_intersections,-1,(0,0,255),2)
   
-plt.imshow(intersection_image)
-
-       
-
-
-# Subtract 1, because the background is counted.
-n_source_rock = cv2.connectedComponents(source_rock)[0] - 1
-
-# Print the number of green blobs identified
-print(f'n_labels = {n_source_rock}')
-
-# Draw the source contours.
+###### Plot the source and host contours on the original image ######
 # This function modifies the input image, so we make a copy.
 # We also have to change this single channel copy to a 3 channel image.
-print("Source rock image rows, columns and channels:", source_rock.shape)
-source_rock_contours_image = cv2.cvtColor(source_rock.copy(), cv2.COLOR_GRAY2RGB)
-print("Source rock contour image rows, columns and channels:", source_rock_contours_image.shape)
+source_rock_contours_image = img.copy()
 cv2.drawContours(source_rock_contours_image, source_rock_contours, -1, (0,255,0), 3)
-#plt.imshow(source_rock_contours_image)
+cv2.drawContours(source_rock_contours_image, host_rock_contours, -1, (0,0,255), 3)
+
+###### Output information ######
+# Subtract 1, because the background is counted.
+n_source_rock = cv2.connectedComponents(source_rock)[0] - 1
+n_host_rock = cv2.connectedComponents(host_rock)[0] - 1
+# Print the number of green blobs identified
+print(f'Number of source rock areas: {n_source_rock}')
+print(f'Number of host rock areas: {n_host_rock}')
+print(f'Number of source rock areas connected to faults:', len(fault_source_intersections))
+print(f'Number of host rock areas connected to faults:', len(fault_host_intersections))
 
 
-# Retrieve the locations of the dark green pixels
-locations = cv2.findNonZero(source_rock)
+# Write images to file
+cv2.imwrite('5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0/5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_00029_intersections.png', intersection_image)
 
-# Plot the thresholded image
-#plt.imshow(source_rock,'gray',vmin=0,vmax=255)
-#plt.imshow(host_rock,'gray',vmin=0,vmax=255)
-#plt.subplot(2,3,1),plt.imshow(source_rock,'gray',vmin=0,vmax=255)
-#plt.subplot(2,3,2),plt.imshow(source_rock_contour_image,vmin=0,vmax=255)
-#plt.subplot(2,3,2),plt.imshow(host_rock,'gray',vmin=0,vmax=255)
-#plt.subplot(2,3,3),plt.imshow(inactive_fault_zone,'gray',vmin=0,vmax=255)
-#plt.subplot(2,3,4),plt.imshow(host_rock_1,'gray',vmin=0,vmax=255)
-#plt.subplot(2,3,5),plt.imshow(host_rock_2,'gray',vmin=0,vmax=255)
-#plt.subplot(2,3,6),plt.imshow(host_rock_3,'gray',vmin=0,vmax=255)
-
-plt.show()
-
-
+cv2.imwrite('5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0/5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_00029_source_contours.png', source_rock_contours_image)
 
