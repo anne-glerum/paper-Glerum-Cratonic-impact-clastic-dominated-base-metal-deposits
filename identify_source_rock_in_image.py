@@ -4,6 +4,9 @@
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
+from shapely.geometry import Polygon
+import shapely
+import itertools
 
 # Read the input image
 img = cv2.imread('5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0/5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_00029_heatfluxcontours_sedtypes_Tcontours_source_host_sedage2_8_zoom2_280000_25000.png')  
@@ -52,46 +55,77 @@ inactive_fault_contours, inactive_fault_hierarchy = cv2.findContours(inactive_fa
 print("Number of inactive_fault rock Contours found = " + str(len(inactive_fault_contours)))
 
 ###### Add bounding box or circle around contours ######
+# TODO improve on dtype=object
 # Bounding circle source rock areas
 source_rock_bounding_image = cv2.cvtColor(source_rock.copy(), cv2.COLOR_GRAY2RGB)
 source_rock_bounding_circle_centers = np.full(len(source_rock_contours), 0., dtype='i,i')
 source_rock_bounding_circle_radii = np.full(len(source_rock_contours), 0., dtype='i')
+source_rock_bounding_rectangle = np.empty(len(source_rock_contours),dtype=object)
 for i, i_source_rock_contours in enumerate(source_rock_contours):
   (x_source_rock,y_source_rock),radius_source_rock = cv2.minEnclosingCircle(i_source_rock_contours)
   source_rock_bounding_circle_centers[i] = (int(x_source_rock),int(y_source_rock))
   source_rock_bounding_circle_radii[i] = int(radius_source_rock)
   cv2.circle(source_rock_bounding_image,source_rock_bounding_circle_centers[i],source_rock_bounding_circle_radii[i],(0,255,0),2)
+  source_rectangle = cv2.minAreaRect(i_source_rock_contours)
+  source_rock_bounding_rectangle[i] = source_rectangle
 #plt.imshow(source_rock_bounding_image)
 # Bounding circle host rock areas
 host_rock_bounding_image = cv2.cvtColor(host_rock.copy(), cv2.COLOR_GRAY2RGB)
 host_rock_bounding_circle_centers = np.full(len(host_rock_contours), 0., dtype='i,i')
 host_rock_bounding_circle_radii = np.full(len(host_rock_contours), 0., dtype='i')
+host_rock_bounding_rectangle = np.empty(len(host_rock_contours),dtype=object)
 for i, i_host_rock_contours in enumerate(host_rock_contours):
   (x_host_rock,y_host_rock),radius_host_rock = cv2.minEnclosingCircle(i_host_rock_contours)
   host_rock_bounding_circle_centers[i] = (int(x_host_rock),int(y_host_rock))
   host_rock_bounding_circle_radii[i] = int(radius_host_rock)
   cv2.circle(host_rock_bounding_image,host_rock_bounding_circle_centers[i],host_rock_bounding_circle_radii[i],(0,255,0),2)
+  host_rectangle = cv2.minAreaRect(i_host_rock_contours)
+  host_rock_bounding_rectangle[i] = host_rectangle
 plt.imshow(host_rock_bounding_image)
-# Bounding circle active fault areas
+# Bounding circle and rotating box active fault areas
 fault_bounding_image = cv2.cvtColor(active_fault_zone.copy(), cv2.COLOR_GRAY2RGB)
 fault_bounding_circle_centers = np.full(len(fault_contours), 0., dtype='i,i')
 fault_bounding_circle_radii = np.full(len(fault_contours), 0., dtype='i')
+fault_bounding_rectangle = np.empty(len(fault_contours),dtype=object)
 for i, i_fault_contours in enumerate(fault_contours):
   (x_fault,y_fault),radius_fault = cv2.minEnclosingCircle(i_fault_contours)
   fault_bounding_circle_centers[i] = (int(x_fault),int(y_fault))
   fault_bounding_circle_radii[i] = int(radius_fault)
   cv2.circle(fault_bounding_image,fault_bounding_circle_centers[i],fault_bounding_circle_radii[i],(0,255,0),2)
+  fault_rectangle = cv2.minAreaRect(i_fault_contours)
+  fault_bounding_rectangle[i] = fault_rectangle
+  fault_box = cv2.boxPoints(fault_rectangle)
+  fault_box = np.int0(fault_box)
 plt.imshow(fault_bounding_image)
 # Bounding circle inactive fault areas
 inactive_fault_bounding_image = cv2.cvtColor(inactive_fault_zone.copy(), cv2.COLOR_GRAY2RGB)
 inactive_fault_bounding_circle_centers = np.full(len(inactive_fault_contours), 0., dtype='i,i')
 inactive_fault_bounding_circle_radii = np.full(len(inactive_fault_contours), 0., dtype='i')
+inactive_fault_bounding_rectangle = np.empty(len(inactive_fault_contours),dtype=object)
 for i, i_inactive_fault_contours in enumerate(inactive_fault_contours):
   (x_inactive_fault,y_inactive_fault),radius_inactive_fault = cv2.minEnclosingCircle(i_inactive_fault_contours)
   inactive_fault_bounding_circle_centers[i] = (int(x_inactive_fault),int(y_inactive_fault))
   inactive_fault_bounding_circle_radii[i] = int(radius_inactive_fault)
   cv2.circle(inactive_fault_bounding_image,inactive_fault_bounding_circle_centers[i],inactive_fault_bounding_circle_radii[i],(0,255,0),2)
+  inactive_fault_rectangle = cv2.minAreaRect(i_inactive_fault_contours)
+  inactive_fault_bounding_rectangle[i] = inactive_fault_rectangle
 plt.imshow(inactive_fault_bounding_image)
+
+###### Loop over faults and check overlap ######
+fault_source_intersections = []
+fault_host_intersections = []
+for i,i_fault_rectangle in enumerate(fault_bounding_rectangle):
+  for j,j_source_rectangle in enumerate(source_rock_bounding_rectangle):
+    intersecting, intersection = (cv2.rotatedRectangleIntersection(i_fault_rectangle, j_source_rectangle))
+    if intersecting:
+      fault_source_intersections.append(intersection)
+  for j,j_host_rectangle in enumerate(host_rock_bounding_rectangle):
+    intersecting, intersection = (cv2.rotatedRectangleIntersection(i_fault_rectangle, j_host_rectangle))
+    if intersecting:
+      fault_host_intersections.append(intersection)
+fault_source_intersections = np.asarray(fault_source_intersections, dtype=object)
+fault_host_intersections = np.asarray(fault_host_intersections, dtype=object)
+       
 
 
 # Subtract 1, because the background is counted.
