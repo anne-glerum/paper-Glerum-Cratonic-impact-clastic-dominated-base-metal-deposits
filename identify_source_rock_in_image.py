@@ -118,13 +118,28 @@ for i,i_fault_rectangle in enumerate(fault_bounding_rectangle):
   for j,j_source_rectangle in enumerate(source_rock_bounding_rectangle):
     intersecting, intersection = (cv2.rotatedRectangleIntersection(i_fault_rectangle, j_source_rectangle))
     if intersecting:
-      fault_source_intersections.append(intersection)
+      # drawContours expects integers, so convert floats to ints
+      fault_host_intersections.append(intersection.astype(np.int32))
+      print ("Fault and source intersect")
   for j,j_host_rectangle in enumerate(host_rock_bounding_rectangle):
     intersecting, intersection = (cv2.rotatedRectangleIntersection(i_fault_rectangle, j_host_rectangle))
     if intersecting:
-      fault_host_intersections.append(intersection)
+      # drawContours expects integers, so convert floats to ints
+      fault_host_intersections.append(intersection.astype(np.int32))
+      print ("Fault and host intersect")
 fault_source_intersections = np.asarray(fault_source_intersections, dtype=object)
 fault_host_intersections = np.asarray(fault_host_intersections, dtype=object)
+
+###### Plot the outlines of the overlaps on the original image ######
+intersection_image = img.copy()
+#for fault_source_intersection in fault_source_intersections:
+if (len(fault_source_intersections) > 0):
+  cv2.drawContours(intersection_image,fault_source_intersections,-1,(0,255,0),3)
+if (len(fault_host_intersections) > 0):
+  cv2.drawContours(intersection_image,fault_host_intersections,-1,(0,0,255),3)
+  
+plt.imshow(intersection_image)
+
        
 
 
