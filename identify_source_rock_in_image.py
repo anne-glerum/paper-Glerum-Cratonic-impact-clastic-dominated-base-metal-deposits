@@ -17,13 +17,13 @@ img_strainrate = cv2.imread('5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_cra
 
 img_strain = cv2.imread('5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0/5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_00029_plasticstrain_8_zoom2_280000_25000.png')  
 
-# Make sure the images exist
+###### Make sure the images exist ######
 assert img is not None, "File could not be read, check with os.path.exists()"
 assert img_source_host is not None, "File could not be read, check with os.path.exists()"
 assert img_strainrate is not None, "File could not be read, check with os.path.exists()"
 assert img_strain is not None, "File could not be read, check with os.path.exists()"
 
-# Print the rows, columns and RGB/BGR channels of the image
+###### Print the rows, columns and RGB/BGR channels of the image ######
 print("Input image rows, columns and channels:", img.shape)
 print("Input image source host rows, columns and channels:", img_source_host.shape)
 print("Input image strainrate rows, columns and channels:", img_strainrate.shape)
@@ -58,22 +58,53 @@ active_fault_zone = cv2.inRange(img_strainrate, (0, 0, 0), (240, 240, 240))
 # The two tuples provide the lower and upper bounds for greys.
 inactive_fault_zone = cv2.inRange(img_strain, (0, 0, 0), (230, 230, 230))
 
-###### Get contours ######
+###### Check for overlaps ######
+overlap_source_fault = cv2.bitwise_and(source_rock, active_fault_zone)
+overlap_host_fault = cv2.bitwise_and(host_rock, active_fault_zone)
+overlap_source_inactive_fault = cv2.bitwise_and(source_rock, inactive_fault_zone)
+overlap_host_inactive_fault = cv2.bitwise_and(host_rock, inactive_fault_zone)
+overlap_source_host_fault = cv2.bitwise_or(overlap_source_fault, overlap_host_fault)
+overlap_source_host_inactive_fault = cv2.bitwise_or(overlap_source_inactive_fault, overlap_host_inactive_fault)
+
+###### Get contours of overlaps ######
+overlap_source_fault_contours, overlap_source_fault_hierarchy = cv2.findContours(overlap_source_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+print("Number of source rock overlaps with active fault found = " + str(len(overlap_source_fault_contours)))
+#overlap_source_fault_polygon = Polygon([l[0] for l in overlap_source_fault_contours[1]])
+#print ("Overlap area: ", overlap_source_fault_polygon.area)
+overlap_source_inactive_fault_contours, overlap_source_inactive_fault_hierarchy = cv2.findContours(overlap_source_inactive_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+print("Number of source rock overlaps with inactive fault found = " + str(len(overlap_source_inactive_fault_contours)))
+overlap_source_host_fault_contours, overlap_source_host_fault_hierarchy = cv2.findContours(overlap_source_host_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+overlap_source_host_inactive_fault_contours, overlap_source_host_inactive_fault_hierarchy = cv2.findContours(overlap_source_host_inactive_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+
+###### Get contours of individual OFM elements ######
 # Get the contours of source rock area
-#source_rock_contours, source_rock_hierarchy = cv2.findContours(source_rock, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 source_rock_contours, source_rock_hierarchy = cv2.findContours(source_rock, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-print("Number of source rock Contours found = " + str(len(source_rock_contours)))
+print("Number of source rock contours found = " + str(len(source_rock_contours)))
 
 # Get the contours of host rock area
 host_rock_contours, host_rock_hierarchy = cv2.findContours(host_rock, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-print("Number of host rock Contours found = " + str(len(host_rock_contours)))
+print("Number of host rock contours found = " + str(len(host_rock_contours)))
 
 # Get the contours of active fault zone area
 fault_contours, fault_hierarchy = cv2.findContours(active_fault_zone, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-print("Number of fault rock Contours found = " + str(len(fault_contours)))
+print("Number of fault rock contours found = " + str(len(fault_contours)))
 
 # Get the contours of inactive fault zone area
 inactive_fault_contours, inactive_fault_hierarchy = cv2.findContours(inactive_fault_zone, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+
+###### Plot the source and host rock contours on top of faults ######
+overlap_source_host_fault_contours_image = img_strainrate.copy()
+overlap_source_host_inactive_fault_contours_image = img_strain.copy()
+cv2.drawContours(overlap_source_host_fault_contours_image, source_rock_contours, -1, (0,0,255), 3)
+cv2.drawContours(overlap_source_host_fault_contours_image, host_rock_contours, -1, (255,0,0), 3)
+cv2.drawContours(overlap_source_host_inactive_fault_contours_image, source_rock_contours, -1, (0,0,255), 3)
+cv2.drawContours(overlap_source_host_inactive_fault_contours_image, host_rock_contours, -1, (255,0,0), 3)
+
+###### Plot overlaps on top of source and host rock contours and faults ######
+cv2.drawContours(overlap_source_host_fault_contours_image, overlap_source_host_fault_contours, -1, (0,255,0), 3)
+cv2.drawContours(overlap_source_host_inactive_fault_contours_image, overlap_source_host_inactive_fault_contours, -1, (0,255,0), 3)
+cv2.imwrite('5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0/5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_00029_overlap_fault.png', overlap_source_host_fault_contours_image)
+cv2.imwrite('5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0/5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_00029_overlap_inactive_fault.png', overlap_source_host_inactive_fault_contours_image)
 
 ###### Add bounding box or circle around contours ######
 # TODO improve on dtype=object
@@ -170,6 +201,35 @@ for i,i_fault_rectangle in enumerate(fault_bounding_rectangle):
       fault_host_intersections.append(intersection.astype(np.int32))
 fault_source_intersections = np.asarray(fault_source_intersections)
 fault_host_intersections = np.asarray(fault_host_intersections)
+
+###### Loop over inactive faults and check for each fault whether there is overlap with both source and host rock ######
+n_OFM3 = 0
+for contour in inactive_fault_contours:
+  area = cv2.contourArea(contour)
+  if (area > 0):
+    intersect_source = False
+    intersect_host = False
+    fault_polygon = Polygon([l[0] for l in contour])
+    for source_contour in source_rock_contours:
+      source_area = cv2.contourArea(source_contour)
+      if source_area > 0:
+        source_polygon = Polygon([l[0] for l in source_contour])
+        intersect_source = fault_polygon.intersects(source_polygon) 
+        if intersect_source:
+          print ("Intersection source and inactive fault" )
+          for host_contour in host_rock_contours:
+            host_area = cv2.contourArea(host_contour)
+            if host_area > 0:
+              #host_polygon = Polygon([l[0] for l in host_contour]).buffer(10)
+              host_polygon = Polygon([l[0] for l in host_contour])
+              intersect_host = fault_polygon.intersects(host_polygon)  
+              if intersect_host:
+                n_OFM3 += 1    
+                break
+        if intersect_host:
+          break
+print ("Nr of OFM3s: ", n_OFM3)
+
 
 ###### Plot the outlines of the overlaps on the original image ######
 intersection_image = img.copy()
