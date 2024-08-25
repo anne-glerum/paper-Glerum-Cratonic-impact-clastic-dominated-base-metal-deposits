@@ -52,7 +52,7 @@ host_rock = cv2.bitwise_or(tmp_host_rock,host_rock_3)
 
 # Build a mask where all black pixels are 255 and other colors are 0.
 # The two tuples provide the lower and upper bounds for black (0,0,0).
-active_fault_zone = cv2.inRange(img_strainrate, (0, 0, 0), (240, 240, 240))  
+active_fault_zone = cv2.inRange(img_strainrate, (0, 0, 0), (220, 220, 220))  
 
 # Build a mask where all grey pixels are 255 and other colors are 0.
 # The two tuples provide the lower and upper bounds for greys.
@@ -204,6 +204,7 @@ fault_host_intersections = np.asarray(fault_host_intersections)
 
 ###### Loop over inactive faults and check for each fault whether there is overlap with both source and host rock ######
 n_OFM3 = 0
+img_OFM3_contours = img_strain.copy()
 for contour in inactive_fault_contours:
   area = cv2.contourArea(contour)
   if (area > 0):
@@ -213,22 +214,27 @@ for contour in inactive_fault_contours:
     for source_contour in source_rock_contours:
       source_area = cv2.contourArea(source_contour)
       if source_area > 0:
-        source_polygon = Polygon([l[0] for l in source_contour])
+        source_polygon = Polygon([l[0] for l in source_contour]).buffer(2)
         intersect_source = fault_polygon.intersects(source_polygon) 
         if intersect_source:
-          print ("Intersection source and inactive fault" )
           for host_contour in host_rock_contours:
             host_area = cv2.contourArea(host_contour)
             if host_area > 0:
-              #host_polygon = Polygon([l[0] for l in host_contour]).buffer(10)
-              host_polygon = Polygon([l[0] for l in host_contour])
-              intersect_host = fault_polygon.intersects(host_polygon)  
+              host_polygon = Polygon([l[0] for l in host_contour]).buffer(2)
+              intersect_host = fault_polygon.intersects(host_polygon)
               if intersect_host:
                 n_OFM3 += 1    
+                cv2.drawContours(img_OFM3_contours, source_contour,-1,(0,255,0),2)
+                cv2.drawContours(img_OFM3_contours, host_contour,-1,(0,0,255),2)
+                # If we find one host rock area, then we stop looping over the rest
                 break
-        if intersect_host:
-          break
+          # If we have found source and host rock areas, then we stop looping over the source rock
+          if intersect_host:
+            break
 print ("Nr of OFM3s: ", n_OFM3)
+
+###### Save the OFM3 source and host on top of strain ######
+cv2.imwrite('5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0/5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_00029_OFM3.png', img_OFM3_contours)
 
 
 ###### Plot the outlines of the overlaps on the original image ######
