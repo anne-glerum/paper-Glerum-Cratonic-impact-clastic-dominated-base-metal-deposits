@@ -9,6 +9,11 @@ import shapely
 import itertools
 import pandas as pd
 
+# Interactive?
+interactive = False
+# What buffer size [pixel] to use for intersections
+buffer = 0
+
 
 # Path to models
 base = r"/Users/acglerum/Documents/Postdoc/SB_CRYSTALS/HLRN/HLRN/FastScapeASPECT_cratons/"
@@ -16,9 +21,9 @@ base = r"/Users/acglerum/Documents/Postdoc/SG_SB/Projects/CERI_cratons/"
 
 # Model names
 models = [
-#'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
@@ -45,17 +50,24 @@ models = [
 #'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 ]
 
-###### Create dataframe to store output data ######
-dataframe = pd.DataFrame(columns=['model_name','time','n_source','n_host','n_source_fault_overlaps','n_host_fault_overlaps','n_source_inactive_fault_overlaps', 'n_host_inactive_fault_overlaps'])
-index_model_time = 0
 
 # Create file paths
 paths = [base+m for m in models]
-ASPECT_time_steps = ['00029']
+ASPECT_time_steps = ['00025']
 ASPECT_time_steps = ['00000','00001','00005','00010','00015','00020','00025','00030','00035','00040','00045','00050']
 
 for m in models:
+
+  ###### Create dataframe to store output data ######
+  dataframe = pd.DataFrame(columns=['time','n_host','n_source_fault_overlaps','n_host_fault_overlaps','n_source_inactive_fault_overlaps', 'n_host_inactive_fault_overlaps','n_source','n_source_host','n_OFM3','n_OFM1','n_OFM2'])
+
+  index_model_time = 0
   for t in ASPECT_time_steps:
+
+    # Store model name and timestep
+    #dataframe.loc[index_model_time, 'model_name'] = '5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0'
+    dataframe.loc[index_model_time, 'time'] = t
+    print ("Model name and timstep: ", m, t)
 
     # Read the input image
     img = cv2.imread(m+'/'+m+'_'+t+'_source_host_strain_strainrate_8_zoom2_280000_25000.png')
@@ -73,10 +85,10 @@ for m in models:
     assert img_strain is not None, "File could not be read, check with os.path.exists()"
     
     ###### Print the rows, columns and RGB/BGR channels of the image ######
-    print("Input image rows, columns and channels:", img.shape)
-    print("Input image source host rows, columns and channels:", img_source_host.shape)
-    print("Input image strainrate rows, columns and channels:", img_strainrate.shape)
-    print("Input image plastic strain rows, columns and channels:", img_strain.shape)
+    #print("Input image rows, columns and channels:", img.shape)
+    #print("Input image source host rows, columns and channels:", img_source_host.shape)
+    #print("Input image strainrate rows, columns and channels:", img_strainrate.shape)
+    #print("Input image plastic strain rows, columns and channels:", img_strain.shape)
     
     ###### Mask OFM ingredients ######
     # Build a mask where all dark green pixels are 255 and other colors are 0.
@@ -117,19 +129,18 @@ for m in models:
     
     ###### Get contours of overlaps ######
     overlap_source_fault_contours, overlap_source_fault_hierarchy = cv2.findContours(overlap_source_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-    print("Number of source rock overlaps with active fault found = " + str(len(overlap_source_fault_contours)))
-    dataframe.loc[index_model_time, 'n_source_fault_overlaps'] = len(overlap_source_fault_contours)
+    print("Number of source rock overlaps with active fault found with binary logic = " + str(len(overlap_source_fault_contours)))
+    #dataframe.loc[index_model_time, 'n_source_fault_overlaps'] = len(overlap_source_fault_contours)
     
     overlap_source_inactive_fault_contours, overlap_source_inactive_fault_hierarchy = cv2.findContours(overlap_source_inactive_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-    print("Number of source rock overlaps with inactive fault found = " + str(len(overlap_source_inactive_fault_contours)))
-    dataframe.loc[index_model_time, 'n_source_inactive_fault_overlaps'] = len(overlap_source_inactive_fault_contours)
+    print("Number of source rock overlaps with inactive fault found with binary logic = " + str(len(overlap_source_inactive_fault_contours)))
     
     overlap_host_fault_contours, overlap_host_fault_hierarchy = cv2.findContours(overlap_host_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-    print("Number of host rock overlaps with active fault found = " + str(len(overlap_host_fault_contours)))
-    dataframe.loc[index_model_time, 'n_host_fault_overlaps'] = len(overlap_host_fault_contours)
+    print("Number of host rock overlaps with active fault found with binary logic = " + str(len(overlap_host_fault_contours)))
+    #dataframe.loc[index_model_time, 'n_host_fault_overlaps'] = len(overlap_host_fault_contours)
     
     overlap_host_inactive_fault_contours, overlap_host_inactive_fault_hierarchy = cv2.findContours(overlap_host_inactive_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-    print("Number of host rock overlaps with inactive fault found = " + str(len(overlap_host_inactive_fault_contours)))
+    print("Number of host rock overlaps with inactive fault found with binary logic = " + str(len(overlap_host_inactive_fault_contours)))
     dataframe.loc[index_model_time, 'n_host_inactive_fault_overlaps'] = len(overlap_host_inactive_fault_contours)
     
     overlap_source_host_fault_contours, overlap_source_host_fault_hierarchy = cv2.findContours(overlap_source_host_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
@@ -260,25 +271,88 @@ for m in models:
     #fault_source_intersections = np.asarray(fault_source_intersections)
     #fault_host_intersections = np.asarray(fault_host_intersections)
     
+    ###### Loop over active faults and check for overlap with source and host rock ######
+    n_source_fault_overlaps = 0
+    n_host_fault_overlaps = 0
+    img_OFM12_contours = img_strainrate.copy()
+    for contour in fault_contours:
+      area = cv2.contourArea(contour)
+      if (area > 0):
+        intersect_source = False
+        intersect_host = False
+        fault_polygon = Polygon([l[0] for l in contour]).buffer(buffer)
+        for source_contour in source_rock_contours:
+          source_area = cv2.contourArea(source_contour)
+          if source_area > 0:
+            source_polygon = Polygon([l[0] for l in source_contour]).buffer(buffer)
+            intersect_source = fault_polygon.intersects(source_polygon) 
+            if intersect_source:
+              cv2.drawContours(img_OFM12_contours, source_contour,-1,(0,255,0),2)
+              n_source_fault_overlaps += 1
+        for host_contour in host_rock_contours:
+          host_area = cv2.contourArea(host_contour)
+          if host_area > 0:
+            host_polygon = Polygon([l[0] for l in host_contour]).buffer(buffer)
+            intersect_host = fault_polygon.intersects(host_polygon)
+            if intersect_host:
+              cv2.drawContours(img_OFM12_contours, host_contour,-1,(0,0,255),2)
+              n_host_fault_overlaps += 1
+    
+    ###### Save the OFM12 source and host on top of strainrate ######
+    cv2.imwrite(m+'/'+m+'_'+t+'_OFM12.png', img_OFM12_contours)
+    
+    ###### Open the OFM12 image and ask user for n_OFM1 and n_OFM2 ######
+    n_source = 0
+    n_source_host = 0
+    n_OFM1 = 0
+    n_OFM2 = 0
+    if len(source_rock_contours) > 0:
+      # Ask user for interpretation
+      if interactive:
+        cv2.imshow("Possible OFM1 and OFM2", img_OFM12_contours)
+        cv2.imshow("Source, host, strainrate and strain", img)
+        cv2.moveWindow("Source, host, strainrate and strain", 0, 250)
+        cv2.imshow("Source, host, strainrate contours", overlap_source_host_fault_contours_image)
+        cv2.moveWindow("Source, host, strainrate contours", 0, 500)
+        cv2.waitKey(0)
+        n_source = input("Nr of basins with source: ")
+        n_source_host = input("Nr of basins with source and host: ")
+        n_OFM1 = input("Nr of OFM1: ")
+        n_OFM2 = input("Nr of OFM2: ")
+        cv2.destroyWindow("Possible OFM1 and OFM2")
+        cv2.destroyWindow("Source, host, strainrate and strain")
+        cv2.destroyWindow("Source, host, strainrate contours")
+    dataframe.loc[index_model_time, 'n_source'] = n_source
+    dataframe.loc[index_model_time, 'n_source_host'] = n_source_host
+    dataframe.loc[index_model_time, 'n_OFM1'] = n_OFM1
+    dataframe.loc[index_model_time, 'n_OFM2'] = n_OFM2
+    print("Number of source rock overlaps with active fault found with shapely and buffer of ", buffer, " = ", n_source_fault_overlaps)
+    dataframe.loc[index_model_time, 'n_source_fault_overlaps'] = n_source_fault_overlaps
+    print("Number of host rock overlaps with active fault found with shapely and buffer of ", buffer, " = ", n_host_fault_overlaps)
+    dataframe.loc[index_model_time, 'n_host_fault_overlaps'] = n_host_fault_overlaps
+
     ###### Loop over inactive faults and check for each fault whether there is overlap with both source and host rock ######
     n_OFM3 = 0
+    n_source_inactive_fault_overlaps = 0
+    n_host_inactive_fault_overlaps = 0
     img_OFM3_contours = img_strain.copy()
     for contour in inactive_fault_contours:
       area = cv2.contourArea(contour)
       if (area > 0):
         intersect_source = False
         intersect_host = False
-        fault_polygon = Polygon([l[0] for l in contour])
+        fault_polygon = Polygon([l[0] for l in contour]).buffer(buffer)
         for source_contour in source_rock_contours:
           source_area = cv2.contourArea(source_contour)
           if source_area > 0:
-            source_polygon = Polygon([l[0] for l in source_contour]).buffer(2)
+            source_polygon = Polygon([l[0] for l in source_contour]).buffer(buffer)
             intersect_source = fault_polygon.intersects(source_polygon) 
             if intersect_source:
+              n_source_inactive_fault_overlaps += 1
               for host_contour in host_rock_contours:
                 host_area = cv2.contourArea(host_contour)
                 if host_area > 0:
-                  host_polygon = Polygon([l[0] for l in host_contour]).buffer(2)
+                  host_polygon = Polygon([l[0] for l in host_contour]).buffer(buffer)
                   intersect_host = fault_polygon.intersects(host_polygon)
                   if intersect_host:
                     n_OFM3 += 1    
@@ -290,6 +364,8 @@ for m in models:
               if intersect_host:
                 break
     print ("Nr of OFM3s: ", n_OFM3)
+    dataframe.loc[index_model_time, 'n_OFM3'] = n_OFM3
+    dataframe.loc[index_model_time, 'n_source_inactive_fault_overlaps'] = n_source_inactive_fault_overlaps
     
     ###### Save the OFM3 source and host on top of strain ######
     cv2.imwrite(m+'/'+m+'_'+t+'_OFM3.png', img_OFM3_contours)
@@ -330,9 +406,12 @@ for m in models:
     #print(f'Number of host rock areas: {n_host_rock}')
     #print(f'Number of source rock areas connected to faults:', len(fault_source_intersections))
     #print(f'Number of host rock areas connected to faults:', len(fault_host_intersections))
+
+    # Update output file index
+    index_model_time += 1
     
-    ###### Write output file ######
-    dataframe.to_csv(m+'/'+m+'_'+t+'_stats.csv',index=False)
+  ###### Write output file ######
+  dataframe.to_csv(m+'/'+m+'_stats.csv',index=False)
     
     
     # Write images to file
