@@ -51,8 +51,8 @@ index_model_time = 0
 
 # Create file paths
 paths = [base+m for m in models]
-ASPECT_time_steps = ['00000','00001','00005','00010','00015','00020','00025','00030','00035','00040','00045','00050']
 ASPECT_time_steps = ['00029']
+ASPECT_time_steps = ['00000','00001','00005','00010','00015','00020','00025','00030','00035','00040','00045','00050']
 
 for m in models:
   for t in ASPECT_time_steps:
