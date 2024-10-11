@@ -206,6 +206,9 @@ for m in models:
     # Per fault, count the overlaps
     source_fault_overlaps = np.zeros(len(fault_contours))
     host_fault_overlaps = np.zeros(len(fault_contours))
+    # Per fault, indicate the contour of the overlaps
+    i_source_fault_overlaps = np.zeros(len(fault_contours))
+    i_host_fault_overlaps = np.zeros(len(fault_contours))
 
     # Plot the OFMs on top of strain rate
     img_OFM12_contours = img_strainrate.copy()
@@ -229,6 +232,7 @@ for m in models:
         print ("Fault contour empty")
 
       # Loop over all source rock contours
+      s = 0
       for source_contour in source_rock_contours:
         source_polygon = Polygon()
         # Create source polygon and pad it with user-set buffer
@@ -250,10 +254,13 @@ for m in models:
           cv2.drawContours(img_OFM12_contours, source_contour,-1,(0,255,0),3)
           n_source_fault_overlaps += 1
           source_fault_overlaps[p] += 1
+          i_source_fault_overlaps[p] = s
         # Reset for next source
         intersect_source = False
+        s += 1
 
       # Loop over host contours
+      h = 0
       for host_contour in host_rock_contours:
         host_polygon = Polygon()
         # Create host polygon and pad it with user-set buffer
@@ -272,8 +279,19 @@ for m in models:
           cv2.drawContours(img_OFM12_contours, host_contour,-1,(0,0,255),3)
           n_host_fault_overlaps += 1
           host_fault_overlaps[p] += 1
+          i_host_fault_overlaps[p] = h
+          # If both source and host overlap with this fault,
+          # plot their contour in different colour
+          # NB several host contours might overlap for one source
+          # contour, so this source contour will be plotted multiple
+          # times
+          if source_fault_overlaps[p] > 0:
+            if len(source_rock_contours[int(i_source_fault_overlaps[p])]) > 0:
+              cv2.drawContours(img_OFM12_contours, source_rock_contours[int(i_source_fault_overlaps[p])],-1,(0,255,255),3) 
+            cv2.drawContours(img_OFM12_contours, host_contour,-1,(240,32,160),3) 
         # Reset for next host
         intersect_host = False
+        h += 1
 
       # Update fault contour counter
       p += 1
@@ -290,10 +308,6 @@ for m in models:
     source_host_fault_overlaps = (source_fault_overlaps != 0) & (host_fault_overlaps != 0)
     print ("Shapely: Nr of potential OFM12s: ", np.count_nonzero(source_host_fault_overlaps))
     dataframe.loc[index_model_time, 'n_OFM12'] = np.count_nonzero(source_host_fault_overlaps)
-    # Draw those overlaps of potential OFM12s 
-    for OFM12 in source_host_fault_overlaps:
-      cv2.drawContours(img_OFM12_contours, source_contour,-1,(0,255,255),3) 
-      cv2.drawContours(img_OFM12_contours, host_contour,-1,(240,32,160),3) 
     
     ###### Save the OFM12 source and host on top of strainrate ######
     cv2.imwrite(m+'/'+m+'_'+t+'_Shapely_buffer_'+str(buffer)+'_OFM12.png', img_OFM12_contours)
@@ -397,11 +411,6 @@ for m in models:
               n_OFM3 += 1    
               cv2.drawContours(img_OFM3_contours, source_contour,-1,(0,255,0),2)
               cv2.drawContours(img_OFM3_contours, host_contour,-1,(0,0,255),2)
-              # If we find one host rock area, then we stop looping over the rest
-              break
-          # If we have found source and host rock areas, then we stop looping over the source rock
-          if intersect_host:
-            break
 
     ###### Print and save data ######
     print ("Shapely: Nr OFM3 with buffer of ", buffer, " = ", n_OFM3)
