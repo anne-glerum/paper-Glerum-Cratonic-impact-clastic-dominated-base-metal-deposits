@@ -16,6 +16,7 @@ from sys import exit
 import io
 import re
 import pandas as pd
+import seaborn as sns
 plt.rcParams["font.family"] = "Arial"
 rc("xtick", labelsize= 12)
 rc("font", size=12)
@@ -133,78 +134,79 @@ if not set(["max_OFM3","max_OFM2","max_OFM1","max_source"]).issubset(dataframe.c
   exit("The requested data columns are not available, exiting.")
 
 # Create empty plot
+sns.set_theme()
 cm = 2.54  # centimeters in inches
-#fig, axs = plt.subplots(figsize=(12, 4),dpi=300, subplots=True)
+fig, axs = plt.subplots(2,4) #,figsize=(6, 2),dpi=300)
 
 # Plot requested columns
-#dataframe.plot.scatter(x=to_plot[0],y=to_plot[1],alpha=0.5,cmap=cmap,s=dataframe["max_OFM3"]*200)
-dataframe.plot.scatter(x=to_plot[0],y=to_plot[1],alpha=0.5,s=dataframe["max_source"]*10,color=cmap(dataframe["max_OFM1"]/5))
-plt.legend()
+#dataframe.plot.scatter(x=to_plot[0],y=to_plot[1],alpha=0.5,s=dataframe["max_source"]*10,color=cmap(dataframe["max_OFM1"]/5))
+sns.scatterplot(data=dataframe,x=to_plot[0],y=to_plot[1],size="max_source",sizes=(0,200),hue="max_OFM1",ax=axs[0,0],legend=False)
+sns.scatterplot(data=dataframe,x=to_plot[1],y=to_plot[0],size="max_source",sizes=(0,200),hue="max_OFM1",ax=axs[1,0],legend=True)
 
 # Ranges and labels of the axes
-plt.title("Initial rift-craton distance: " + str(dataframe["initial_craton_distance"][0]) + " km", weight="bold")
-
-if to_plot[0] == 'initial_craton_distance':
-  plt.xlim(-1.5,151.5) # km
-  plt.xlabel("Initial craton-rift distance [km]",weight="bold")
-#if to_plot[0] == 'initial_fault_geometry':
+axs[0,0].set_title("Initial rift-craton distance: " + str(dataframe["initial_craton_distance"][0]) + " km", weight="bold")
+#
+#if to_plot[0] == 'initial_craton_distance':
 #  plt.xlim(-1.5,151.5) # km
-elif to_plot[0] == 'start_migration':
-  plt.xlim(-0.25,25.25) # My
-  plt.xlabel("Start rift migration [My]",weight="bold")
-#if to_plot[0] == 'narrow_margin':
-elif to_plot[0] == 'start_border_fault':
-  plt.xlim(-0.25,25.25) # My
-  plt.xlabel("Start source basin border fault(s) [My]",weight="bold")
-elif to_plot[0] == 'max_source_basins':
-  plt.xlim(-0.1,10.1) # -
-  plt.xlabel("Max. nr of source basins [-]",weight="bold")
-elif to_plot[0] == 'max_source_host_basins':
-  plt.xlim(-0.1,10.1) # -
-  plt.xlabel("Max. nr of source+host basins [-]",weight="bold")
-elif to_plot[0] == 'max_OFM3':
-  plt.xlim(-0.05,5.05) # -
-  plt.xlabel("Max. nr of OFM3 [-]",weight="bold")
-elif to_plot[0] == 'max_OFM2':
-  plt.xlim(-0.05,5.05) # -
-  plt.xlabel("Max. nr of OFM2 [-]",weight="bold")
-elif to_plot[0] == 'max_OMF1':
-  plt.xlim(-0.05,5.05) # -
-  plt.xlabel("Max. nr of OFM1 [-]",weight="bold")
-elif to_plot[0] == 'end_migration':
-  plt.xlim(-0.25,25.25) # My
-  plt.xlabel("End rift migration [My]",weight="bold")
-
-if to_plot[1] == 'initial_craton_distance':
-  plt.ylim(-1.5,151.5) # km
-  plt.ylabel("Initial craton-rift distance [km]",weight="bold")
-#if to_plot[1] == 'initial_fault_geometry':
+#  plt.xlabel("Initial craton-rift distance [km]",weight="bold")
+##if to_plot[0] == 'initial_fault_geometry':
+##  plt.xlim(-1.5,151.5) # km
+#elif to_plot[0] == 'start_migration':
+#  plt.xlim(-0.25,25.25) # My
+#  plt.xlabel("Start rift migration [My]",weight="bold")
+##if to_plot[0] == 'narrow_margin':
+#elif to_plot[0] == 'start_border_fault':
+#  plt.xlim(-0.25,25.25) # My
+#  plt.xlabel("Start source basin border fault(s) [My]",weight="bold")
+#elif to_plot[0] == 'max_source_basins':
+#  plt.xlim(-0.1,10.1) # -
+#  plt.xlabel("Max. nr of source basins [-]",weight="bold")
+#elif to_plot[0] == 'max_source_host_basins':
+#  plt.xlim(-0.1,10.1) # -
+#  plt.xlabel("Max. nr of source+host basins [-]",weight="bold")
+#elif to_plot[0] == 'max_OFM3':
+#  plt.xlim(-0.05,5.05) # -
+#  plt.xlabel("Max. nr of OFM3 [-]",weight="bold")
+#elif to_plot[0] == 'max_OFM2':
+#  plt.xlim(-0.05,5.05) # -
+#  plt.xlabel("Max. nr of OFM2 [-]",weight="bold")
+#elif to_plot[0] == 'max_OMF1':
+#  plt.xlim(-0.05,5.05) # -
+#  plt.xlabel("Max. nr of OFM1 [-]",weight="bold")
+#elif to_plot[0] == 'end_migration':
+#  plt.xlim(-0.25,25.25) # My
+#  plt.xlabel("End rift migration [My]",weight="bold")
+#
+#if to_plot[1] == 'initial_craton_distance':
 #  plt.ylim(-1.5,151.5) # km
-elif to_plot[1] == 'start_migration':
-  plt.ylim(-0.25,25.25) # My
-  plt.ylabel("Start rift migration [My]",weight="bold")
-#if to_plot[1] == 'narrow_margin':
-elif to_plot[1] == 'start_border_fault':
-  plt.ylim(-0.25,25.25) # My
-  plt.ylabel("Start source basin border fault(s) [My]",weight="bold")
-elif to_plot[1] == 'max_source_basins':
-  plt.ylim(-0.1,10.1) # -
-  plt.ylabel("Max. nr of source basins [-]",weight="bold")
-elif to_plot[1] == 'max_source_host_basins':
-  plt.ylim(-0.1,10.1) # -
-  plt.ylabel("Max. nr of source+host basins [-]",weight="bold")
-elif to_plot[1] == 'max_OFM3':
-  plt.ylim(-0.05,5.05) # -
-  plt.ylabel("Max. nr of OFM3 [-]",weight="bold")
-elif to_plot[1] == 'max_OFM2':
-  plt.ylim(-0.05,5.05) # -
-  plt.ylabel("Max. nr of OFM2 [-]",weight="bold")
-elif to_plot[1] == 'max_OMF1':
-  plt.ylim(-0.05,5.05) # -
-  plt.ylabel("Max. nr of OFM1 [-]",weight="bold")
-elif to_plot[1] == 'end_migration':
-  plt.ylim(-0.25,25.25) # My
-  plt.ylabel("End rift migration [My]",weight="bold")
+#  plt.ylabel("Initial craton-rift distance [km]",weight="bold")
+##if to_plot[1] == 'initial_fault_geometry':
+##  plt.ylim(-1.5,151.5) # km
+#elif to_plot[1] == 'start_migration':
+#  plt.ylim(-0.25,25.25) # My
+#  plt.ylabel("Start rift migration [My]",weight="bold")
+##if to_plot[1] == 'narrow_margin':
+#elif to_plot[1] == 'start_border_fault':
+#  plt.ylim(-0.25,25.25) # My
+#  plt.ylabel("Start source basin border fault(s) [My]",weight="bold")
+#elif to_plot[1] == 'max_source_basins':
+#  plt.ylim(-0.1,10.1) # -
+#  plt.ylabel("Max. nr of source basins [-]",weight="bold")
+#elif to_plot[1] == 'max_source_host_basins':
+#  plt.ylim(-0.1,10.1) # -
+#  plt.ylabel("Max. nr of source+host basins [-]",weight="bold")
+#elif to_plot[1] == 'max_OFM3':
+#  plt.ylim(-0.05,5.05) # -
+#  plt.ylabel("Max. nr of OFM3 [-]",weight="bold")
+#elif to_plot[1] == 'max_OFM2':
+#  plt.ylim(-0.05,5.05) # -
+#  plt.ylabel("Max. nr of OFM2 [-]",weight="bold")
+#elif to_plot[1] == 'max_OMF1':
+#  plt.ylim(-0.05,5.05) # -
+#  plt.ylabel("Max. nr of OFM1 [-]",weight="bold")
+#elif to_plot[1] == 'end_migration':
+#  plt.ylim(-0.25,25.25) # My
+#  plt.ylabel("End rift migration [My]",weight="bold")
 
 # Axis labels
 #ax = plt.gca()
