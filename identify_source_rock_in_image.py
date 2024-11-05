@@ -84,39 +84,38 @@ for m in models:
     ###### Make sure the images exist ######
     assert img is not None, "File could not be read, check with os.path.exists()"
     assert img_all is not None, "File could not be read, check with os.path.exists()"
-    assert img_source_host is not None, "File could not be read, check with os.path.exists()"
+    assert img_source is not None, "File could not be read, check with os.path.exists()"
+    assert img_host is not None, "File could not be read, check with os.path.exists()"
     assert img_strainrate is not None, "File could not be read, check with os.path.exists()"
     assert img_strain is not None, "File could not be read, check with os.path.exists()"
     
     ###### Mask OFM ingredients ######
     # 1. Source rock
-    # Build a mask where all dark green pixels are 255 and other colors are 0.
-    # The two tuples provide the lower and upper bounds for dark green (0,85,0).
-    source_rock = cv2.inRange(img_source, (0, 82, 0), (5, 88, 5))  
-    
+    img_gray = cv2.cvtColor(img_source, cv2.COLOR_BGR2GRAY)
+    ret, thresh = cv2.threshold(img_gray, 254, 255, cv2.THRESH_BINARY)
+    source_rock = cv2.bitwise_not(thresh)
+    cv2.imwrite(m+'/'+m+'_'+t+'_gray_threshold_inverted_source.png', source_rock)
+
     # Build a mask where all light green pixels are 255 and other colors are 0.
     # 2. Host rock
-    # Original RGBs:
-    # Limestones 186 228 179
-    # Carbonates 166 196 118
-    # Silicates 35 139 69
-    # The two tuples provide the lower and upper bounds in BGR!
-    host_rock_1 = cv2.inRange(img_host, (165, 217, 179), (171, 223, 185))  
-    host_rock_2 = cv2.inRange(img_host, (108, 187, 160), (114, 193, 166))  
-    host_rock_3 = cv2.inRange(img_host, (62, 132, 31), (68, 138, 37))
-    # Combine the three different host rocks into one.
-    tmp_host_rock = cv2.bitwise_or(host_rock_1,host_rock_2)
-    host_rock = cv2.bitwise_or(tmp_host_rock,host_rock_3)
+    img_gray = cv2.cvtColor(img_host, cv2.COLOR_BGR2GRAY)
+    ret, thresh = cv2.threshold(img_gray, 254, 255, cv2.THRESH_BINARY)
+    host_rock = cv2.bitwise_not(thresh)
+    cv2.imwrite(m+'/'+m+'_'+t+'_gray_threshold_inverted_host.png', host_rock)
     
     # Build a mask where all black pixels are 255 and other colors are 0.
     # 3. Strain rate
-    # The two tuples provide the lower and upper bounds for greys.
-    active_fault_zone = cv2.inRange(img_strainrate, (0, 0, 0), (250, 250, 250))  
+    img_gray = cv2.cvtColor(img_strainrate, cv2.COLOR_BGR2GRAY)
+    ret, thresh = cv2.threshold(img_gray, 245, 255, cv2.THRESH_BINARY)
+    active_fault_zone = cv2.bitwise_not(thresh)
+    cv2.imwrite(m+'/'+m+'_'+t+'_gray_threshold_inverted_fault.png', active_fault_zone) 
     
     # Build a mask where all grey pixels are 255 and other colors are 0.
     # 4. Plastic strain
-    # The two tuples provide the lower and upper bounds for greys.
-    inactive_fault_zone = cv2.inRange(img_strain, (0, 0, 0), (230, 230, 230))
+    img_gray = cv2.cvtColor(img_strain, cv2.COLOR_BGR2GRAY)
+    ret, thresh = cv2.threshold(img_gray, 245, 255, cv2.THRESH_BINARY)
+    inactive_fault_zone = cv2.bitwise_not(thresh)
+    cv2.imwrite(m+'/'+m+'_'+t+'_gray_threshold_inverted_inactive_fault.png', inactive_fault_zone) 
     
     ###### Finding intersections with 2 methods ######
     # 1. Using binary logic: find overlaps but no OFMs
