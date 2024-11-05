@@ -92,7 +92,7 @@ for m in models:
     # 1. Source rock
     # Build a mask where all dark green pixels are 255 and other colors are 0.
     # The two tuples provide the lower and upper bounds for dark green (0,85,0).
-    source_rock = cv2.inRange(img_source_host, (0, 82, 0), (5, 88, 5))  
+    source_rock = cv2.inRange(img_source, (0, 82, 0), (5, 88, 5))  
     
     # Build a mask where all light green pixels are 255 and other colors are 0.
     # 2. Host rock
@@ -101,9 +101,9 @@ for m in models:
     # Carbonates 166 196 118
     # Silicates 35 139 69
     # The two tuples provide the lower and upper bounds in BGR!
-    host_rock_1 = cv2.inRange(img, (165, 217, 179), (171, 223, 185))  
-    host_rock_2 = cv2.inRange(img, (108, 187, 160), (114, 193, 166))  
-    host_rock_3 = cv2.inRange(img, (62, 132, 31), (68, 138, 37))
+    host_rock_1 = cv2.inRange(img_host, (165, 217, 179), (171, 223, 185))  
+    host_rock_2 = cv2.inRange(img_host, (108, 187, 160), (114, 193, 166))  
+    host_rock_3 = cv2.inRange(img_host, (62, 132, 31), (68, 138, 37))
     # Combine the three different host rocks into one.
     tmp_host_rock = cv2.bitwise_or(host_rock_1,host_rock_2)
     host_rock = cv2.bitwise_or(tmp_host_rock,host_rock_3)
