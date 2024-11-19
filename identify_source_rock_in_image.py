@@ -10,12 +10,12 @@ from shapely.geometry import Point
 import shapely
 import itertools
 import pandas as pd
-print (shapely.__version__)
+print ("Shapely version: ", shapely.__version__)
 
 ###### Interactive? ######
 interactive = False
 ###### What buffer size [pixel] to use for intersections ######
-buffer = 1
+buffer = 0
 
 
 ###### Path to models ######
@@ -49,15 +49,15 @@ models = [
 #'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 ]
 
 
 ###### Create file paths ######
 paths = [base+m for m in models]
 ASPECT_time_steps = ['00000','00001','00005','00010','00015','00020','00025','00030','00035','00040','00045','00050']
-ASPECT_time_steps = ['00045']
+ASPECT_time_steps = ['00040']
 
 ###### Loop over requested models ######
 for m in models:
@@ -78,6 +78,8 @@ for m in models:
     img = cv2.imread(m+'/'+m+'_'+t+'_source_host_strain_strainrate_8_zoom2_280000_25000.png')
     img_all = cv2.imread(m+'/'+m+'_'+t+'_heatfluxcontours_sedtypes_Tcontours_source_host_sedage2_8_zoom2_280000_25000.png')
     img_source_host = cv2.imread(m+'/'+m+'_'+t+'_source_host_8_zoom2_280000_25000.png')  
+    img_source = cv2.imread(m+'/'+m+'_'+t+'_source_8_zoom2_280000_25000.png')  
+    img_host = cv2.imread(m+'/'+m+'_'+t+'_host_8_zoom2_280000_25000.png')  
     img_strainrate = cv2.imread(m+'/'+m+'_'+t+'_strainrate_8_zoom2_280000_25000.png')  
     img_strain = cv2.imread(m+'/'+m+'_'+t+'_plasticstrain_8_zoom2_280000_25000.png')  
     
@@ -96,21 +98,18 @@ for m in models:
     source_rock = cv2.bitwise_not(thresh)
     cv2.imwrite(m+'/'+m+'_'+t+'_gray_threshold_inverted_source.png', source_rock)
 
-    # Build a mask where all light green pixels are 255 and other colors are 0.
     # 2. Host rock
     img_gray = cv2.cvtColor(img_host, cv2.COLOR_BGR2GRAY)
     ret, thresh = cv2.threshold(img_gray, 254, 255, cv2.THRESH_BINARY)
     host_rock = cv2.bitwise_not(thresh)
     cv2.imwrite(m+'/'+m+'_'+t+'_gray_threshold_inverted_host.png', host_rock)
     
-    # Build a mask where all black pixels are 255 and other colors are 0.
     # 3. Strain rate
     img_gray = cv2.cvtColor(img_strainrate, cv2.COLOR_BGR2GRAY)
     ret, thresh = cv2.threshold(img_gray, 245, 255, cv2.THRESH_BINARY)
     active_fault_zone = cv2.bitwise_not(thresh)
     cv2.imwrite(m+'/'+m+'_'+t+'_gray_threshold_inverted_fault.png', active_fault_zone) 
     
-    # Build a mask where all grey pixels are 255 and other colors are 0.
     # 4. Plastic strain
     img_gray = cv2.cvtColor(img_strain, cv2.COLOR_BGR2GRAY)
     ret, thresh = cv2.threshold(img_gray, 245, 255, cv2.THRESH_BINARY)
