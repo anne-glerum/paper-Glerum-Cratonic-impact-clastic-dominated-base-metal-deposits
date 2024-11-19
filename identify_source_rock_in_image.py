@@ -133,7 +133,62 @@ for m in models:
     # Get the contours of inactive fault zone area
     inactive_fault_contours, inactive_fault_hierarchy = cv2.findContours(inactive_fault_zone, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     print("Contours: Nr inactive faults = " + str(len(inactive_fault_contours)))
+
+    # Get rid of any contours that are too small
+    def remove_small_contours(min_contour_size, contours):
+      idx_to_delete = []
+      index = 0
+      for c in contours:
+        if cv2.contourArea(c) <= min_contour_size:
+          idx_to_delete.append(index)
+        index+=1
+      contours = np.delete(contours,idx_to_delete)
+      return contours
+
+    # The minimum nr of pixels a contour should encompass
+    min_contour_size = 1
+    source_rock_contours = remove_small_contours(min_contour_size, source_rock_contours)
+    contour_source_image = cv2.cvtColor(source_rock.copy(), cv2.COLOR_GRAY2RGB)
+    cv2.drawContours(contour_source_image, source_rock_contours, -1, (0,0,255), 1)
+    cv2.imwrite(m+'/'+m+'_'+t+'_source_area.png', contour_source_image)
+    print("Contours: Nr large source rock areas = " + str(len(source_rock_contours)))
+
+    contour_host_image = cv2.cvtColor(host_rock.copy(), cv2.COLOR_GRAY2RGB)
+    idx_to_delete = []
+    index = 0
+    for c in host_rock_contours:
+      if cv2.contourArea(c) <= min_contour_size:
+        idx_to_delete.append(index)
+        cv2.drawContours(contour_host_image, c, -1, (0,0,255), 1)
+      index+=1
+    host_rock_contours = np.delete(host_rock_contours,idx_to_delete)
+    cv2.imwrite(m+'/'+m+'_'+t+'_host_area.png', contour_host_image)
+    print("Contours: Nr large host rock areas = " + str(len(host_rock_contours)))
+
+    contour_fault_image = cv2.cvtColor(active_fault_zone.copy(), cv2.COLOR_GRAY2RGB)
+    idx_to_delete = []
+    index = 0
+    for c in fault_contours:
+      if cv2.contourArea(c) <= min_contour_size:
+        idx_to_delete.append(index)
+        cv2.drawContours(contour_fault_image, c, -1, (0,0,255), 1)
+      index+=1
+    fault_contours = np.delete(fault_contours,idx_to_delete)
+    cv2.imwrite(m+'/'+m+'_'+t+'_fault_area.png', contour_fault_image)
+    print("Contours: Nr large active fault areas = " + str(len(fault_contours)))
     
+    contour_inactive_fault_image = cv2.cvtColor(inactive_fault_zone.copy(), cv2.COLOR_GRAY2RGB)
+    idx_to_delete = []
+    index = 0
+    for c in inactive_fault_contours:
+      if cv2.contourArea(c) <= min_contour_size:
+        idx_to_delete.append(index)
+        cv2.drawContours(contour_inactive_fault_image, c, -1, (0,0,255), 1)
+      index+=1
+    inactive_fault_contours = np.delete(inactive_fault_contours,idx_to_delete)
+    cv2.imwrite(m+'/'+m+'_'+t+'_inactive_fault_area.png', contour_inactive_fault_image)
+    print("Contours: Nr large inactive fault areas = " + str(len(inactive_fault_contours)))
+
     ###### Finding intersections with 2 methods ######
     # 1. Using binary logic: find overlaps but no OFMs
    
