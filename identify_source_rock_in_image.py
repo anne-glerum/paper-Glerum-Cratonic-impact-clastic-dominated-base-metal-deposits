@@ -131,7 +131,7 @@ for m in models:
     
     # Get the contours of inactive fault zone area
     inactive_fault_contours, inactive_fault_hierarchy = cv2.findContours(inactive_fault_zone, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-    print("Contours: Nr inactive faults = " + str(len(inactive_fault_contours)))
+    print("Contours: Nr inactive faults = " + str(len(inactive_fault_contours)) + "\n")
 
     # Get rid of any contours that are too small
     def remove_small_contours(min_contour_size, contours):
@@ -169,7 +169,7 @@ for m in models:
     inactive_fault_contours = remove_small_contours(min_contour_size, inactive_fault_contours)
     cv2.drawContours(contour_inactive_fault_image, inactive_fault_contours, -1, (0,0,255), 1)
     cv2.imwrite(m+'/'+m+'_'+t+'_inactive_fault_area.png', contour_inactive_fault_image)
-    print("Contours: Nr large inactive fault areas = " + str(len(inactive_fault_contours)))
+    print("Contours: Nr large inactive fault areas = " + str(len(inactive_fault_contours)) + "\n")
 
     ###### Finding intersections with 2 methods ######
     # 1. Using binary logic: find overlaps but no OFMs
@@ -179,7 +179,9 @@ for m in models:
     overlap_host_fault = cv2.bitwise_and(host_rock, active_fault_zone)
     overlap_source_inactive_fault = cv2.bitwise_and(source_rock, inactive_fault_zone)
     overlap_host_inactive_fault = cv2.bitwise_and(host_rock, inactive_fault_zone)
+    # Potential OFM12
     overlap_source_host_fault = cv2.bitwise_or(overlap_source_fault, overlap_host_fault)
+    # Potential OFM3
     overlap_source_host_inactive_fault = cv2.bitwise_or(overlap_source_inactive_fault, overlap_host_inactive_fault)
     # To check whether OFM12 or OFM3 occurs when both strain rate and strain are present
     overlap_source_active_inactive_fault = cv2.bitwise_and(overlap_source_fault, overlap_source_inactive_fault)
@@ -214,36 +216,38 @@ for m in models:
     cv2.drawContours(overlap_host_inactive_fault_image, overlap_host_inactive_fault_contours, -1, (0,0,255), 2)
     cv2.imwrite(m+'/'+m+'_'+t+'_bitwise_overlap_host_inactive_fault.png', overlap_host_inactive_fault_image)
 
+    # Source and host rock intersection with active fault
+    overlap_source_host_fault_contours, overlap_source_host_fault_hierarchy = cv2.findContours(overlap_source_host_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    print("Binary + Contours: Nr source and host rock overlaps active fault = " + str(len(overlap_source_host_fault_contours)))
+
     # Source rock intersection with active and inactive fault
     overlap_source_active_inactive_fault_contours, overlap_source_active_inactive_fault_hierarchy = cv2.findContours(overlap_source_active_inactive_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     print("Binary + Contours: Nr source rock overlaps active and inactive fault = " + str(len(overlap_source_active_inactive_fault_contours)))
 
-    # Source and host rock intersection with active fault
-    overlap_source_host_fault_contours, overlap_source_host_fault_hierarchy = cv2.findContours(overlap_source_host_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-    
     # Source and host rock intersection with inactive fault
     overlap_source_host_inactive_fault_contours, overlap_source_host_inactive_fault_hierarchy = cv2.findContours(overlap_source_host_inactive_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    print("Binary + Contours: Nr source and host rock overlaps inactive fault = " + str(len(overlap_source_host_inactive_fault_contours)) + "\n")
     
     ###### Plot the source and host rock contours on top of faults ######
     # active fault
     overlap_source_host_fault_contours_image = img_strainrate.copy()
-    cv2.drawContours(overlap_source_host_fault_contours_image, source_rock_contours, -1, (0,0,255), 1)
-    cv2.drawContours(overlap_source_host_fault_contours_image, host_rock_contours, -1, (255,0,0), 1)
+    cv2.drawContours(overlap_source_host_fault_contours_image, source_rock_contours, -1, (0,0,255), 1) # red
+    cv2.drawContours(overlap_source_host_fault_contours_image, host_rock_contours, -1, (255,0,0), 1) # blue
     # inactive fault
     overlap_source_host_inactive_fault_contours_image = img_strain.copy()
-    cv2.drawContours(overlap_source_host_inactive_fault_contours_image, source_rock_contours, -1, (0,0,255), 1)
-    cv2.drawContours(overlap_source_host_inactive_fault_contours_image, host_rock_contours, -1, (255,0,0), 1)
+    cv2.drawContours(overlap_source_host_inactive_fault_contours_image, source_rock_contours, -1, (0,0,255), 1) # red
+    cv2.drawContours(overlap_source_host_inactive_fault_contours_image, host_rock_contours, -1, (255,0,0), 1) # blue
     
-    ###### Plot binary overlaps on top of source and host rock contours and faults ######
+    ###### Plot binary overlaps on top of source and host rock contours and faults - these should be used for OFM analysis ######
     # active fault
-    cv2.drawContours(overlap_source_host_fault_contours_image, overlap_source_host_fault_contours, -1, (0,255,0), 3)
+    cv2.drawContours(overlap_source_host_fault_contours_image, overlap_source_host_fault_contours, -1, (0,255,0), 3) # green
     cv2.imwrite(m+'/'+m+'_'+t+'_bitwise_overlap_fault.png', overlap_source_host_fault_contours_image)
-    # active fault
-    cv2.drawContours(overlap_source_host_inactive_fault_contours_image, overlap_source_host_inactive_fault_contours, -1, (0,255,0), 3)
+    # inactive fault
+    cv2.drawContours(overlap_source_host_inactive_fault_contours_image, overlap_source_host_inactive_fault_contours, -1, (0,255,0), 3) # green
+    # source and host that are already linked to active fault
+    cv2.drawContours(overlap_source_host_inactive_fault_contours_image, overlap_source_host_fault_contours, -1, (0,0,0), 2) # black
     cv2.imwrite(m+'/'+m+'_'+t+'_bitwise_overlap_inactive_fault.png', overlap_source_host_inactive_fault_contours_image)
 
-    #TODO find OFM3s
-    
     ###### ######
     # 2. Using polygons from Shapely: find OFMs
     # variables containing overlaps found with Shapely end in 'overlaps',
@@ -350,13 +354,14 @@ for m in models:
     print("Shapely: Nr source rock overlaps active fault with buffer of", buffer, " = ", n_source_fault_overlaps)
     dataframe.loc[index_model_time, 'n_source_fault_overlaps'] = n_source_fault_overlaps
     print("Shapely: Nr host rock overlaps active fault with buffer of", buffer, " = ", n_host_fault_overlaps)
+    #print("Shapely2: Nr host rock overlaps active fault with buffer of", buffer, " = ", np.sum(host_fault_overlaps))
     dataframe.loc[index_model_time, 'n_host_fault_overlaps'] = n_host_fault_overlaps
 
     # Check which fault overlaps with both source and host rock, print and save
     # Note that they are only potential OFM12s, because a fault can be connected at
     # depth to another fault and they will be counted as one.
     source_host_fault_overlaps = (source_fault_overlaps != 0) & (host_fault_overlaps != 0)
-    print ("Shapely: Nr of potential OFM12s: ", np.count_nonzero(source_host_fault_overlaps))
+    print ("Shapely: Nr of potential OFM12s: ", np.count_nonzero(source_host_fault_overlaps), "\n")
     dataframe.loc[index_model_time, 'n_OFM12'] = np.count_nonzero(source_host_fault_overlaps)
     
     ###### Save the OFM12 source and host on top of strainrate ######
@@ -395,7 +400,7 @@ for m in models:
 
     # Print data 
     print("Shapely + visual inspection: Nr OFM1 with buffer of", buffer, " = ", n_OFM1)
-    print("Shapely + visual inspection: Nr OFM2 with buffer of", buffer, " = ", n_OFM2)
+    print("Shapely + visual inspection: Nr OFM2 with buffer of", buffer, " = ", n_OFM2, "\n")
 
     ###### Loop over inactive faults and check for each fault whether there is overlap with both source and host rock ######
     # If there is no overlap with source rock, skip checking host rock
