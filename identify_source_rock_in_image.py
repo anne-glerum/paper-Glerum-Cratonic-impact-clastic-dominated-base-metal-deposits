@@ -260,14 +260,16 @@ for m in models:
     # Per fault, count the overlaps
     source_fault_overlaps = np.zeros(len(fault_contours))
     host_fault_overlaps = np.zeros(len(fault_contours))
-    # Per fault, indicate the contour of the overlaps
+    # Per fault, indicate the contour of the source or host that overlaps
     i_source_fault_overlaps = np.zeros(len(fault_contours))
     i_host_fault_overlaps = np.zeros(len(fault_contours))
-
-    # Plot the OFMs on top of strain rate
-    img_OFM12_contours = img_strainrate.copy()
     # Fault index
     p = 0
+
+    # Plot the OFMs on top of strain rate and source and host contours
+    img_OFM12_contours = img_strainrate.copy()
+    cv2.drawContours(img_OFM12_contours, source_rock_contours, -1, (0,0,255), 1) # red
+    cv2.drawContours(img_OFM12_contours, host_rock_contours, -1, (255,0,0), 1) # blue
 
     # Loop over each fault contour
     for contour in fault_contours:
@@ -282,6 +284,7 @@ for m in models:
         fault_polygon = LineString([l[0] for l in contour]).buffer(buffer)
       elif len(contour) == 1:
         fault_polygon = Point(contour[0][0]).buffer(buffer)
+        print("Fault polygon is point")
       else:
         print ("Fault contour empty")
 
@@ -298,14 +301,18 @@ for m in models:
         # Create a point instead of a polygon
         elif len(source_contour) == 1:
           source_polygon = Point(contour[0][0]).buffer(buffer)
+          print("Source polygon is point")
         else:
           print ("Source rock contour empty")
 
         # Check for overlap fault and source rock
-        intersect_source = fault_polygon.intersects(source_polygon) 
+        if (fault_polygon.intersects(source_polygon) or fault_polygon.touches(source_polygon) or source_polygon.within(fault_polygon) or fault_polygon.within(source_polygon) or source_polygon.overlaps(fault_polygon) or fault_polygon.covers(source_polygon) or fault_polygon.crosses(source_polygon) ):
+          intersect_source = True
+        if (len(source_contour) == 1 and source_polygon.within(fault_polygon)):
+          intersect_source = True
         # Draw and count if overlap occurs
         if intersect_source:
-          cv2.drawContours(img_OFM12_contours, source_contour,-1,(0,255,0),3)
+          cv2.drawContours(img_OFM12_contours, source_contour,-1,(0,255,0),3) # green
           n_source_fault_overlaps += 1
           source_fault_overlaps[p] += 1
           i_source_fault_overlaps[p] = s
@@ -324,13 +331,17 @@ for m in models:
           host_polygon = LineString([l[0] for l in host_contour]).buffer(buffer)
         elif len(host_contour) == 1:
           host_polygon = Point(host_contour[0][0]).buffer(buffer)
+          print("Host polygon is point")
         else:
-          print ("Source rock contour empty")
+          print ("Host rock contour empty")
 
         # Check for overlap fault and host rock
-        intersect_host = fault_polygon.intersects(host_polygon)
+        if (fault_polygon.intersects(host_polygon) or fault_polygon.touches(host_polygon) or host_polygon.within(fault_polygon) or fault_polygon.within(host_polygon) or host_polygon.overlaps(fault_polygon) or fault_polygon.covers(host_polygon) or fault_polygon.crosses(host_polygon) ):
+          intersect_host = True
+        if (len(host_contour) == 1 and host_polygon.within(fault_polygon)):
+          intersect_host = True
         if intersect_host:
-          cv2.drawContours(img_OFM12_contours, host_contour,-1,(0,0,255),3)
+          cv2.drawContours(img_OFM12_contours, host_contour,-1,(0,255,0),3) # green
           n_host_fault_overlaps += 1
           host_fault_overlaps[p] += 1
           i_host_fault_overlaps[p] = h
