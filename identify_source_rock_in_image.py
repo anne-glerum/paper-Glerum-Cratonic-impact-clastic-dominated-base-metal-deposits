@@ -1,5 +1,5 @@
 # Locate and count the number of dark green blobs
-# in pngs that represent source rockn_source.
+# in pngs that represent source and host rock.
 
 import cv2
 import numpy as np
@@ -7,12 +7,14 @@ from matplotlib import pyplot as plt
 from shapely.geometry import Polygon
 from shapely.geometry import LineString
 from shapely.geometry import Point
+from shapely.ops import unary_union
 import shapely
 import itertools
 import pandas as pd
 print ("Shapely version: ", shapely.__version__)
 
 ###### Interactive? ######
+interactive_OFM12 = False
 interactive = False
 ###### What buffer size [pixel] to use for intersections ######
 buffer = 0
@@ -371,10 +373,12 @@ for m in models:
           # NB several host contours might overlap for one source
           # contour, so this source contour will be plotted multiple
           # times
-          if source_fault_overlaps[p] > 0:
-            if len(source_rock_contours[int(i_source_fault_overlaps[p])]) > 0:
-              cv2.drawContours(img_OFM12_contours, source_rock_contours[int(i_source_fault_overlaps[p])],-1,(0,255,255),3) 
-            cv2.drawContours(img_OFM12_contours, host_contour,-1,(240,32,160),3) 
+          #if source_fault_overlaps[p] > 0:
+          #  if len(source_rock_contours[int(i_source_fault_overlaps[p])]) > 0:
+          #    cv2.drawContours(img_OFM12_contours, source_rock_contours[int(i_source_fault_overlaps[p])],-1,(0,255,255),3) 
+          #  cv2.drawContours(img_OFM12_contours, host_contour,-1,(240,32,160),3)
+        #else:
+        #  cv2.drawContours(img_OFM12_contours, host_contour,-1,(0,0,255),1)
         # Reset for next host
         intersect_host = False
         h += 1
@@ -517,7 +521,6 @@ for m in models:
         if (len(host_contour) == 1 and host_polygon.within(fault_polygon)):
            intersect_host = True
         if intersect_host:
-          host_inactive_fault_union_polygon = unary_union([fault_polygon,host_polygon])
           cv2.drawContours(img_OFM3_contours, host_contour,-1,(0,255,0),1) # green
           n_host_inactive_fault_overlaps += 1
           host_inactive_fault_overlaps[p] += 1
@@ -526,6 +529,9 @@ for m in models:
         # Reset for next host
         intersect_host = False
         h += 1
+
+        # TODO Create unions of source + host + inactive faults and count?
+        #host_inactive_fault_union_polygon = unary_union([fault_polygon,host_polygon])
 
       # Update fault contour counter
       p += 1
