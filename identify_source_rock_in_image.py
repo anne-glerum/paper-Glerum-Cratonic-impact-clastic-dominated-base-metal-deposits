@@ -364,7 +364,7 @@ for m in models:
     print ("Shapely: Nr of potential OFM12s: ", np.count_nonzero(source_host_fault_overlaps), "\n")
     dataframe.loc[index_model_time, 'n_OFM12'] = np.count_nonzero(source_host_fault_overlaps)
     
-    ###### Save the OFM12 source and host on top of strainrate ######
+    ###### Save the OFM12 source and host on top of strainrate - this figure should be used for OFMs ######
     cv2.imwrite(m+'/'+m+'_'+t+'_Shapely_buffer_'+str(buffer)+'_OFM12.png', img_OFM12_contours)
     
     ###### Open the OFM12 image and ask user for n_OFM1 and n_OFM2 ######
@@ -374,21 +374,18 @@ for m in models:
     n_OFM2 = np.nan
     if len(source_rock_contours) > 0:
       # Ask user for interpretation
-      if interactive and ((len(overlap_source_host_fault) > 0) or (np.count_nonzero(source_host_fault_overlaps) > 0)):
+      if interactive_OFM12 and ((len(overlap_source_host_fault) > 0) or (np.count_nonzero(source_host_fault_overlaps) > 0)):
         cv2.imshow("Shapely: Possible OFM1 and OFM2", img_OFM12_contours)
-        cv2.imshow("Original: Source, host, strainrate and strain", img)
-        cv2.moveWindow("Original: Source, host, strainrate and strain", 0, 250)
         cv2.imshow("Binary: Source, host, strainrate contours", overlap_source_host_fault_contours_image)
-        cv2.moveWindow("Binary: Source, host, strainrate contours", 0, 500)
+        cv2.moveWindow("Binary: Source, host, strainrate contours", 0, 250)
         cv2.imshow("Original: All data", img_all)
-        cv2.moveWindow("Original: All data", 0, 750)
+        cv2.moveWindow("Original: All data", 0, 500)
         cv2.waitKey(0)
         n_source = input("Nr of basins with source: ")
         n_source_host = input("Nr of basins with source and host: ")
         n_OFM1 = input("Nr of OFM1: ")
         n_OFM2 = input("Nr of OFM2: ")
         cv2.destroyWindow("Shapely: Possible OFM1 and OFM2")
-        cv2.destroyWindow("Original: Source, host, strainrate and strain")
         cv2.destroyWindow("Binary: Source, host, strainrate contours")
         cv2.destroyWindow("Original: All data")
 
