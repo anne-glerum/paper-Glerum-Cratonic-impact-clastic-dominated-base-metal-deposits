@@ -141,7 +141,9 @@ for m in models:
         if cv2.contourArea(c) <= min_contour_size:
           idx_to_delete.append(index)
         index+=1
-      contours = np.delete(contours,idx_to_delete)
+      # Only delete entries if there are actually indices in the list
+      if idx_to_delete:
+        contours = np.delete(contours,idx_to_delete)
       return contours
 
     # The minimum nr of pixels a contour should encompass
@@ -187,33 +189,52 @@ for m in models:
     overlap_source_active_inactive_fault = cv2.bitwise_and(overlap_source_fault, overlap_source_inactive_fault)
     
     ###### Get contours of bitwise overlaps and report ######
+    # Function to create a random BGR color
+    def create_random_color():
+      color = np.random.randint(0, 255, size=(3, ))
+      #convert data types int64 to int
+      color = ( int (color [ 0 ]), int (color [ 1 ]), int (color [ 2 ]))
+      return tuple(color)
+
     # Source rock intersection with active fault
     overlap_source_fault_contours, overlap_source_fault_hierarchy = cv2.findContours(overlap_source_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    overlap_source_fault_contours = remove_small_contours(min_contour_size, overlap_source_fault_contours)
     print("Binary + Contours: Nr source rock overlaps active fault = " + str(len(overlap_source_fault_contours)))
     overlap_source_fault_image = cv2.cvtColor(active_fault_zone.copy(), cv2.COLOR_GRAY2RGB)
-    cv2.drawContours(overlap_source_fault_image, overlap_source_fault_contours, -1, (0,0,255), 2)
+    # Draw each contour with own color
+    for c in overlap_source_fault_contours:
+      cv2.drawContours(overlap_source_fault_image, c, -1, create_random_color(), 1)
     cv2.imwrite(m+'/'+m+'_'+t+'_bitwise_overlap_source_fault.png', overlap_source_fault_image)
     
     # Source rock intersection with inactive fault
     overlap_source_inactive_fault_contours, overlap_source_inactive_fault_hierarchy = cv2.findContours(overlap_source_inactive_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    overlap_source_inactive_fault_contours = remove_small_contours(min_contour_size, overlap_source_inactive_fault_contours)
     print("Binary + Contours: Nr source rock overlaps inactive fault = " + str(len(overlap_source_inactive_fault_contours)))
     overlap_source_inactive_fault_image = cv2.cvtColor(inactive_fault_zone.copy(), cv2.COLOR_GRAY2RGB)
-    cv2.drawContours(overlap_source_inactive_fault_image, overlap_source_inactive_fault_contours, -1, (0,0,255), 2)
+    # Draw each contour with own color
+    for c in overlap_source_inactive_fault_contours:
+      cv2.drawContours(overlap_source_inactive_fault_image, c, -1, create_random_color(), 1)
     cv2.imwrite(m+'/'+m+'_'+t+'_bitwise_overlap_source_inactive_fault.png', overlap_source_inactive_fault_image)
     
     # Host rock intersection with active fault
     overlap_host_fault_contours, overlap_host_fault_hierarchy = cv2.findContours(overlap_host_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    overlap_host_fault_contours = remove_small_contours(min_contour_size, overlap_host_fault_contours)
     print("Binary + Contours: Nr host rock overlaps active fault = " + str(len(overlap_host_fault_contours)))
     overlap_host_fault_image = cv2.cvtColor(active_fault_zone.copy(), cv2.COLOR_GRAY2RGB)
-    cv2.drawContours(overlap_host_fault_image, overlap_host_fault_contours, -1, (0,0,255), 2)
+    # Draw each contour with own color
+    for c in overlap_host_fault_contours:
+      cv2.drawContours(overlap_host_fault_image, c, -1, create_random_color(), 1)
     cv2.imwrite(m+'/'+m+'_'+t+'_bitwise_overlap_host_fault.png', overlap_host_fault_image)
     
     # Host rock intersection with inactive fault
     overlap_host_inactive_fault_contours, overlap_host_inactive_fault_hierarchy = cv2.findContours(overlap_host_inactive_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-    print("Binary + Contours: Nr host rock overlaps inactive fault = " + str(len(overlap_host_inactive_fault_contours)))
+    overlap_host_inactive_fault_contours = remove_small_contours(min_contour_size, overlap_host_inactive_fault_contours)
+    print("Binary + Contours: Nr host rock overlaps inactive fault = " + str(len(overlap_host_inactive_fault_contours)) + "\n")
     dataframe.loc[index_model_time, 'n_host_inactive_fault_overlaps'] = len(overlap_host_inactive_fault_contours)
     overlap_host_inactive_fault_image = cv2.cvtColor(inactive_fault_zone.copy(), cv2.COLOR_GRAY2RGB)
-    cv2.drawContours(overlap_host_inactive_fault_image, overlap_host_inactive_fault_contours, -1, (0,0,255), 2)
+    # Draw each contour with own color
+    for c in overlap_host_inactive_fault_contours:
+      cv2.drawContours(overlap_host_inactive_fault_image, c, -1, create_random_color(), 1)
     cv2.imwrite(m+'/'+m+'_'+t+'_bitwise_overlap_host_inactive_fault.png', overlap_host_inactive_fault_image)
 
     # Source and host rock intersection with active fault
@@ -238,7 +259,7 @@ for m in models:
     cv2.drawContours(overlap_source_host_inactive_fault_contours_image, source_rock_contours, -1, (0,0,255), 1) # red
     cv2.drawContours(overlap_source_host_inactive_fault_contours_image, host_rock_contours, -1, (255,0,0), 1) # blue
     
-    ###### Plot binary overlaps on top of source and host rock contours and faults - these should be used for OFM analysis ######
+    ###### Plot binary overlaps on top of source and host rock contours and faults - !these should be used for OFM analysis! ######
     # active fault
     cv2.drawContours(overlap_source_host_fault_contours_image, overlap_source_host_fault_contours, -1, (0,255,0), 3) # green
     cv2.imwrite(m+'/'+m+'_'+t+'_bitwise_overlap_fault.png', overlap_source_host_fault_contours_image)
