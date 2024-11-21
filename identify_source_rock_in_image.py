@@ -137,16 +137,11 @@ for m in models:
 
     # Get rid of any contours that are too small
     def remove_small_contours(min_contour_size, contours):
-      idx_to_delete = []
-      index = 0
+      tmp_contours = []
       for c in contours:
-        if cv2.contourArea(c) <= min_contour_size:
-          idx_to_delete.append(index)
-        index+=1
-      # Only delete entries if there are actually indices in the list
-      if idx_to_delete:
-        contours = np.delete(contours,idx_to_delete)
-      return contours
+        if cv2.contourArea(c) > min_contour_size:
+          tmp_contours.append(c)
+      return tuple(tmp_contours)
 
     # The minimum nr of pixels a contour should encompass
     min_contour_size = 1
