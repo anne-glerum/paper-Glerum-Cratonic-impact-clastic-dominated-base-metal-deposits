@@ -11,14 +11,19 @@ from shapely.ops import unary_union
 import shapely
 import itertools
 import pandas as pd
+from os.path import exists
+import time
 print ("Shapely version: ", shapely.__version__)
+print ("Numpy version: ", np.__version__)
 
 ###### Interactive? ######
 interactive_OFM12 = False
-interactive = False
+interactive_OFM3 = False
+interactive_summary = False
 ###### What buffer size [pixel] to use for intersections ######
 buffer = 0
-
+###### Factor to multiple vtu timestep number with to get the model time in My ######
+vtu_step_to_time_in_My = 0.5
 
 ###### Path to models ######
 base = r"/Users/acglerum/Documents/Postdoc/SB_CRYSTALS/HLRN/HLRN/FastScapeASPECT_cratons/"
@@ -64,8 +69,11 @@ ASPECT_time_steps = ['00040']
 ###### Loop over requested models ######
 for m in models:
 
-  ###### Create dataframe to store output data ######
-  dataframe = pd.DataFrame(columns=['time','buffer','n_source_fault_overlaps','n_host_fault_overlaps','n_source_inactive_fault_overlaps', 'n_host_inactive_fault_overlaps','n_source','n_source_host','n_OFM12','n_OFM3','n_OFM1','n_OFM2'])
+  ###### Create dataframes to store output data ######
+  # 1. frame for data for every timestep
+  dataframe = pd.DataFrame(columns=['time','buffer','n_source_fault_overlaps','n_host_fault_overlaps','n_source_inactive_fault_overlaps','n_host_inactive_fault_overlaps','n_source','n_source_host','n_potential_OFM12','n_potential_OFM3','n_OFM3','n_OFM1','n_OFM2'])
+  # 2. frame for data summarizing the results of all timesteps
+  dataframe_summary = pd.DataFrame(columns=['initial_fault_geometry','start_border_fault', 'end_border_fault','start_migration','end_migration','migration_direction','start_oceanic_spreading','n_source_max','n_source_host_max','n_OFM3_max','n_OFM1_max','n_OFM2_max'])
 
   ###### Loop over requested timesteps ######
   index_model_time = 0
@@ -197,6 +205,7 @@ for m in models:
     overlap_source_fault_contours, overlap_source_fault_hierarchy = cv2.findContours(overlap_source_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     overlap_source_fault_contours = remove_small_contours(min_contour_size, overlap_source_fault_contours)
     print("Binary + Contours: Nr source rock overlaps active fault = " + str(len(overlap_source_fault_contours)))
+    dataframe.loc[index_model_time, 'n_source_fault_overlaps'] = len(overlap_source_fault_contours)
     overlap_source_fault_image = cv2.cvtColor(active_fault_zone.copy(), cv2.COLOR_GRAY2RGB)
     # Draw each contour with own color
     for c in overlap_source_fault_contours:
@@ -207,6 +216,7 @@ for m in models:
     overlap_source_inactive_fault_contours, overlap_source_inactive_fault_hierarchy = cv2.findContours(overlap_source_inactive_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     overlap_source_inactive_fault_contours = remove_small_contours(min_contour_size, overlap_source_inactive_fault_contours)
     print("Binary + Contours: Nr source rock overlaps inactive fault = " + str(len(overlap_source_inactive_fault_contours)))
+    dataframe.loc[index_model_time, 'n_source_inactive_fault_overlaps'] = len(overlap_source_inactive_fault_contours)
     overlap_source_inactive_fault_image = cv2.cvtColor(inactive_fault_zone.copy(), cv2.COLOR_GRAY2RGB)
     # Draw each contour with own color
     for c in overlap_source_inactive_fault_contours:
@@ -217,6 +227,7 @@ for m in models:
     overlap_host_fault_contours, overlap_host_fault_hierarchy = cv2.findContours(overlap_host_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     overlap_host_fault_contours = remove_small_contours(min_contour_size, overlap_host_fault_contours)
     print("Binary + Contours: Nr host rock overlaps active fault = " + str(len(overlap_host_fault_contours)))
+    dataframe.loc[index_model_time, 'n_host_fault_overlaps'] = len(overlap_host_fault_contours)
     overlap_host_fault_image = cv2.cvtColor(active_fault_zone.copy(), cv2.COLOR_GRAY2RGB)
     # Draw each contour with own color
     for c in overlap_host_fault_contours:
@@ -383,23 +394,22 @@ for m in models:
 
     # Save and print output
     print("Shapely: Nr source rock overlaps active fault with buffer of", buffer, " = ", n_source_fault_overlaps)
-    dataframe.loc[index_model_time, 'n_source_fault_overlaps'] = n_source_fault_overlaps
+    #dataframe.loc[index_model_time, 'n_source_fault_overlaps'] = n_source_fault_overlaps
     print("Shapely: Nr host rock overlaps active fault with buffer of", buffer, " = ", n_host_fault_overlaps)
-    #print("Shapely2: Nr host rock overlaps active fault with buffer of", buffer, " = ", np.sum(host_fault_overlaps))
-    dataframe.loc[index_model_time, 'n_host_fault_overlaps'] = n_host_fault_overlaps
+    #dataframe.loc[index_model_time, 'n_host_fault_overlaps'] = n_host_fault_overlaps
 
     # Check which fault overlaps with both source and host rock, print and save
     # Note that they are only potential OFM12s, because a fault can be connected at
     # depth to another fault and they will be counted as one.
     source_host_fault_overlaps = (source_fault_overlaps != 0) & (host_fault_overlaps != 0)
     print ("Shapely: Nr of potential OFM12s: ", np.count_nonzero(source_host_fault_overlaps), "\n")
-    dataframe.loc[index_model_time, 'n_OFM12'] = np.count_nonzero(source_host_fault_overlaps)
+    dataframe.loc[index_model_time, 'n_potential_OFM12'] = np.count_nonzero(source_host_fault_overlaps)
     
     ###### Save the OFM12 source and host on top of strainrate - this figure should be used for OFMs ######
     cv2.imwrite(m+'/'+m+'_'+t+'_Shapely_buffer_'+str(buffer)+'_OFM12.png', img_OFM12_contours)
     
     ###### Open the OFM12 image and ask user for n_OFM1 and n_OFM2 ######
-    n_source = len(source_rock_contours)
+    n_source = np.nan
     n_source_host = np.nan
     n_OFM1 = np.nan
     n_OFM2 = np.nan
@@ -412,10 +422,10 @@ for m in models:
         cv2.imshow("Original: All data", img_all)
         cv2.moveWindow("Original: All data", 0, 500)
         cv2.waitKey(0)
-        n_source = input("Nr of basins with source: ")
+        n_source = input("Nr of basins with source (potentially " + len(source_rock_contours) + ": ")
         n_source_host = input("Nr of basins with source and host: ")
-        n_OFM1 = input("Nr of OFM1: ")
-        n_OFM2 = input("Nr of OFM2: ")
+        n_OFM1 = input("Nr of OFM1 (potentially " + np.count_nonzero(source_host_fault_overlaps) + ": ")
+        n_OFM2 = input("Nr of OFM2 (potentially " + np.count_nonzero(source_host_fault_overlaps) + ": ")
         cv2.destroyWindow("Shapely: Possible OFM1 and OFM2")
         cv2.destroyWindow("Binary: Source, host, strainrate contours")
         cv2.destroyWindow("Original: All data")
@@ -431,7 +441,6 @@ for m in models:
     print("Shapely + visual inspection: Nr OFM2 with buffer of", buffer, " = ", n_OFM2, "\n")
 
     ###### Loop over inactive faults and check for each fault whether there is overlap with source and/or host rock ######
-    n_OFM3 = 0
     n_source_inactive_fault_overlaps = 0
     n_host_inactive_fault_overlaps = 0
     # Per fault, count the overlaps
@@ -535,41 +544,72 @@ for m in models:
     ###### Print and save data ######
     print("Shapely: Nr source rock overlaps inactive fault with buffer of", buffer, " = ", n_source_inactive_fault_overlaps)
     print("Shapely: Nr host rock overlaps inactive fault with buffer of", buffer, " = ", n_host_inactive_fault_overlaps)
-    dataframe.loc[index_model_time, 'n_source_inactive_fault_overlaps'] = n_source_inactive_fault_overlaps
-    dataframe.loc[index_model_time, 'n_host_inactive_fault_overlaps'] = n_host_inactive_fault_overlaps
+    #dataframe.loc[index_model_time, 'n_source_inactive_fault_overlaps'] = n_source_inactive_fault_overlaps
+    #dataframe.loc[index_model_time, 'n_host_inactive_fault_overlaps'] = n_host_inactive_fault_overlaps
 
     # Check which inactive fault overlaps with both source and host rock, print and save
     # Note that they are only potential OFM3s, because an inactive fault can be connected at
     # depth to another fault and they will be counted as one.
     source_host_inactive_fault_overlaps = (source_inactive_fault_overlaps != 0) & (host_inactive_fault_overlaps != 0)
-    print ("Shapely: Nr of potential OFM3s with buffer of ", buffer, " = ", np.count_nonzero(source_host_inactive_fault_overlaps), "\n")
-    dataframe.loc[index_model_time, 'n_OFM3'] = np.count_nonzero(source_host_inactive_fault_overlaps)
+    n_potential_OFM3 = np.count_nonzero(source_host_inactive_fault_overlaps)
+    print ("Shapely: Nr of potential OFM3s with buffer of ", buffer, " = ", n_potential_OFM3, "\n")
+    dataframe.loc[index_model_time, 'n_potential_OFM3'] = n_potential_OFM3
 
     ###### Save the OFM3 source and host on top of strain ######
     cv2.imwrite(m+'/'+m+'_'+t+'_Shapely_buffer_'+str(buffer)+'_OFM3.png', img_OFM3_contours)
 
     ###### If requested, check OFM3s interactively ######
     # But only if there is a chance of OFM3
-    if interactive and (n_OFM3 > 0 or len(overlap_source_host_inactive_fault) > 0):
+    n_OFM3 = np.nan
+    if interactive_OFM3 and (n_potential_OFM3 > 0 or len(overlap_source_host_inactive_fault) > 0):
       cv2.imshow("Shapely: Possible OFM3", img_OFM3_contours)
-      cv2.imshow("Original: Source, host, strainrate and strain", img)
-      cv2.moveWindow("Original: Source, host, strainrate and strain", 0, 250)
       cv2.imshow("Binary: Source, host, strain contours", overlap_source_host_inactive_fault_contours_image)
       cv2.moveWindow("Binary: Source, host, strain contours", 0, 500)
       cv2.imshow("Original: All data", img_all)
       cv2.moveWindow("Original: All data", 0, 750)
       cv2.waitKey(0)
-      n_OFM3 = input("Nr of OFM3: ")
+      n_OFM3 = input("Nr of OFM3 (potentially " + n_potential_OFM3 + "): ")
       cv2.destroyWindow("Shapely: Possible OFM3")
-      cv2.destroyWindow("Original: Source, host, strainrate and strain")
       cv2.destroyWindow("Binary: Source, host, strain contours")
       cv2.destroyWindow("Original: All data")
 
-      print("Shapely + visual inspection: Nr OFM3 with buffer of", buffer, " = ", n_OFM3)
-      dataframe.loc[index_model_time, 'n_OFM3'] = n_OFM3
+    print("Shapely + visual inspection: Nr OFM3 with buffer of", buffer, " = ", n_OFM3)
+    dataframe.loc[index_model_time, 'n_OFM3'] = n_OFM3
     
     ###### Update output file index ######
     index_model_time += 1
-    
-  ###### Write output file ######
-  dataframe.to_csv(m+'/'+m+'_stats_2.csv',index=False)
+  
+  ###### Fill the summary table
+  start_border_fault = np.nan
+  end_border_fault = np.nan
+  start_migration = np.nan
+  end_migration = np.nan
+  initial_geometry = 'X'
+  migration_direction = 'X'
+  start_spreading = np.nan
+  if interactive_summary:
+    start_border_fault = input("Start border fault (vtu step): ")*vtu_step_to_time_in_My
+    end_border_fault = input("End border fault (vtu step): ")*vtu_step_to_time_in_My
+    start_migration = input("Start migration (vtu step): ")*vtu_step_to_time_in_My
+    end_migration = input("End migration (vtu step): ")*vtu_step_to_time_in_My
+    initial_geometry = input("Initial fault geometry (C|C-RD|C-LD|Lside-Rdip|Rside-Ldip|Lside-Rdip Rside-ULCshear|Rside-Ldip Lside-ULCshear): ")
+    migration_direction = input("Migration direction (L|C|R): ")
+    start_spreading = input("Start oceanic spreading (vtu step): ")*vtu_step_to_time_in_My
+  dataframe_summary.loc['start_border_fault'] = start_border_fault
+  dataframe_summary.loc['end_border_fault'] = end_border_fault
+  dataframe_summary.loc['start_migration'] = start_migration
+  dataframe_summary.loc['end_migration'] = end_migration
+  dataframe_summary.loc['initial_fault_geometry'] = initial_geometry
+  dataframe_summary.loc['migration_direction'] = migration_direction
+  dataframe_summary.loc['start_oceanic_spreading'] = start_spreading
+  max_values = dataframe.max()
+  dataframe_summary.loc['n_source_max'] = max_values['n_source']
+  dataframe_summary.loc['n_source_host_max'] = max_values['n_source_host']
+  dataframe_summary.loc['n_OFM3_max'] = max_values['n_OFM3']
+  dataframe_summary.loc['n_OFM1_max'] = max_values['n_OFM1']
+  dataframe_summary.loc['n_OFM2_max'] = max_values['n_OFM2']
+
+  ###### Write output files with timestamp to avoid overwriting ######
+  timestr = time.strftime("%Y%m%d-%H%M%S")
+  dataframe.to_csv(m+'/'+m+'_stats_'+timestr+'.csv',index=False)
+  dataframe_summary.to_csv(m+'/'+m+'_stats_summary_'+timestr+'.csv',index=False)
