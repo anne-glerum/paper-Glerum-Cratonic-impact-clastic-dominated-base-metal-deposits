@@ -19,7 +19,7 @@ print ("Numpy version: ", np.__version__)
 ###### Interactive? ######
 interactive_OFM12 = False
 interactive_OFM3 = False
-interactive_summary = False
+interactive_summary = True
 ###### What buffer size [pixel] to use for intersections ######
 buffer = 0
 ###### Factor to multiple vtu timestep number with to get the model time in My ######
@@ -65,6 +65,7 @@ models = [
 paths = [base+m for m in models]
 ASPECT_time_steps = ['00000','00001','00005','00010','00015','00020','00025','00030','00035','00040','00045','00050']
 ASPECT_time_steps = ['00040']
+#ASPECT_time_steps = ['00000','00001','00002','00003','00004','00005','00006','00007','00008','00009','00010','00011','00012','00013','00014','00015','00016','00017','00018','00019','00020','00021','00022','00023','00024','00025','00026','00027','00028','00029','00030','00031','00032','00033','00034','00035','00036','00037','00038','00039','00040','00041','00042','00043','00044','00045','00046','00047','00048','00049','00050']
 
 ###### Loop over requested models ######
 for m in models:
@@ -87,7 +88,6 @@ for m in models:
     ###### Read the input images ######
     img = cv2.imread(m+'/'+m+'_'+t+'_source_host_strain_strainrate_8_zoom2_280000_25000.png')
     img_all = cv2.imread(m+'/'+m+'_'+t+'_heatfluxcontours_sedtypes_Tcontours_source_host_sedage2_8_zoom2_280000_25000.png')
-    img_source_host = cv2.imread(m+'/'+m+'_'+t+'_source_host_8_zoom2_280000_25000.png')  
     img_source = cv2.imread(m+'/'+m+'_'+t+'_source_8_zoom2_280000_25000.png')  
     img_host = cv2.imread(m+'/'+m+'_'+t+'_host_8_zoom2_280000_25000.png')  
     img_strainrate = cv2.imread(m+'/'+m+'_'+t+'_strainrate_8_zoom2_280000_25000.png')  
@@ -576,6 +576,19 @@ for m in models:
     print("Shapely + visual inspection: Nr OFM3 with buffer of", buffer, " = ", n_OFM3)
     dataframe.loc[index_model_time, 'n_OFM3'] = n_OFM3
     
+    ###### Look at initial fault geometry and rift stabilization
+    first_timesteps = ASPECT_time_steps[:5]
+    last_timesteps = ASPECT_time_steps[-5:]
+    print ("first and last timesteps: ", first_timesteps, last_timesteps)
+    if interactive_summary and (t in first_timesteps):
+      cv2.imshow("Original: All data at " + t, img_all)
+      cv2.waitKey(0)
+      cv2.destroyWindow("Original: All data")
+    if interactive_summary and (t in last_timesteps):
+      cv2.imshow("Original: All data at " + t, img_all)
+      cv2.waitKey(0)
+      cv2.destroyWindow("Original: All data")
+
     ###### Update output file index ######
     index_model_time += 1
   
@@ -588,6 +601,15 @@ for m in models:
   migration_direction = 'X'
   start_spreading = np.nan
   if interactive_summary:
+    while True:
+      timestep = input("Timestep to look at again (eg 00005): ")
+      if timestep in ASPECT_time_steps:
+        cv2.imread(m+'/'+m+'_'+timestep+'_heatfluxcontours_sedtypes_Tcontours_source_host_sedage2_8_zoom2_280000_25000.png')
+        cv2.imshow("Original: All data at " + timestep, img_all)
+        cv2.waitKey(0)
+      else:
+        cv2.destroyAllWindows()
+        break  
     start_border_fault = input("Start border fault (vtu step): ")*vtu_step_to_time_in_My
     end_border_fault = input("End border fault (vtu step): ")*vtu_step_to_time_in_My
     start_migration = input("Start migration (vtu step): ")*vtu_step_to_time_in_My
