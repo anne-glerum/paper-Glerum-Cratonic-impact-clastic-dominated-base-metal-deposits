@@ -17,8 +17,8 @@ print ("Shapely version: ", shapely.__version__)
 print ("Numpy version: ", np.__version__)
 
 ###### Interactive? ######
-interactive_OFM12 = False
-interactive_OFM3 = False
+interactive_OFM12 = True
+interactive_OFM3 = True
 interactive_summary = True
 ###### What buffer size [pixel] to use for intersections ######
 buffer = 0
@@ -422,10 +422,10 @@ for m in models:
         cv2.imshow("Original: All data", img_all)
         cv2.moveWindow("Original: All data", 0, 500)
         cv2.waitKey(0)
-        n_source = input("Nr of basins with source (potentially " + len(source_rock_contours) + ": ")
+        n_source = int(input(F'Nr of basins with source (potentially {len(source_rock_contours)}): '))
         n_source_host = input("Nr of basins with source and host: ")
-        n_OFM1 = input("Nr of OFM1 (potentially " + np.count_nonzero(source_host_fault_overlaps) + ": ")
-        n_OFM2 = input("Nr of OFM2 (potentially " + np.count_nonzero(source_host_fault_overlaps) + ": ")
+        n_OFM1 = int(input(F'Nr of OFM1 (potentially {np.count_nonzero(source_host_fault_overlaps)}): '))
+        n_OFM2 = int(input(F'Nr of OFM2 (potentially {np.count_nonzero(source_host_fault_overlaps)}): '))
         cv2.destroyWindow("Shapely: Possible OFM1 and OFM2")
         cv2.destroyWindow("Binary: Source, host, strainrate contours")
         cv2.destroyWindow("Original: All data")
@@ -564,11 +564,11 @@ for m in models:
     if interactive_OFM3 and (n_potential_OFM3 > 0 or len(overlap_source_host_inactive_fault) > 0):
       cv2.imshow("Shapely: Possible OFM3", img_OFM3_contours)
       cv2.imshow("Binary: Source, host, strain contours", overlap_source_host_inactive_fault_contours_image)
-      cv2.moveWindow("Binary: Source, host, strain contours", 0, 500)
+      cv2.moveWindow("Binary: Source, host, strain contours", 0, 250)
       cv2.imshow("Original: All data", img_all)
-      cv2.moveWindow("Original: All data", 0, 750)
+      cv2.moveWindow("Original: All data", 0, 500)
       cv2.waitKey(0)
-      n_OFM3 = input("Nr of OFM3 (potentially " + n_potential_OFM3 + "): ")
+      n_OFM3 = int(input(F'Nr of OFM3 (potentially {n_potential_OFM3}): '))
       cv2.destroyWindow("Shapely: Possible OFM3")
       cv2.destroyWindow("Binary: Source, host, strain contours")
       cv2.destroyWindow("Original: All data")
