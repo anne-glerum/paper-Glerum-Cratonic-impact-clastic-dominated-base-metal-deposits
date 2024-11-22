@@ -17,8 +17,8 @@ print ("Shapely version: ", shapely.__version__)
 print ("Numpy version: ", np.__version__)
 
 ###### Interactive? ######
-interactive_OFM12 = True
-interactive_OFM3 = True
+interactive_OFM12 = False
+interactive_OFM3 = False
 interactive_summary = True
 ###### What buffer size [pixel] to use for intersections ######
 buffer = 0
@@ -64,8 +64,8 @@ models = [
 ###### Create file paths ######
 paths = [base+m for m in models]
 #ASPECT_time_steps = ['00000','00001','00005','00010','00015','00020','00025','00030','00035','00040','00045','00050']
-#ASPECT_time_steps = ['00000']
-ASPECT_time_steps = ['00000','00001','00002','00003','00004','00005','00006','00007','00008','00009','00010','00011','00012','00013','00014','00015','00016','00017','00018','00019','00020','00021','00022','00023','00024','00025','00026','00027','00028','00029','00030','00031','00032','00033','00034','00035','00036','00037','00038','00039','00040','00041','00042','00043','00044','00045','00046','00047','00048','00049','00050']
+ASPECT_time_steps = ['00040']
+#ASPECT_time_steps = ['00000','00001','00002','00003','00004','00005','00006','00007','00008','00009','00010','00011','00012','00013','00014','00015','00016','00017','00018','00019','00020','00021','00022','00023','00024','00025','00026','00027','00028','00029','00030','00031','00032','00033','00034','00035','00036','00037','00038','00039','00040','00041','00042','00043','00044','00045','00046','00047','00048','00049','00050']
 
 ###### Loop over requested models ######
 for m in models:
@@ -429,9 +429,7 @@ for m in models:
         n_source_host = input("Nr of basins with source and host: ")
         n_OFM1 = int(input(F'Nr of OFM1 (potentially {np.count_nonzero(source_host_fault_overlaps)}): '))
         n_OFM2 = int(input(F'Nr of OFM2 (potentially {np.count_nonzero(source_host_fault_overlaps)}): '))
-        cv2.destroyWindow("Shapely: Possible OFM1 and OFM2")
-        cv2.destroyWindow("Binary: Source, host, strainrate contours")
-        cv2.destroyWindow("Original: All data")
+        cv2.destroyAllWindows()
 
     # Save data
     dataframe.loc[index_model_time, 'n_source'] = n_source
@@ -572,9 +570,7 @@ for m in models:
       cv2.moveWindow("Original: All data", 0, 500)
       cv2.waitKey(0)
       n_OFM3 = int(input(F'Nr of OFM3 (potentially {n_potential_OFM3}): '))
-      cv2.destroyWindow("Shapely: Possible OFM3")
-      cv2.destroyWindow("Binary: Source, host, strain contours")
-      cv2.destroyWindow("Original: All data")
+      cv2.destroyAllWindows()
 
     print("Shapely + visual inspection: Nr OFM3 with buffer of", buffer, " = ", n_OFM3)
     dataframe.loc[index_model_time, 'n_OFM3'] = n_OFM3
@@ -585,15 +581,19 @@ for m in models:
     if interactive_summary and (t in first_timesteps):
       cv2.imshow("Original: All data at " + t, img_all)
       cv2.waitKey(0)
-      cv2.destroyWindow("Original: All data")
+      cv2.destroyAllWindows()
     if interactive_summary and (t in last_timesteps):
       cv2.imshow("Original: All data at " + t, img_all)
       cv2.waitKey(0)
-      cv2.destroyWindow("Original: All data")
+      cv2.destroyAllWindows()
 
     ###### Update output file index ######
     index_model_time += 1
   
+  ###### Write output file with timestamp to avoid overwriting ######
+  timestr = time.strftime("%Y%m%d-%H%M%S")
+  dataframe.to_csv(m+'/'+m+'_stats_'+timestr+'.csv',index=False,na_rep='nan')
+
   ###### Fill the summary table
   start_border_fault = np.nan
   end_border_fault = np.nan
@@ -606,34 +606,33 @@ for m in models:
     while True:
       timestep = input("Timestep to look at again (eg 00005): ")
       if timestep in ASPECT_time_steps:
+        print("Reviewing timestep " + timestep)
         cv2.imread(m+'/'+m+'_'+timestep+'_heatfluxcontours_sedtypes_Tcontours_source_host_sedage2_8_zoom2_280000_25000.png')
         cv2.imshow("Original: All data at " + timestep, img_all)
         cv2.waitKey(0)
-      else:
         cv2.destroyAllWindows()
+      else:
         break  
-    start_border_fault = input("Start border fault (vtu step): ")*vtu_step_to_time_in_My
-    end_border_fault = input("End border fault (vtu step): ")*vtu_step_to_time_in_My
-    start_migration = input("Start migration (vtu step): ")*vtu_step_to_time_in_My
-    end_migration = input("End migration (vtu step): ")*vtu_step_to_time_in_My
+    start_border_fault = float(input("Start border fault (vtu step): "))*vtu_step_to_time_in_My
+    end_border_fault = float(input("End border fault (vtu step): "))*vtu_step_to_time_in_My
+    start_migration = float(input("Start migration (vtu step): "))*vtu_step_to_time_in_My
+    end_migration = float(input("End migration (vtu step): "))*vtu_step_to_time_in_My
     initial_geometry = input("Initial fault geometry (C|C-RD|C-LD|Lside-Rdip|Rside-Ldip|Lside-Rdip Rside-ULCshear|Rside-Ldip Lside-ULCshear): ")
     migration_direction = input("Migration direction (L|C|R): ")
-    start_spreading = input("Start oceanic spreading (vtu step): ")*vtu_step_to_time_in_My
-  dataframe_summary.loc['start_border_fault'] = start_border_fault
-  dataframe_summary.loc['end_border_fault'] = end_border_fault
-  dataframe_summary.loc['start_migration'] = start_migration
-  dataframe_summary.loc['end_migration'] = end_migration
-  dataframe_summary.loc['initial_fault_geometry'] = initial_geometry
-  dataframe_summary.loc['migration_direction'] = migration_direction
-  dataframe_summary.loc['start_oceanic_spreading'] = start_spreading
+    start_spreading = float(input("Start oceanic spreading (vtu step): "))*vtu_step_to_time_in_My
+  dataframe_summary.loc[0,'start_border_fault'] = start_border_fault
+  dataframe_summary.loc[0,'end_border_fault'] = end_border_fault
+  dataframe_summary.loc[0,'start_migration'] = start_migration
+  dataframe_summary.loc[0,'end_migration'] = end_migration
+  dataframe_summary.loc[0,'initial_fault_geometry'] = initial_geometry
+  dataframe_summary.loc[0,'migration_direction'] = migration_direction
+  dataframe_summary.loc[0,'start_oceanic_spreading'] = start_spreading
   max_values = dataframe.max()
-  dataframe_summary.loc['n_source_max'] = max_values['n_source']
-  dataframe_summary.loc['n_source_host_max'] = max_values['n_source_host']
-  dataframe_summary.loc['n_OFM3_max'] = max_values['n_OFM3']
-  dataframe_summary.loc['n_OFM1_max'] = max_values['n_OFM1']
-  dataframe_summary.loc['n_OFM2_max'] = max_values['n_OFM2']
+  dataframe_summary.loc[0,'n_source_max'] = max_values['n_source']
+  dataframe_summary.loc[0,'n_source_host_max'] = max_values['n_source_host']
+  dataframe_summary.loc[0,'n_OFM3_max'] = max_values['n_OFM3']
+  dataframe_summary.loc[0,'n_OFM1_max'] = max_values['n_OFM1']
+  dataframe_summary.loc[0,'n_OFM2_max'] = max_values['n_OFM2']
 
-  ###### Write output files with timestamp to avoid overwriting ######
-  timestr = time.strftime("%Y%m%d-%H%M%S")
-  dataframe.to_csv(m+'/'+m+'_stats_'+timestr+'.csv',index=False)
-  dataframe_summary.to_csv(m+'/'+m+'_stats_summary_'+timestr+'.csv',index=False)
+  ###### Write summary output file with same timestamp ######
+  dataframe_summary.to_csv(m+'/'+m+'_stats_summary_'+timestr+'.csv',index=False,na_rep='nan')
