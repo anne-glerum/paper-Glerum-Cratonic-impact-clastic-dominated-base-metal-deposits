@@ -438,6 +438,11 @@ for m in models:
           except ValueError:
             print("Please enter valid integer")
         cv2.destroyAllWindows()
+    else:
+      n_source = 0
+      n_source_host = 0
+      n_OFM1 = 0
+      n_OFM2 = 0
 
     # Save data
     dataframe.loc[index_model_time, 'n_source'] = n_source
@@ -584,6 +589,8 @@ for m in models:
         except ValueError:
           print("Please enter valid integer")
       cv2.destroyAllWindows()
+    elif len(source_rock_contours) == 0:
+      n_OFM3 = 0
 
     print("Shapely + visual inspection: Nr OFM3 with buffer of", buffer, " = ", n_OFM3)
     dataframe.loc[index_model_time, 'n_OFM3'] = n_OFM3
