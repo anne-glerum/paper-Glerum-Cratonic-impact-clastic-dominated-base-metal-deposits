@@ -63,8 +63,8 @@ models = [
 
 ###### Create file paths ######
 paths = [base+m for m in models]
-ASPECT_time_steps = ['00000','00001','00005','00010','00015','00020','00025','00030','00035','00040','00045','00050']
-ASPECT_time_steps = ['00040']
+#ASPECT_time_steps = ['00000','00001','00005','00010','00015','00020','00025','00030','00035','00040','00045','00050']
+ASPECT_time_steps = ['00000']
 #ASPECT_time_steps = ['00000','00001','00002','00003','00004','00005','00006','00007','00008','00009','00010','00011','00012','00013','00014','00015','00016','00017','00018','00019','00020','00021','00022','00023','00024','00025','00026','00027','00028','00029','00030','00031','00032','00033','00034','00035','00036','00037','00038','00039','00040','00041','00042','00043','00044','00045','00046','00047','00048','00049','00050']
 
 ###### Loop over requested models ######
@@ -415,7 +415,7 @@ for m in models:
     n_OFM2 = np.nan
     if len(source_rock_contours) > 0:
       # Ask user for interpretation
-      if interactive_OFM12 and ((len(overlap_source_host_fault) > 0) or (np.count_nonzero(source_host_fault_overlaps) > 0)):
+      if interactive_OFM12 and ((len(overlap_source_host_fault_contours) > 0) or (np.count_nonzero(source_host_fault_overlaps) > 0)):
         cv2.imshow("Shapely: Possible OFM1 and OFM2", img_OFM12_contours)
         cv2.imshow("Binary: Source, host, strainrate contours", overlap_source_host_fault_contours_image)
         cv2.moveWindow("Binary: Source, host, strainrate contours", 0, 250)
@@ -561,7 +561,7 @@ for m in models:
     ###### If requested, check OFM3s interactively ######
     # But only if there is a chance of OFM3
     n_OFM3 = np.nan
-    if interactive_OFM3 and (n_potential_OFM3 > 0 or len(overlap_source_host_inactive_fault) > 0):
+    if interactive_OFM3 and (n_potential_OFM3 > 0 or len(overlap_source_host_inactive_fault_contours) > 0):
       cv2.imshow("Shapely: Possible OFM3", img_OFM3_contours)
       cv2.imshow("Binary: Source, host, strain contours", overlap_source_host_inactive_fault_contours_image)
       cv2.moveWindow("Binary: Source, host, strain contours", 0, 250)
