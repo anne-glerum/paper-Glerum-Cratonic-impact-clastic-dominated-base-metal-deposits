@@ -421,7 +421,7 @@ for m in models:
     n_OFM2 = np.nan
     if len(source_rock_contours) > 0:
       # Ask user for interpretation
-      if interactive_OFM12 and ((len(overlap_source_host_fault_contours) > 0) or (np.count_nonzero(source_host_fault_overlaps) > 0)):
+      if interactive_OFM12:
         cv2.imshow("Shapely: Possible OFM1 and OFM2", img_OFM12_contours)
         cv2.imshow("Binary: Source, host, strainrate contours", overlap_source_host_fault_contours_image)
         cv2.moveWindow("Binary: Source, host, strainrate contours", 0, 250)
@@ -638,7 +638,7 @@ for m in models:
         end_border_fault = float(input("End border fault (vtu step): "))*vtu_step_to_time_in_My
         start_migration = float(input("Start migration (vtu step): "))*vtu_step_to_time_in_My
         end_migration = float(input("End migration (vtu step): "))*vtu_step_to_time_in_My
-        initial_geometry = input("Initial fault geometry (C|C-RD|C-LD|Lside-Rdip|Rside-Ldip|Lside-Rdip Rside-ULCshear|Rside-Ldip Lside-ULCshear): ")
+        initial_geometry = input("Initial fault geometry (C|C-RD|C-LD|Lside-Rdip|Rside-Ldip|Lside-Rdip Rside-ULCshear|Rside-Ldip Lside-ULCshear|S-ULCshear): ")
         migration_direction = input("Migration direction (L|C|R): ")
         start_spreading = float(input("Start oceanic spreading (vtu step): "))*vtu_step_to_time_in_My
         break
