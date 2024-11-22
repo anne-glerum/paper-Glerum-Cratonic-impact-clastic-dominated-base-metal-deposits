@@ -17,13 +17,16 @@ print ("Shapely version: ", shapely.__version__)
 print ("Numpy version: ", np.__version__)
 
 ###### Interactive? ######
-interactive_OFM12 = False
-interactive_OFM3 = False
+interactive_OFM12 = True
+interactive_OFM3 = True
 interactive_summary = True
 ###### What buffer size [pixel] to use for intersections ######
 buffer = 0
 ###### Factor to multiple vtu timestep number with to get the model time in My ######
 vtu_step_to_time_in_My = 0.5
+
+###### Store timestamp for writing to file
+timestr = time.strftime("%Y%m%d-%H%M%S")
 
 ###### Path to models ######
 base = r"/Users/acglerum/Documents/Postdoc/SB_CRYSTALS/HLRN/HLRN/FastScapeASPECT_cratons/"
@@ -64,8 +67,8 @@ models = [
 ###### Create file paths ######
 paths = [base+m for m in models]
 #ASPECT_time_steps = ['00000','00001','00005','00010','00015','00020','00025','00030','00035','00040','00045','00050']
-ASPECT_time_steps = ['00040']
-#ASPECT_time_steps = ['00000','00001','00002','00003','00004','00005','00006','00007','00008','00009','00010','00011','00012','00013','00014','00015','00016','00017','00018','00019','00020','00021','00022','00023','00024','00025','00026','00027','00028','00029','00030','00031','00032','00033','00034','00035','00036','00037','00038','00039','00040','00041','00042','00043','00044','00045','00046','00047','00048','00049','00050']
+#ASPECT_time_steps = ['00040','00041']
+ASPECT_time_steps = ['00000','00001','00002','00003','00004','00005','00006','00007','00008','00009','00010','00011','00012','00013','00014','00015','00016','00017','00018','00019','00020','00021','00022','00023','00024','00025','00026','00027','00028','00029','00030','00031','00032','00033','00034','00035','00036','00037','00038','00039','00040','00041','00042','00043','00044','00045','00046','00047','00048','00049','00050']
 
 ###### Loop over requested models ######
 for m in models:
@@ -425,10 +428,15 @@ for m in models:
         cv2.imshow("Original: All data", img_all)
         cv2.moveWindow("Original: All data", 0, 500)
         cv2.waitKey(0)
-        n_source = int(input(F'Nr of basins with source (potentially {len(source_rock_contours)}): '))
-        n_source_host = input("Nr of basins with source and host: ")
-        n_OFM1 = int(input(F'Nr of OFM1 (potentially {np.count_nonzero(source_host_fault_overlaps)}): '))
-        n_OFM2 = int(input(F'Nr of OFM2 (potentially {np.count_nonzero(source_host_fault_overlaps)}): '))
+        while True:
+          try:
+            n_source = int(input(F'Nr of basins with source (potentially {len(source_rock_contours)}): '))
+            n_source_host = input("Nr of basins with source and host: ")
+            n_OFM1 = int(input(F'Nr of OFM1 (potentially {np.count_nonzero(source_host_fault_overlaps)}): '))
+            n_OFM2 = int(input(F'Nr of OFM2 (potentially {np.count_nonzero(source_host_fault_overlaps)}): '))
+            break
+          except ValueError:
+            print("Please enter valid integer")
         cv2.destroyAllWindows()
 
     # Save data
@@ -569,7 +577,12 @@ for m in models:
       cv2.imshow("Original: All data", img_all)
       cv2.moveWindow("Original: All data", 0, 500)
       cv2.waitKey(0)
-      n_OFM3 = int(input(F'Nr of OFM3 (potentially {n_potential_OFM3}): '))
+      while True:
+        try:
+          n_OFM3 = int(input(F'Nr of OFM3 (potentially {n_potential_OFM3}): '))
+          break
+        except ValueError:
+          print("Please enter valid integer")
       cv2.destroyAllWindows()
 
     print("Shapely + visual inspection: Nr OFM3 with buffer of", buffer, " = ", n_OFM3)
@@ -587,12 +600,11 @@ for m in models:
       cv2.waitKey(0)
       cv2.destroyAllWindows()
 
+    ###### Write output file with timestamp to avoid overwriting ######
+    dataframe.to_csv(m+'/'+m+'_stats_'+timestr+'.csv',index=False,na_rep='nan')
+
     ###### Update output file index ######
     index_model_time += 1
-  
-  ###### Write output file with timestamp to avoid overwriting ######
-  timestr = time.strftime("%Y%m%d-%H%M%S")
-  dataframe.to_csv(m+'/'+m+'_stats_'+timestr+'.csv',index=False,na_rep='nan')
 
   ###### Fill the summary table
   start_border_fault = np.nan
@@ -604,7 +616,7 @@ for m in models:
   start_spreading = np.nan
   if interactive_summary:
     while True:
-      timestep = input("Timestep to look at again (eg 00005): ")
+      timestep = str(input("Timestep to look at again (eg 00005): "))
       if timestep in ASPECT_time_steps:
         print("Reviewing timestep " + timestep)
         cv2.imread(m+'/'+m+'_'+timestep+'_heatfluxcontours_sedtypes_Tcontours_source_host_sedage2_8_zoom2_280000_25000.png')
@@ -613,13 +625,18 @@ for m in models:
         cv2.destroyAllWindows()
       else:
         break  
-    start_border_fault = float(input("Start border fault (vtu step): "))*vtu_step_to_time_in_My
-    end_border_fault = float(input("End border fault (vtu step): "))*vtu_step_to_time_in_My
-    start_migration = float(input("Start migration (vtu step): "))*vtu_step_to_time_in_My
-    end_migration = float(input("End migration (vtu step): "))*vtu_step_to_time_in_My
-    initial_geometry = input("Initial fault geometry (C|C-RD|C-LD|Lside-Rdip|Rside-Ldip|Lside-Rdip Rside-ULCshear|Rside-Ldip Lside-ULCshear): ")
-    migration_direction = input("Migration direction (L|C|R): ")
-    start_spreading = float(input("Start oceanic spreading (vtu step): "))*vtu_step_to_time_in_My
+    while True:
+      try:  
+        start_border_fault = float(input("Start border fault (vtu step): "))*vtu_step_to_time_in_My
+        end_border_fault = float(input("End border fault (vtu step): "))*vtu_step_to_time_in_My
+        start_migration = float(input("Start migration (vtu step): "))*vtu_step_to_time_in_My
+        end_migration = float(input("End migration (vtu step): "))*vtu_step_to_time_in_My
+        initial_geometry = input("Initial fault geometry (C|C-RD|C-LD|Lside-Rdip|Rside-Ldip|Lside-Rdip Rside-ULCshear|Rside-Ldip Lside-ULCshear): ")
+        migration_direction = input("Migration direction (L|C|R): ")
+        start_spreading = float(input("Start oceanic spreading (vtu step): "))*vtu_step_to_time_in_My
+        break
+      except ValueError:
+        print("Please enter valid value")
   dataframe_summary.loc[0,'start_border_fault'] = start_border_fault
   dataframe_summary.loc[0,'end_border_fault'] = end_border_fault
   dataframe_summary.loc[0,'start_migration'] = start_migration
