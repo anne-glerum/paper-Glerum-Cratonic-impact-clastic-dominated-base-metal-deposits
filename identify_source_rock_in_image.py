@@ -596,16 +596,16 @@ for m in models:
     dataframe.loc[index_model_time, 'n_OFM3'] = n_OFM3
     
     ###### Look at initial fault geometry and rift stabilization
-    first_timesteps = ASPECT_time_steps[:20]
-    last_timesteps = ASPECT_time_steps[-5:]
-    if interactive_summary and (t in first_timesteps):
+    #first_timesteps = ASPECT_time_steps[:20]
+    #last_timesteps = ASPECT_time_steps[-5:]
+    if interactive_summary: # and (t in first_timesteps):
       cv2.imshow("Original: All data at " + t, img_all)
       cv2.waitKey(0)
       cv2.destroyAllWindows()
-    if interactive_summary and (t in last_timesteps):
-      cv2.imshow("Original: All data at " + t, img_all)
-      cv2.waitKey(0)
-      cv2.destroyAllWindows()
+    #if interactive_summary and (t in last_timesteps):
+    #  cv2.imshow("Original: All data at " + t, img_all)
+    #  cv2.waitKey(0)
+    #  cv2.destroyAllWindows()
 
     ###### Write output file with timestamp to avoid overwriting ######
     dataframe.to_csv(m+'/'+m+'_stats_'+timestr+'.csv',index=False,na_rep='nan')
