@@ -64,8 +64,8 @@ models = [
 ###### Create file paths ######
 paths = [base+m for m in models]
 #ASPECT_time_steps = ['00000','00001','00005','00010','00015','00020','00025','00030','00035','00040','00045','00050']
-ASPECT_time_steps = ['00000']
-#ASPECT_time_steps = ['00000','00001','00002','00003','00004','00005','00006','00007','00008','00009','00010','00011','00012','00013','00014','00015','00016','00017','00018','00019','00020','00021','00022','00023','00024','00025','00026','00027','00028','00029','00030','00031','00032','00033','00034','00035','00036','00037','00038','00039','00040','00041','00042','00043','00044','00045','00046','00047','00048','00049','00050']
+#ASPECT_time_steps = ['00000']
+ASPECT_time_steps = ['00000','00001','00002','00003','00004','00005','00006','00007','00008','00009','00010','00011','00012','00013','00014','00015','00016','00017','00018','00019','00020','00021','00022','00023','00024','00025','00026','00027','00028','00029','00030','00031','00032','00033','00034','00035','00036','00037','00038','00039','00040','00041','00042','00043','00044','00045','00046','00047','00048','00049','00050']
 
 ###### Loop over requested models ######
 for m in models:
@@ -247,14 +247,17 @@ for m in models:
 
     # Source and host rock intersection with active fault
     overlap_source_host_fault_contours, overlap_source_host_fault_hierarchy = cv2.findContours(overlap_source_host_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    overlap_source_host_fault_contours = remove_small_contours(min_contour_size, overlap_source_host_fault_contours)
     print("Binary + Contours: Nr source and host rock overlaps active fault = " + str(len(overlap_source_host_fault_contours)))
 
     # Source rock intersection with active and inactive fault
     overlap_source_active_inactive_fault_contours, overlap_source_active_inactive_fault_hierarchy = cv2.findContours(overlap_source_active_inactive_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    overlap_source_active_inactive_fault_contours = remove_small_contours(min_contour_size, overlap_source_active_inactive_fault_contours)
     print("Binary + Contours: Nr source rock overlaps active and inactive fault = " + str(len(overlap_source_active_inactive_fault_contours)))
 
     # Source and host rock intersection with inactive fault
     overlap_source_host_inactive_fault_contours, overlap_source_host_inactive_fault_hierarchy = cv2.findContours(overlap_source_host_inactive_fault, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    overlap_source_host_inactive_fault_contours = remove_small_contours(min_contour_size, overlap_source_host_inactive_fault_contours)
     print("Binary + Contours: Nr source and host rock overlaps inactive fault = " + str(len(overlap_source_host_inactive_fault_contours)) + "\n")
     
     ###### Plot the source and host rock contours on top of faults ######
@@ -561,7 +564,7 @@ for m in models:
     ###### If requested, check OFM3s interactively ######
     # But only if there is a chance of OFM3
     n_OFM3 = np.nan
-    if interactive_OFM3 and (n_potential_OFM3 > 0 or len(overlap_source_host_inactive_fault_contours) > 0):
+    if interactive_OFM3 and len(source_rock_contours) > 0 and (n_potential_OFM3 > 0 or len(overlap_source_host_inactive_fault_contours) > 0):
       cv2.imshow("Shapely: Possible OFM3", img_OFM3_contours)
       cv2.imshow("Binary: Source, host, strain contours", overlap_source_host_inactive_fault_contours_image)
       cv2.moveWindow("Binary: Source, host, strain contours", 0, 250)
@@ -577,9 +580,8 @@ for m in models:
     dataframe.loc[index_model_time, 'n_OFM3'] = n_OFM3
     
     ###### Look at initial fault geometry and rift stabilization
-    first_timesteps = ASPECT_time_steps[:5]
+    first_timesteps = ASPECT_time_steps[:20]
     last_timesteps = ASPECT_time_steps[-5:]
-    print ("first and last timesteps: ", first_timesteps, last_timesteps)
     if interactive_summary and (t in first_timesteps):
       cv2.imshow("Original: All data at " + t, img_all)
       cv2.waitKey(0)
