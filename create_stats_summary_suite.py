@@ -81,14 +81,20 @@ models = [
 #'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 ]
 
-###### Create dataframe to store output data ######
+###### Create dataframes to store output data ######
 dataframe_summary = pd.DataFrame(columns=['n_source_max','n_source_host_max','n_OFM3_max','n_OFM12_max'])
+dataframe_summary_sampled = pd.DataFrame(columns=['n_source_max','n_source_host_max','n_OFM3_max','n_OFM12_max'])
 
 n_source_max = 0
 n_source_host_max = 0
 n_OFM3_max = 0
 n_OFM12_max = 0
 n_models = 0
+n_source_max_sampled = 0
+n_source_host_max_sampled = 0
+n_OFM3_max_sampled = 0
+n_OFM12_max_sampled = 0
+n_models_sampled = 0
 
 ###### Loop over requested models ######
 for m in models:
@@ -96,7 +102,7 @@ for m in models:
   ###### Read timestep output file ######
   if Path(m).exists():
     path = base + m
-    summary_files = sorted(Path(path).glob('*stats_summary*'))
+    summary_files = sorted(Path(path).glob('*stats_summary_2*'))
     if len(summary_files) == 1:
         n_models += 1
         print(f"{summary_files[0].name}\n")
@@ -110,6 +116,20 @@ for m in models:
     else:
       print ("Multiple summary files for model: ", m)
       continue
+    summary_files = sorted(Path(path).glob('*stats_summary_sampled*'))
+    if len(summary_files) == 1:
+        n_models_sampled += 1
+        print(f"{summary_files[0].name}\n")
+        filename = m + "/" + summary_files[0].name
+        dataframe = pd.read_csv(filename)
+
+        n_source_max_sampled += dataframe['n_source_max'][0]
+        n_source_host_max_sampled += dataframe['n_source_host_max'][0]
+        n_OFM3_max_sampled += dataframe['n_OFM3_max'][0]
+        n_OFM12_max_sampled += dataframe['n_OFM1_max'][0] + dataframe['n_OFM2_max'][0]
+    else:
+      print ("Multiple summary files for model: ", m)
+      continue
 
 ###### Fill the summary table with averages ######
 print("Nr of valid model summaries: ", n_models)
@@ -117,7 +137,14 @@ dataframe_summary.loc[0,'n_source_max'] = n_source_max/n_models
 dataframe_summary.loc[0,'n_source_host_max'] = n_source_host_max/n_models
 dataframe_summary.loc[0,'n_OFM3_max'] = n_OFM3_max/n_models
 dataframe_summary.loc[0,'n_OFM12_max'] = n_OFM12_max/n_models
+print("Nr of valid sampled model summaries: ", n_models_sampled)
+dataframe_summary_sampled.loc[0,'n_source_max'] = n_source_max_sampled/n_models_sampled
+dataframe_summary_sampled.loc[0,'n_source_host_max'] = n_source_host_max_sampled/n_models_sampled
+dataframe_summary_sampled.loc[0,'n_OFM3_max'] = n_OFM3_max_sampled/n_models_sampled
+dataframe_summary_sampled.loc[0,'n_OFM12_max'] = n_OFM12_max_sampled/n_models_sampled
 
 # ###### Write summary output file with same timestamp ######
 dataframe_summary.to_csv(base_output_file+timestr+".csv",index=False,na_rep='nan')
+dataframe_summary_sampled.to_csv(base_output_file+"_sampled_"+timestr+".csv",index=False,na_rep='nan')
 print("File created: " + base_output_file+timestr+".csv")
+print("File created: " + base_output_file+"_sampled_"+timestr+".csv")
