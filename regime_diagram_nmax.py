@@ -43,7 +43,7 @@ dataframe['right_border_fault_duration'] = dataframe['end_right_border_fault'] -
 #print ("Interpretation data file: ", dataframe.dtypes)
 if not set(columns_to_plot).issubset(dataframe.columns):
   exit("The requested data columns are not available, exiting.")
-if not set(["n_OFM3_max","n_OFM2_max","n_OFM1_max","n_source_max"]).issubset(dataframe.columns):
+if not set(["n_OFM3_max","n_OFM2_max","n_OFM1_max","n_source_max","source_max"]).issubset(dataframe.columns):
   exit("The requested data columns are not available, exiting.")
 
 # Create empty plot
@@ -55,14 +55,14 @@ fig, axs = plt.subplots(4,n_columns,figsize=(2*n_columns, 8),dpi=300, sharex='co
 
 # Plot requested columns by looping over column names
 for i in range(n_columns):
-  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_source_max",size="n_OFM12_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[0,i],legend=False, alpha=0.7)
-  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_source_host_max",size="n_OFM12_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[1,i],legend=False, alpha=0.7)
-  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM3_max",size="n_OFM12_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[2,i],legend=False, alpha=0.7)
+  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_source_max",size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[0,i],legend=False, alpha=0.7)
+  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_source_host_max",size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[1,i],legend=False, alpha=0.7)
+  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM3_max",size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[2,i],legend=False, alpha=0.7)
   if i == n_columns-1:
-    sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM12_max",size="n_OFM12_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[3,i],legend="full", alpha=0.7)
+    sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM12_max",size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[3,i],legend="full", alpha=0.7)
     #sns.move_legend(axs[3,i], "upper right") #, bbox_to_anchor=(1, 1), fontsize=8) #,title=None, frameon=False)
   else:
-    sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM12_max",size="n_OFM12_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[3,i],legend=False, alpha=0.7)
+    sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM12_max",size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[3,i],legend=False, alpha=0.7)
 
 
 # Ranges and labels of the axes
