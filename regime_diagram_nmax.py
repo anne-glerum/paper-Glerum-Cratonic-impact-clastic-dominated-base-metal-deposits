@@ -14,10 +14,7 @@ import re
 import pandas as pd
 import seaborn as sns
 plt.rcParams["font.family"] = "Arial"
-rc("xtick", labelsize= 12)
-rc("font", size=12)
-#rc('axes', linewidth=3)
-rc("legend", fontsize=8)
+print ("Seaborn version: ", sns.__version__)
 
 # Path to models
 base = r"/Users/acglerum/Documents/Postdoc/SG_SB/Projects/CERI_cratons/"
@@ -58,10 +55,15 @@ fig, axs = plt.subplots(4,n_columns,figsize=(2*n_columns, 8),dpi=300, sharex='co
 
 # Plot requested columns by looping over column names
 for i in range(n_columns):
-  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_source_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[0,i],legend=False)
-  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_source_host_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[1,i],legend=False)
-  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM3_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[2,i],legend=False)
-  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM12_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[3,i],legend=False)
+  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_source_max",size="n_OFM12_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[0,i],legend=False, alpha=0.7)
+  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_source_host_max",size="n_OFM12_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[1,i],legend=False, alpha=0.7)
+  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM3_max",size="n_OFM12_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[2,i],legend=False, alpha=0.7)
+  if i == n_columns-1:
+    sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM12_max",size="n_OFM12_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[3,i],legend="full", alpha=0.7)
+    #sns.move_legend(axs[3,i], "upper right") #, bbox_to_anchor=(1, 1), fontsize=8) #,title=None, frameon=False)
+  else:
+    sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM12_max",size="n_OFM12_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[3,i],legend=False, alpha=0.7)
+
 
 # Ranges and labels of the axes
 # TODO Would be great not to repeat this for both the x and y axis.
