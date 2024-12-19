@@ -54,7 +54,7 @@ sns.set_theme()
 cm = 2.54  # centimeters in inches
 n_columns = len(columns_to_plot)
 fig, axs = plt.subplots(4,n_columns,figsize=(2*n_columns, 8),dpi=300, sharex='col', sharey='row')
-fig.subplots_adjust(top = 0.95, bottom = 0.06, left = 0.08, right = 0.90, hspace=0.4, wspace=0.4)
+#fig.subplots_adjust(top = 0.95, bottom = 0.06, left = 0.08, right = 0.90, hspace=0.4, wspace=0.4)
 
 # Plot requested columns by looping over column names
 for i in range(n_columns):
@@ -78,7 +78,7 @@ for ax in axs.reshape(-1):
     ax.set_xticks([0,5,10])
     ax.set_xlabel("Start rift migration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'migration_direction':
-#    ax.set_xticks(["L","C","R"])
+    ax.margins(x=0.2)
     ax.set_xlabel("Direction rift migration [-]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'start_left_border_fault':
     ax.set_xlim(-0.10,10.10) # My
@@ -111,16 +111,16 @@ for ax in axs.reshape(-1):
     ax.set_xticks([10,15,20,25])
     ax.set_xlabel("End rift migration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'migration_duration':
-    ax.set_xlim(-0.20,20.20) # My
-    ax.set_xticks([0,10.,20])
-    ax.set_xlabel("Migration duration [My]",weight="bold",fontsize=ftsize)
+    ax.set_xlim(0,25) # My
+    ax.set_xticks([0,12.5,25])
+    ax.set_xlabel("Rift migration duration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'left_border_fault_duration':
-    ax.set_xlim(-0.20,20.20) # My
-    ax.set_xticks([0,10.,20])
+    ax.set_xlim(0,25) # My
+    ax.set_xticks([0,12.5,25])
     ax.set_xlabel("Left border fault duration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'right_border_fault_duration':
-    ax.set_xlim(-0.20,20.20) # My
-    ax.set_xticks([0,10.,20])
+    ax.set_xlim(0,25) # My
+    ax.set_xticks([0,12.5,25])
     ax.set_xlabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
   
   if ax.get_ylabel() == 'initial_craton_distance':
@@ -134,7 +134,7 @@ for ax in axs.reshape(-1):
     ax.set_yticks([0,5,10])
     ax.set_ylabel("Start rift migration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'migration_direction':
-#    ax.set_yticks(["L","C","R"])
+    ax.margins(x=0.2)
     ax.set_ylabel("Direction rift migration [-]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'start_left_border_fault':
     ax.set_ylim(-0.10,10.10) # My
@@ -171,16 +171,16 @@ for ax in axs.reshape(-1):
     ax.set_yticks([10,15,20,25])
     ax.set_ylabel("End rift migration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'migration_duration':
-    ax.set_ylim(-0.20,20.20) # My
-    ax.set_yticks([0,10.,20])
-    ax.set_ylabel("Migration duration [My]",weight="bold",fontsize=ftsize)
+    ax.set_ylim(0,25) # My
+    ax.set_yticks([0,12.5,25])
+    ax.set_ylabel("Rift migration duration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'left_border_fault_duration':
-    ax.set_ylim(-0.20,20.20) # My
-    ax.set_yticks([0,10.,20])
+    ax.set_ylim(0,25) # My
+    ax.set_yticks([0,12.5,25])
     ax.set_ylabel("Left border fault duration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'right_border_fault_duration':
-    ax.set_ylim(-0.20,20.20) # My
-    ax.set_yticks([0,10.,20])
+    ax.set_ylim(0,25) # My
+    ax.set_yticks([0,12.5,25])
     ax.set_ylabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
 
 ## Name the png according to the plotted field
