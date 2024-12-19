@@ -43,7 +43,7 @@ dataframe['left_border_fault_duration'] = dataframe['end_left_border_fault'] - d
 dataframe['right_border_fault_duration'] = dataframe['end_right_border_fault'] - dataframe['start_right_border_fault']
 
 # Check data
-print ("Interpretation data file: ", dataframe.dtypes)
+#print ("Interpretation data file: ", dataframe.dtypes)
 if not set(columns_to_plot).issubset(dataframe.columns):
   exit("The requested data columns are not available, exiting.")
 if not set(["n_OFM3_max","n_OFM2_max","n_OFM1_max","n_source_max"]).issubset(dataframe.columns):
@@ -52,43 +52,16 @@ if not set(["n_OFM3_max","n_OFM2_max","n_OFM1_max","n_source_max"]).issubset(dat
 # Create empty plot
 sns.set_theme()
 cm = 2.54  # centimeters in inches
-fig, axs = plt.subplots(4,5,figsize=(10, 8),dpi=300, sharex='col', sharey='row')
+n_columns = len(columns_to_plot)
+fig, axs = plt.subplots(4,n_columns,figsize=(2*n_columns, 8),dpi=300, sharex='col', sharey='row')
 fig.subplots_adjust(top = 0.95, bottom = 0.06, left = 0.08, right = 0.90, hspace=0.4, wspace=0.4)
 
-# Plot requested columns
-
-
-# First column
-sns.scatterplot(data=dataframe,x=columns_to_plot[0],y="n_source_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[0,0],legend=False)
-sns.scatterplot(data=dataframe,x=columns_to_plot[0],y="n_source_host_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[1,0],legend=False)
-sns.scatterplot(data=dataframe,x=columns_to_plot[0],y="n_OFM3_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[2,0],legend=False)
-sns.scatterplot(data=dataframe,x=columns_to_plot[0],y="n_OFM12_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[3,0],legend=False)
-
-# Second column
-sns.scatterplot(data=dataframe,x=columns_to_plot[1],y="n_source_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[0,1],legend=False)
-sns.scatterplot(data=dataframe,x=columns_to_plot[1],y="n_source_host_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[1,1],legend=False)
-sns.scatterplot(data=dataframe,x=columns_to_plot[1],y="n_OFM3_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[2,1],legend=False)
-sns.scatterplot(data=dataframe,x=columns_to_plot[1],y="n_OFM12_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[3,1],legend=False)
-
-# Third column
-sns.scatterplot(data=dataframe,x=columns_to_plot[2],y="n_source_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[0,2],legend=False)
-sns.scatterplot(data=dataframe,x=columns_to_plot[2],y="n_source_host_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[1,2],legend=False)
-sns.scatterplot(data=dataframe,x=columns_to_plot[2],y="n_OFM3_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[2,2],legend=False)
-sns.scatterplot(data=dataframe,x=columns_to_plot[2],y="n_OFM12_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[3,2],legend=False)
-
-## Fourth column
-sns.scatterplot(data=dataframe,x=columns_to_plot[3],y="n_source_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[0,3],legend=False)
-##axs[0,3].xaxis.set_visible(False)
-sns.scatterplot(data=dataframe,x=columns_to_plot[3],y="n_source_host_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[1,3],legend=False)
-#sns.move_legend(axs[1,3], "upper left", bbox_to_anchor=(1, 1)) #,title=None, frameon=False)
-sns.scatterplot(data=dataframe,x=columns_to_plot[3],y="n_OFM3_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[2,3],legend=False)
-sns.scatterplot(data=dataframe,x=columns_to_plot[3],y="n_OFM12_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[3,3],legend=False)
-
-## Fifth column
-sns.scatterplot(data=dataframe,x=columns_to_plot[4],y="n_source_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[0,4],legend=False)
-sns.scatterplot(data=dataframe,x=columns_to_plot[4],y="n_source_host_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[1,4],legend=True)
-sns.scatterplot(data=dataframe,x=columns_to_plot[4],y="n_OFM3_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[2,4],legend=False)
-sns.scatterplot(data=dataframe,x=columns_to_plot[4],y="n_OFM12_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[3,4],legend=False)
+# Plot requested columns by looping over column names
+for i in range(n_columns):
+  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_source_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[0,i],legend=False)
+  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_source_host_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[1,i],legend=False)
+  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM3_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[2,i],legend=False)
+  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM12_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[3,i],legend=False)
 
 # Ranges and labels of the axes
 # TODO Would be great not to repeat this for both the x and y axis.
