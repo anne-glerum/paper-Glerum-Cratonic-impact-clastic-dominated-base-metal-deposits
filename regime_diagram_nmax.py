@@ -63,7 +63,11 @@ for i in range(n_columns):
     sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_source_host_max",size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[1,i],legend=False, alpha=0.7)
   sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM3_max",size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[2,i],legend=False, alpha=0.7)
   sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM12_max",size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[3,i],legend=False, alpha=0.7)
-
+  
+# Do a regression
+# NB robust=True is more expensive
+# Does not work in loop over columns  
+#sns.regplot(data=dataframe,x=columns_to_plot[1],y="n_OFM12_max",ax=axs[3,1],scatter=False,robust=True)
 
 # Ranges and labels of the axes
 # TODO Would be great not to repeat this for both the x and y axis.
