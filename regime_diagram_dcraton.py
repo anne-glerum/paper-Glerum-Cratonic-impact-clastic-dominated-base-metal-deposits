@@ -99,47 +99,47 @@ ftsize = 6
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
 for ax in axs.reshape(-1):
   if ax.get_xlabel() == 'initial_craton_distance':
-    ax.set_xlim(345,605.) # km
+    ax.set_xlim(350,600) # km
     ax.set_xticks([400,450,500,550])
     ax.set_xticklabels(craton_distance_labels)
     ax.set_xlabel("Initial craton-rift distance [km]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'initial_fault_geometry':
     ax.set_xlabel("Initial fault geometry [-]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'start_migration':
-    ax.set_xlim(4.90,10.10) # My
+    ax.set_xlim(5,10) # My
     ax.set_xticks([0,5,10])
     ax.set_xlabel("Start rift migration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'migration_direction':
     ax.margins(x=0.2)
     ax.set_xlabel("Direction rift migration [-]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'start_left_border_fault':
-    ax.set_xlim(-0.10,10.10) # My
+    ax.set_xlim(0,10) # My
     ax.set_xticks([0,5,10])
     ax.set_xlabel("Start left border fault(s) [My]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'start_right_border_fault':
-    ax.set_xlim(-0.10,10.10) # My
+    ax.set_xlim(0,10) # My
     ax.set_xticks([0,5,10])
     ax.set_xlabel("Start right border fault(s) [My]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'n_source_max':
-    ax.set_xlim(-0.1,10.1) # -
+    ax.set_xlim(0,10) # -
     ax.set_xlabel("Max. nr of source basins [-]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'n_source_host_max':
-    ax.set_xlim(-0.1,10.1) # -
+    ax.set_xlim(0,10) # -
     ax.set_xlabel("Max. nr of source+host basins [-]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'n_OFM3_max':
-    ax.set_xlim(-1.05,5.05) # -
+    ax.set_xlim(0,5.0) # -
     ax.set_xlabel("Max. nr of OFM3 [-]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'n_OFM2_max':
-    ax.set_xlim(-0.05,5.05) # -
+    ax.set_xlim(0,5) # -
     ax.set_xlabel("Max. nr of OFM2 [-]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'n_OMF1_max':
-    ax.set_xlim(-0.05,5.05) # -
+    ax.set_xlim(0,5) # -
     ax.set_xlabel("Max. nr of OFM1 [-]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'n_OFM12_max':
-    ax.set_xlim(-0.05,7.05) # -
+    ax.set_xlim(0,7) # -
     ax.set_xlabel("Max. nr of OFM12 [-]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'end_migration':
-    ax.set_xlim(9.75,25.25) # My
+    ax.set_xlim(10,25) # My
     ax.set_xticks([10,15,20,25])
     ax.set_xlabel("End rift migration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'migration_duration':
@@ -156,51 +156,51 @@ for ax in axs.reshape(-1):
     ax.set_xlabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
   
   if ax.get_ylabel() == 'initial_craton_distance':
-    ax.set_ylim(345,605.) # km
+    ax.set_ylim(350,600) # km
     ax.set_yticks([400,450,500,550])
     ax.set_yticklabels(craton_distance_labels)
     ax.set_ylabel("Initial craton-rift distance [km]",weight="bold",fontsize=ftsize)
   if ax.get_ylabel() == 'initial_fault_geometry':
     ax.set_ylabel("Initial fault geometry [-]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'start_migration':
-    ax.set_ylim(-0.10,10.10) # My
+    ax.set_ylim(0,10) # My
     ax.set_yticks([0,5,10])
     ax.set_ylabel("Start rift migration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'migration_direction':
     ax.margins(x=0.2)
     ax.set_ylabel("Direction rift migration [-]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'start_left_border_fault':
-    ax.set_ylim(-0.10,10.10) # My
+    ax.set_ylim(0,10) # My
     ax.set_yticks([0,5,10])
     ax.set_ylabel("Start left border fault(s) [My]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'start_right_border_fault':
-    ax.set_ylim(-0.10,10.10) # My
+    ax.set_ylim(0,10) # My
     ax.set_yticks([0,5,10])
     ax.set_ylabel("Start right border fault(s) [My]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'start_border_fault':
-    ax.set_ylim(-0.25,25.25) # My
+    ax.set_ylim(0,25) # My
     ax.set_yticks([0,10,20,25])
     ax.set_ylabel("Start border fault(s) [My]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'n_source_max':
-    ax.set_ylim(-0.1,10.1) # -
+    ax.set_ylim(-0.,10.) # -
     ax.set_ylabel("Max. nr of source basins [-]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'n_source_host_max':
-    ax.set_ylim(-0.1,10.1) # -
+    ax.set_ylim(-0.,10.) # -
     ax.set_ylabel("Max. nr of source+host basins [-]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'n_OFM3_max':
-    ax.set_ylim(-1.05,5.05) # -
+    ax.set_ylim(-1.0,5.0) # -
     ax.set_ylabel("Max. nr of OFM3 [-]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'n_OFM2_max':
-    ax.set_ylim(-0.05,5.05) # -
+    ax.set_ylim(-0.0,5.0) # -
     ax.set_ylabel("Max. nr of OFM2 [-]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'n_OMF1_max':
-    ax.set_ylim(-0.05,5.05) # -
+    ax.set_ylim(-0.0,5.0) # -
     ax.set_ylabel("Max. nr of OFM1 [-]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'n_OFM12_max':
-    ax.set_ylim(-0.07,7.07) # -
+    ax.set_ylim(-0.0,7.0) # -
     ax.set_ylabel("Max. nr of OFM12 [-]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'end_migration':
-    ax.set_ylim(9.75,25.25) # My
+    ax.set_ylim(10,25) # My
     ax.set_yticks([10,15,20,25])
     ax.set_ylabel("End rift migration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'migration_duration':
