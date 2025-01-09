@@ -2,7 +2,6 @@
 """
 Created on Mon 14 Feb 2022 by Anne Glerum
 """
-from this import d
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rc
@@ -71,6 +70,15 @@ fig, axs = plt.subplots(n_rows,n_columns,figsize=(2*n_columns, 2*n_rows),dpi=300
 #fig.subplots_adjust(top = 0.95, bottom = 0.06, left = 0.08, right = 0.90, hspace=0.4, wspace=0.4)
 fig.subplots_adjust(left = 0.2)
 
+#print (sns.color_palette())
+#[(0.2980392156862745, 0.4470588235294118, 0.6901960784313725), 
+# (0.8666666666666667, 0.5176470588235295, 0.3215686274509804),
+# (0.3333333333333333, 0.6588235294117647, 0.40784313725490196),
+# (0.7686274509803922, 0.3058823529411765, 0.3215686274509804),
+# (0.5058823529411764, 0.4470588235294118, 0.7019607843137254),
+# (0.5764705882352941, 0.47058823529411764, 0.3764705882352941),
+# etc
+
 # Plot requested columns by looping over column names
 for i in range(n_columns):
   for j in range(n_rows):
@@ -79,24 +87,37 @@ for i in range(n_columns):
     #  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y=rows_to_plot[j],size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[j,i],legend="brief", alpha=0.7)
       #sns.move_legend(axs[1,i], "upper right") #, bbox_to_anchor=(1, 1), fontsize=8) #,title=None, frameon=False)
     else:
-      sns.scatterplot(data=dataframe,x=columns_to_plot[i],y=rows_to_plot[j],size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[j,i],legend=False, alpha=0.7)
+      sns.scatterplot(data=dataframe,x=columns_to_plot[i],y=rows_to_plot[j],size="source_max",sizes=(20,200),hue="migration_direction",style="migration_direction",ax=axs[j,i],legend=False, alpha=0.7)
       # Do a regression
       # NB robust=True is more expensive
       # Does not work on L/R rift migration direction
       if columns_to_plot[i] != "migration_direction" and rows_to_plot[j] != "migration_direction" and columns_to_plot[i] != "initial_fault_geometry" and rows_to_plot[j] != "initial_fault_geometry":
         if columns_to_plot[i] == "left_border_fault_duration" or rows_to_plot[j] == "left_border_fault_duration":
-          sns.regplot(data=dataframe_left_border_fault,x=columns_to_plot[i],y=rows_to_plot[j],ax=axs[j,i],scatter=False,robust=False,order=1)
+          sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=(0.2980392156862745, 0.4470588235294118, 0.6901960784313725)),ax=axs[j,i],scatter=False,robust=False,order=1)
+          sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=(0.3333333333333333, 0.6588235294117647, 0.40784313725490196)),ax=axs[j,i],scatter=False,robust=False,order=1)
         elif columns_to_plot[i] == "right_border_fault_duration" or rows_to_plot[j] == "right_border_fault_duration":
-          sns.regplot(data=dataframe_right_border_fault,x=columns_to_plot[i],y=rows_to_plot[j],ax=axs[j,i],scatter=False,robust=False,order=1)
+          sns.regplot(data=dataframe_right_border_fault[dataframe_right_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=(0.2980392156862745, 0.4470588235294118, 0.6901960784313725)),ax=axs[j,i],scatter=False,robust=False,order=1)
+          sns.regplot(data=dataframe_right_border_fault[dataframe_right_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=(0.3333333333333333, 0.6588235294117647, 0.40784313725490196)),ax=axs[j,i],scatter=False,robust=False,order=1)
         elif columns_to_plot[i] == "migration_duration" or rows_to_plot[j] == "migration_duration":
-          sns.regplot(data=dataframe_migration,x=columns_to_plot[i],y=rows_to_plot[j],ax=axs[j,i],scatter=False,robust=False,order=1)
+          sns.regplot(data=dataframe_migration[dataframe_migration["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=(0.2980392156862745, 0.4470588235294118, 0.6901960784313725)),ax=axs[j,i],scatter=False,robust=False,order=1)
+          sns.regplot(data=dataframe_migration[dataframe_migration["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=(0.3333333333333333, 0.6588235294117647, 0.40784313725490196)),ax=axs[j,i],scatter=False,robust=False,order=1)
         else:
-          sns.regplot(data=dataframe_cratons,x=columns_to_plot[i],y=rows_to_plot[j],ax=axs[j,i],scatter=False,robust=False,order=1)
+          sns.regplot(data=dataframe_cratons[dataframe_cratons["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=(0.2980392156862745, 0.4470588235294118, 0.6901960784313725)),ax=axs[j,i],scatter=False,robust=False,order=1)
+          sns.regplot(data=dataframe_cratons[dataframe_cratons["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=(0.3333333333333333, 0.6588235294117647, 0.40784313725490196)),ax=axs[j,i],scatter=False,robust=False,order=1)
 
 # Ranges and labels of the axes
 # TODO Would be great not to repeat this for both the x and y axis.
 ftsize = 6
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
+migration_duration_min = 0
+migration_duration_max = 14
+migration_duration_ticks = [0.0,7.0,14.0]
+LBF_duration_min = 7
+LBF_duration_max = 21
+LBF_duration_ticks = [7.0,14.0,21]
+RBF_duration_min = 4
+RBF_duration_max = 22
+RBF_duration_ticks = [4.0,10.0,16.0,22.0]
 for ax in axs.reshape(-1):
   if ax.get_xlabel() == 'initial_craton_distance':
     ax.set_xlim(350,600) # km
@@ -143,16 +164,16 @@ for ax in axs.reshape(-1):
     ax.set_xticks([10,15,20,25])
     ax.set_xlabel("End rift migration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'migration_duration':
-    ax.set_xlim(0,25) # My
-    ax.set_xticks([0,12.5,25])
+    ax.set_xlim(migration_duration_min,migration_duration_max) # My
+    ax.set_xticks(migration_duration_ticks)
     ax.set_xlabel("Rift migration duration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'left_border_fault_duration':
-    ax.set_xlim(0,25) # My
-    ax.set_xticks([0,12.5,25])
+    ax.set_xlim(LBF_duration_min,LBF_duration_max) # My
+    ax.set_xticks(LBF_duration_ticks)
     ax.set_xlabel("Left border fault duration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'right_border_fault_duration':
-    ax.set_xlim(0,25) # My
-    ax.set_xticks([0,12.5,25])
+    ax.set_xlim(RBF_duration_min,RBF_duration_max) # My
+    ax.set_xticks(RBF_duration_ticks)
     ax.set_xlabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
   
   if ax.get_ylabel() == 'initial_craton_distance':
@@ -204,16 +225,16 @@ for ax in axs.reshape(-1):
     ax.set_yticks([10,15,20,25])
     ax.set_ylabel("End rift migration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'migration_duration':
-    ax.set_ylim(0,25) # My
-    ax.set_yticks([0,12.5,25])
+    ax.set_ylim(migration_duration_min,migration_duration_max) # My
+    ax.set_yticks(migration_duration_ticks)
     ax.set_ylabel("Rift migration duration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'left_border_fault_duration':
-    ax.set_ylim(0,25) # My
-    ax.set_yticks([0,12.5,25])
+    ax.set_ylim(LBF_duration_min,LBF_duration_max) # My
+    ax.set_yticks(LBF_duration_ticks)
     ax.set_ylabel("Left border fault duration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'right_border_fault_duration':
-    ax.set_ylim(0,25) # My
-    ax.set_yticks([0,12.5,25])
+    ax.set_ylim(RBF_duration_min,RBF_duration_max) # My
+    ax.set_yticks(RBF_duration_ticks)
     ax.set_ylabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
 
 ## Name the png according to the plotted field
