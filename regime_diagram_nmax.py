@@ -19,20 +19,20 @@ print ("Seaborn version: ", sns.__version__)
 # Path to models
 base = r"/Users/acglerum/Documents/Postdoc/SG_SB/Projects/CERI_cratons/"
 
-output_name = '5p_fixed_regime_diagram_nmax_duration'
+output_name = '5o_fixed_regime_diagram_nmax_duration'
 
 # File name
 # test file
 tail = r"5p_fixed_CERI_craton_analysis.txt"
 # real file
-tail = r"5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
+tail = r"5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
 
 # Structure of input file: 3x9 rows of the following columns:
 # initial_craton_distance,initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
 columns_to_plot = ['initial_craton_distance', 'migration_duration', 'migration_direction', 'left_border_fault_duration', 'right_border_fault_duration']
 
 # Read the data file
-dataframe = pd.read_csv(base+tail, sep=",")
+dataframe = pd.read_csv(base+tail, sep=",", comment='#')
 
 # Compute durations
 dataframe['migration_duration'] = dataframe['end_migration'] - dataframe['start_migration']
@@ -45,6 +45,20 @@ if not set(columns_to_plot).issubset(dataframe.columns):
   exit("The requested data columns are not available, exiting.")
 if not set(["n_OFM3_max","n_OFM2_max","n_OFM1_max","n_source_max","source_max"]).issubset(dataframe.columns):
   exit("The requested data columns are not available, exiting.")
+
+# The runs without a craton have an artificial craton distance of 2000 km. Replace this value
+# with 550 km, but label axis as "infinite".
+dataframe.loc[dataframe['initial_craton_distance'] == 2000, 'initial_craton_distance'] = 550
+
+# For the regression plots, we only want to use the craton distances of 400, 450 and 500 km,
+# as these are the ones that were actually in the model domain. Select this subset:
+dataframe_cratons = dataframe[dataframe["initial_craton_distance"].isin([400,450,500])]
+# Some border faults live on till the end of the simulation, they were given a value of 50 My.
+# This also skews the regression, so remove them.
+dataframe_left_border_fault = dataframe_cratons[dataframe_cratons["left_border_fault_duration"] <= 25]
+dataframe_right_border_fault = dataframe_cratons[dataframe_cratons["right_border_fault_duration"] <= 25]
+# Same for rifts, some do not stabilize within the model time.
+dataframe_migration = dataframe_cratons[dataframe_cratons["migration_duration"] <= 25]
 
 # Create empty plot
 sns.set_theme()
@@ -63,19 +77,40 @@ for i in range(n_columns):
     sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_source_host_max",size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[1,i],legend=False, alpha=0.7)
   sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM3_max",size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[2,i],legend=False, alpha=0.7)
   sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM12_max",size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[3,i],legend=False, alpha=0.7)
-  
-# Do a regression
-# NB robust=True is more expensive
-# Does not work in loop over columns  
-#sns.regplot(data=dataframe,x=columns_to_plot[1],y="n_OFM12_max",ax=axs[3,1],scatter=False,robust=True)
+  # Do a regression
+  # NB robust=True is more expensive
+  # Does not work on L/R rift migration direction
+  if columns_to_plot[i] != "migration_direction" and columns_to_plot[i] != "initial_fault_geometry":
+    if columns_to_plot[i] == "left_border_fault_duration":
+      sns.regplot(data=dataframe_left_border_fault,x=columns_to_plot[i],y="n_source_max",ax=axs[0,i],scatter=False,robust=False,order=1)
+      sns.regplot(data=dataframe_left_border_fault,x=columns_to_plot[i],y="n_source_host_max",ax=axs[1,i],scatter=False,robust=False,order=1)
+      sns.regplot(data=dataframe_left_border_fault,x=columns_to_plot[i],y="n_OFM3_max",ax=axs[2,i],scatter=False,robust=False,order=1)
+      sns.regplot(data=dataframe_left_border_fault,x=columns_to_plot[i],y="n_OFM12_max",ax=axs[3,i],scatter=False,robust=False,order=1)
+    elif columns_to_plot[i] == "right_border_fault_duration":
+      sns.regplot(data=dataframe_right_border_fault,x=columns_to_plot[i],y="n_source_max",ax=axs[0,i],scatter=False,robust=False,order=1)
+      sns.regplot(data=dataframe_right_border_fault,x=columns_to_plot[i],y="n_source_host_max",ax=axs[1,i],scatter=False,robust=False,order=1)
+      sns.regplot(data=dataframe_right_border_fault,x=columns_to_plot[i],y="n_OFM3_max",ax=axs[2,i],scatter=False,robust=False,order=1)
+      sns.regplot(data=dataframe_right_border_fault,x=columns_to_plot[i],y="n_OFM12_max",ax=axs[3,i],scatter=False,robust=False,order=1)
+    elif columns_to_plot[i] == "migration_duration":
+      sns.regplot(data=dataframe_migration,x=columns_to_plot[i],y="n_source_max",ax=axs[0,i],scatter=False,robust=False,order=1)
+      sns.regplot(data=dataframe_migration,x=columns_to_plot[i],y="n_source_host_max",ax=axs[1,i],scatter=False,robust=False,order=1)
+      sns.regplot(data=dataframe_migration,x=columns_to_plot[i],y="n_OFM3_max",ax=axs[2,i],scatter=False,robust=False,order=1)
+      sns.regplot(data=dataframe_migration,x=columns_to_plot[i],y="n_OFM12_max",ax=axs[3,i],scatter=False,robust=False,order=1)
+    else:
+      sns.regplot(data=dataframe_cratons,x=columns_to_plot[i],y="n_source_max",ax=axs[0,i],scatter=False,robust=False,order=1)
+      sns.regplot(data=dataframe_cratons,x=columns_to_plot[i],y="n_source_host_max",ax=axs[1,i],scatter=False,robust=False,order=1)
+      sns.regplot(data=dataframe_cratons,x=columns_to_plot[i],y="n_OFM3_max",ax=axs[2,i],scatter=False,robust=False,order=1)
+      sns.regplot(data=dataframe_cratons,x=columns_to_plot[i],y="n_OFM12_max",ax=axs[3,i],scatter=False,robust=False,order=1)
 
 # Ranges and labels of the axes
 # TODO Would be great not to repeat this for both the x and y axis.
 ftsize = 6
+craton_distance_labels = ["50", "100", "150", r"$\infty$"]
 for ax in axs.reshape(-1):
   if ax.get_xlabel() == 'initial_craton_distance':
-    ax.set_xlim(345,555.) # km
-    ax.set_xticks([400,450,500])
+    ax.set_xlim(345,605.) # km
+    ax.set_xticks([400,450,500,550])
+    ax.set_xticklabels(craton_distance_labels)
     ax.set_xlabel("Initial craton-rift distance [km]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'initial_fault_geometry':
     ax.set_xlabel("Initial fault geometry [-]",weight="bold",fontsize=ftsize)
@@ -130,8 +165,9 @@ for ax in axs.reshape(-1):
     ax.set_xlabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
   
   if ax.get_ylabel() == 'initial_craton_distance':
-    ax.set_ylim(345,555) # km
-    ax.set_yticks([400,450,500])
+    ax.set_ylim(345,605.) # km
+    ax.set_yticks([400,450,500,550])
+    ax.set_yticklabels(craton_distance_labels)
     ax.set_ylabel("Initial craton-rift distance [km]",weight="bold",fontsize=ftsize)
   if ax.get_ylabel() == 'initial_fault_geometry':
     ax.set_ylabel("Initial fault geometry [-]",weight="bold",fontsize=ftsize)
@@ -161,7 +197,7 @@ for ax in axs.reshape(-1):
     ax.set_ylim(-0.1,10.1) # -
     ax.set_ylabel("Max. nr of source+host basins [-]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'n_OFM3_max':
-    ax.set_ylim(-1.05,5.05) # -
+#    ax.set_ylim(-1.05,5.05) # -
     ax.set_ylabel("Max. nr of OFM3 [-]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'n_OFM2_max':
     ax.set_ylim(-0.05,5.05) # -
