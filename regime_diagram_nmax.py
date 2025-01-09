@@ -30,6 +30,7 @@ tail = r"5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksa
 # Structure of input file: 3x9 or 4x9 rows of the following columns:
 # initial_craton_distance,initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
 columns_to_plot = ['initial_craton_distance', 'migration_duration', 'migration_direction', 'left_border_fault_duration', 'right_border_fault_duration']
+rows_to_plot = ['n_source_max', 'n_source_host_max', 'n_OFM3_max', 'n_OFM12_max']
 
 # Read the data file
 dataframe = pd.read_csv(base+tail, sep=",", comment='#')
@@ -64,48 +65,55 @@ dataframe_migration = dataframe_cratons[dataframe_cratons["migration_duration"] 
 sns.set_theme()
 cm = 2.54  # centimeters in inches
 n_columns = len(columns_to_plot)
-fig, axs = plt.subplots(4,n_columns,figsize=(2*n_columns, 8),dpi=300, sharex='col', sharey='row')
+n_rows = len(rows_to_plot)
+color_left = (0.2980392156862745, 0.4470588235294118, 0.6901960784313725)
+color_right = (0.3333333333333333, 0.6588235294117647, 0.40784313725490196)
+fig, axs = plt.subplots(4,n_columns,figsize=(2*n_columns, 2*n_rows),dpi=300, sharex='col', sharey='row')
 #fig.subplots_adjust(top = 0.95, bottom = 0.06, left = 0.08, right = 0.90, hspace=0.4, wspace=0.4)
 
 # Plot requested columns by looping over column names
 for i in range(n_columns):
-  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_source_max",size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[0,i],legend=False, alpha=0.7)
-  if i == n_columns-1:
-    sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_source_host_max",size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[1,i],legend="brief", alpha=0.7)
-    #sns.move_legend(axs[1,i], "upper right") #, bbox_to_anchor=(1, 1), fontsize=8) #,title=None, frameon=False)
-  else:
-    sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_source_host_max",size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[1,i],legend=False, alpha=0.7)
-  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM3_max",size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[2,i],legend=False, alpha=0.7)
-  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y="n_OFM12_max",size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[3,i],legend=False, alpha=0.7)
-  # Do a regression
-  # NB robust=True is more expensive
-  # Does not work on L/R rift migration direction
-  if columns_to_plot[i] != "migration_direction" and columns_to_plot[i] != "initial_fault_geometry":
-    if columns_to_plot[i] == "left_border_fault_duration":
-      sns.regplot(data=dataframe_left_border_fault,x=columns_to_plot[i],y="n_source_max",ax=axs[0,i],scatter=False,robust=False,order=1)
-      sns.regplot(data=dataframe_left_border_fault,x=columns_to_plot[i],y="n_source_host_max",ax=axs[1,i],scatter=False,robust=False,order=1)
-      sns.regplot(data=dataframe_left_border_fault,x=columns_to_plot[i],y="n_OFM3_max",ax=axs[2,i],scatter=False,robust=False,order=1)
-      sns.regplot(data=dataframe_left_border_fault,x=columns_to_plot[i],y="n_OFM12_max",ax=axs[3,i],scatter=False,robust=False,order=1)
-    elif columns_to_plot[i] == "right_border_fault_duration":
-      sns.regplot(data=dataframe_right_border_fault,x=columns_to_plot[i],y="n_source_max",ax=axs[0,i],scatter=False,robust=False,order=1)
-      sns.regplot(data=dataframe_right_border_fault,x=columns_to_plot[i],y="n_source_host_max",ax=axs[1,i],scatter=False,robust=False,order=1)
-      sns.regplot(data=dataframe_right_border_fault,x=columns_to_plot[i],y="n_OFM3_max",ax=axs[2,i],scatter=False,robust=False,order=1)
-      sns.regplot(data=dataframe_right_border_fault,x=columns_to_plot[i],y="n_OFM12_max",ax=axs[3,i],scatter=False,robust=False,order=1)
-    elif columns_to_plot[i] == "migration_duration":
-      sns.regplot(data=dataframe_migration,x=columns_to_plot[i],y="n_source_max",ax=axs[0,i],scatter=False,robust=False,order=1)
-      sns.regplot(data=dataframe_migration,x=columns_to_plot[i],y="n_source_host_max",ax=axs[1,i],scatter=False,robust=False,order=1)
-      sns.regplot(data=dataframe_migration,x=columns_to_plot[i],y="n_OFM3_max",ax=axs[2,i],scatter=False,robust=False,order=1)
-      sns.regplot(data=dataframe_migration,x=columns_to_plot[i],y="n_OFM12_max",ax=axs[3,i],scatter=False,robust=False,order=1)
-    else:
-      sns.regplot(data=dataframe_cratons,x=columns_to_plot[i],y="n_source_max",ax=axs[0,i],scatter=False,robust=False,order=1)
-      sns.regplot(data=dataframe_cratons,x=columns_to_plot[i],y="n_source_host_max",ax=axs[1,i],scatter=False,robust=False,order=1)
-      sns.regplot(data=dataframe_cratons,x=columns_to_plot[i],y="n_OFM3_max",ax=axs[2,i],scatter=False,robust=False,order=1)
-      sns.regplot(data=dataframe_cratons,x=columns_to_plot[i],y="n_OFM12_max",ax=axs[3,i],scatter=False,robust=False,order=1)
+  for j in range(n_rows):
+    ##if i == n_columns-1 and j == 1:
+    ##  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y=rows_to_plot[j],size="source_max",sizes=(20,200),hue="migration_direction",style="migration_direction",ax=axs[j,i],legend="brief", alpha=0.7)
+      #sns.move_legend(axs[1,i], "upper right") #, bbox_to_anchor=(1, 1), fontsize=8) #,title=None, frameon=False)
+    ##else:
+    sns.scatterplot(data=dataframe,x=columns_to_plot[i],y=rows_to_plot[j],size="source_max",sizes=(20,200),hue="migration_direction",style="migration_direction",ax=axs[j,i],legend=False, alpha=0.7)
+      
+  
+    # Do a regression
+    # NB robust=True is more expensive
+    # Does not work on L/R rift migration direction
+    # TODO precompute the data frames
+    if columns_to_plot[i] != "migration_direction" and rows_to_plot[j] != "migration_direction" and columns_to_plot[i] != "initial_fault_geometry" and rows_to_plot[j] != "initial_fault_geometry":
+      if columns_to_plot[i] == "left_border_fault_duration" or rows_to_plot[j] == "left_border_fault_duration":
+        sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left),ax=axs[j,i],scatter=False,robust=False,order=1)
+        sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right),ax=axs[j,i],scatter=False,robust=False,order=1)
+      elif columns_to_plot[i] == "right_border_fault_duration" or rows_to_plot[j] == "right_border_fault_duration":
+        sns.regplot(data=dataframe_right_border_fault[dataframe_right_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left),ax=axs[j,i],scatter=False,robust=False,order=1)
+        sns.regplot(data=dataframe_right_border_fault[dataframe_right_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right),ax=axs[j,i],scatter=False,robust=False,order=1)
+      elif columns_to_plot[i] == "migration_duration" or rows_to_plot[j] == "migration_duration":
+        sns.regplot(data=dataframe_migration[dataframe_migration["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left),ax=axs[j,i],scatter=False,robust=False,order=1)
+        sns.regplot(data=dataframe_migration[dataframe_migration["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right),ax=axs[j,i],scatter=False,robust=False,order=1)
+      else:
+        sns.regplot(data=dataframe_cratons[dataframe_cratons["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left),ax=axs[j,i],scatter=False,robust=False,order=1)
+        sns.regplot(data=dataframe_cratons[dataframe_cratons["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right),ax=axs[j,i],scatter=False,robust=False,order=1)
 
 # Ranges and labels of the axes
 # TODO Would be great not to repeat this for both the x and y axis.
 ftsize = 6
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
+# 5o = 0,14
+migration_duration_min = 0
+migration_duration_max = 14
+migration_duration_ticks = [0.0,7.0,14.0]
+LBF_duration_min = 7
+LBF_duration_max = 21
+LBF_duration_ticks = [7.0,14.0,21]
+RBF_duration_min = 4
+RBF_duration_max = 22
+RBF_duration_ticks = [4.0,10.0,16.0,22.0]
+OFM12_max = 4
 for ax in axs.reshape(-1):
   if ax.get_xlabel() == 'initial_craton_distance':
     ax.set_xlim(350,600.) # km
@@ -147,23 +155,23 @@ for ax in axs.reshape(-1):
     ax.set_xlim(-0.0,5.0) # -
     ax.set_xlabel("Max. nr of OFM1 [-]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'n_OFM12_max':
-    ax.set_xlim(-0.0,7.0) # -
+    ax.set_xlim(-0.0,OFM12_max) # -
     ax.set_xlabel("Max. nr of OFM12 [-]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'end_migration':
     ax.set_xlim(10,25) # My
     ax.set_xticks([10,15,20,25])
     ax.set_xlabel("End rift migration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'migration_duration':
-    ax.set_xlim(0,25) # My
-    ax.set_xticks([0,12.5,25])
+    ax.set_xlim(migration_duration_min,migration_duration_max) # My
+    ax.set_xticks(migration_duration_ticks)
     ax.set_xlabel("Rift migration duration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'left_border_fault_duration':
-    ax.set_xlim(0,25) # My
-    ax.set_xticks([0,12.5,25])
+    ax.set_xlim(LBF_duration_min,LBF_duration_max) # My
+    ax.set_xticks(LBF_duration_ticks)
     ax.set_xlabel("Left border fault duration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'right_border_fault_duration':
-    ax.set_xlim(0,25) # My
-    ax.set_xticks([0,12.5,25])
+    ax.set_xlim(RBF_duration_min,RBF_duration_max) # My
+    ax.set_xticks(RBF_duration_ticks)
     ax.set_xlabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
   
   if ax.get_ylabel() == 'initial_craton_distance':
@@ -210,23 +218,23 @@ for ax in axs.reshape(-1):
     ax.set_ylim(-0.0,5.0) # -
     ax.set_ylabel("Max. nr of OFM1 [-]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'n_OFM12_max':
-    ax.set_ylim(-0.0,7.0) # -
+    ax.set_ylim(-0.0,OFM12_max) # -
     ax.set_ylabel("Max. nr of OFM12 [-]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'end_migration':
     ax.set_ylim(10,25) # My
     ax.set_yticks([10,15,20,25])
     ax.set_ylabel("End rift migration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'migration_duration':
-    ax.set_ylim(0,25) # My
-    ax.set_yticks([0,12.5,25])
+    ax.set_ylim(migration_duration_min,migration_duration_max) # My
+    ax.set_yticks(migration_duration_ticks)
     ax.set_ylabel("Rift migration duration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'left_border_fault_duration':
-    ax.set_ylim(0,25) # My
-    ax.set_yticks([0,12.5,25])
+    ax.set_ylim(LBF_duration_min,LBF_duration_max) # My
+    ax.set_yticks(LBF_duration_ticks)
     ax.set_ylabel("Left border fault duration [My]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'right_border_fault_duration':
-    ax.set_ylim(0,25) # My
-    ax.set_yticks([0,12.5,25])
+    ax.set_ylim(RBF_duration_min,RBF_duration_max) # My
+    ax.set_yticks(RBF_duration_ticks)
     ax.set_ylabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
 
 ## Name the png according to the plotted field
