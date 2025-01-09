@@ -70,6 +70,8 @@ color_left = (0.2980392156862745, 0.4470588235294118, 0.6901960784313725)
 color_right = (0.3333333333333333, 0.6588235294117647, 0.40784313725490196)
 fig, axs = plt.subplots(4,n_columns,figsize=(2*n_columns, 2*n_rows),dpi=300, sharex='col', sharey='row')
 #fig.subplots_adjust(top = 0.95, bottom = 0.06, left = 0.08, right = 0.90, hspace=0.4, wspace=0.4)
+# Regression confidence interval
+confidence_interval = 95
 
 # Plot requested columns by looping over column names
 for i in range(n_columns):
@@ -87,17 +89,17 @@ for i in range(n_columns):
     # TODO precompute the data frames
     if columns_to_plot[i] != "migration_direction" and rows_to_plot[j] != "migration_direction" and columns_to_plot[i] != "initial_fault_geometry" and rows_to_plot[j] != "initial_fault_geometry":
       if columns_to_plot[i] == "left_border_fault_duration" or rows_to_plot[j] == "left_border_fault_duration":
-        sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left),ax=axs[j,i],scatter=False,robust=False,order=1)
-        sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right),ax=axs[j,i],scatter=False,robust=False,order=1)
+        sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
+        sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
       elif columns_to_plot[i] == "right_border_fault_duration" or rows_to_plot[j] == "right_border_fault_duration":
-        sns.regplot(data=dataframe_right_border_fault[dataframe_right_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left),ax=axs[j,i],scatter=False,robust=False,order=1)
-        sns.regplot(data=dataframe_right_border_fault[dataframe_right_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right),ax=axs[j,i],scatter=False,robust=False,order=1)
+        sns.regplot(data=dataframe_right_border_fault[dataframe_right_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
+        sns.regplot(data=dataframe_right_border_fault[dataframe_right_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
       elif columns_to_plot[i] == "migration_duration" or rows_to_plot[j] == "migration_duration":
-        sns.regplot(data=dataframe_migration[dataframe_migration["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left),ax=axs[j,i],scatter=False,robust=False,order=1)
-        sns.regplot(data=dataframe_migration[dataframe_migration["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right),ax=axs[j,i],scatter=False,robust=False,order=1)
+        sns.regplot(data=dataframe_migration[dataframe_migration["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
+        sns.regplot(data=dataframe_migration[dataframe_migration["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
       else:
-        sns.regplot(data=dataframe_cratons[dataframe_cratons["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left),ax=axs[j,i],scatter=False,robust=False,order=1)
-        sns.regplot(data=dataframe_cratons[dataframe_cratons["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right),ax=axs[j,i],scatter=False,robust=False,order=1)
+        sns.regplot(data=dataframe_cratons[dataframe_cratons["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
+        sns.regplot(data=dataframe_cratons[dataframe_cratons["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
 
 # Ranges and labels of the axes
 # TODO Would be great not to repeat this for both the x and y axis.
