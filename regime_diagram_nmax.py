@@ -19,18 +19,22 @@ print ("Seaborn version: ", sns.__version__)
 # Path to models
 base = r"/Users/acglerum/Documents/Postdoc/SG_SB/Projects/CERI_cratons/"
 
-output_name = '5o_fixed_regime_diagram_nmax_duration'
+output_name = '5p_fixed_regime_diagram_nmax_duration'
 
 # File name
 # test file
 tail = r"5p_fixed_CERI_craton_analysis.txt"
 # real file
-tail = r"5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
+tail = r"5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
 
 # Structure of input file: 3x9 or 4x9 rows of the following columns:
 # initial_craton_distance,initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
 columns_to_plot = ['initial_craton_distance', 'migration_duration', 'migration_direction', 'left_border_fault_duration', 'right_border_fault_duration']
 rows_to_plot = ['n_source_max', 'n_source_host_max', 'n_OFM3_max', 'n_OFM12_max']
+
+# Whether or not to set limits for and format the axes
+# Setting it to False helps in spotting unexpected outliers
+set_axes = True
 
 # Read the data file
 dataframe = pd.read_csv(base+tail, sep=",", comment='#')
@@ -51,6 +55,9 @@ if not set(["n_OFM3_max","n_OFM2_max","n_OFM1_max","n_source_max","source_max"])
 # with 550 km, but label axis as "infinite".
 dataframe.loc[dataframe['initial_craton_distance'] == 2000, 'initial_craton_distance'] = 550
 
+# Order data according to migration direction so that direction axes have the same order
+dataframe = dataframe.sort_values(by=["migration_direction"])
+
 # For the regression plots, we only want to use the craton distances of 400, 450 and 500 km,
 # as these are the ones that were actually in the model domain. Select this subset:
 dataframe_cratons = dataframe[dataframe["initial_craton_distance"].isin([400,450,500])]
@@ -66,12 +73,22 @@ sns.set_theme()
 cm = 2.54  # centimeters in inches
 n_columns = len(columns_to_plot)
 n_rows = len(rows_to_plot)
-color_left = (0.2980392156862745, 0.4470588235294118, 0.6901960784313725)
-color_right = (0.3333333333333333, 0.6588235294117647, 0.40784313725490196)
+color_left = (0.2980392156862745, 0.4470588235294118, 0.6901960784313725) #76,114,176. 
+color_right = (0.3333333333333333, 0.6588235294117647, 0.40784313725490196) #85,168,104
+#60%:rgb(30, 45, 70)(0.117647058823529, 0.176470588235294, 0.274509803921569) 40%:rgb(46, 68, 106)(0.180392156862745, 0.266666666666667, 0.415686274509804) 30%:rgb(53, 79, 123)
+color_left_darker = (0.207843137254902, 0.309803921568627, 0.482352941176471) 
+#60%:rgb(34, 67, 42) 20%:rgb(68, 134, 83)(0.266666666666667, 0.525490196078431, 0.325490196078431) 40%:rgb(51, 101, 62)(0.2, 0.396078431372549, 0.243137254901961) 30%:rgb(59, 118, 73)
+color_right_darker = (0.231372549019608, 0.462745098039216, 0.286274509803922) 
 fig, axs = plt.subplots(4,n_columns,figsize=(2*n_columns, 2*n_rows),dpi=300, sharex='col', sharey='row')
 #fig.subplots_adjust(top = 0.95, bottom = 0.06, left = 0.08, right = 0.90, hspace=0.4, wspace=0.4)
 # Regression confidence interval
-confidence_interval = 95
+confidence_interval = 0
+# Which markers for which migration direction
+markers = {'L': 'o', 'C':'X', 'R': 's'}
+# Order in which style and hue is applied
+order = ["L", "C", "R"]
+# Repeated parameters for regression
+reg_prms = {"scatter":False,"robust":False,"order":1,"ci":confidence_interval}
 
 # Plot requested columns by looping over column names
 for i in range(n_columns):
@@ -80,164 +97,174 @@ for i in range(n_columns):
     ##  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y=rows_to_plot[j],size="source_max",sizes=(20,200),hue="migration_direction",style="migration_direction",ax=axs[j,i],legend="brief", alpha=0.7)
       #sns.move_legend(axs[1,i], "upper right") #, bbox_to_anchor=(1, 1), fontsize=8) #,title=None, frameon=False)
     ##else:
-    sns.scatterplot(data=dataframe,x=columns_to_plot[i],y=rows_to_plot[j],size="source_max",sizes=(20,200),hue="migration_direction",style="migration_direction",ax=axs[j,i],legend=False, alpha=0.7)
+    sns.scatterplot(data=dataframe,x=columns_to_plot[i],y=rows_to_plot[j],size="source_max",sizes=(20,200),hue="migration_direction",hue_order=order,style="migration_direction",style_order=order,markers=markers,ax=axs[j,i],legend=False, alpha=0.7)
       
-  
     # Do a regression
-    # NB robust=True is more expensive
-    # Does not work on L/R rift migration direction
+    # Does not work categorical data
     # TODO precompute the data frames
     if columns_to_plot[i] != "migration_direction" and rows_to_plot[j] != "migration_direction" and columns_to_plot[i] != "initial_fault_geometry" and rows_to_plot[j] != "initial_fault_geometry":
       if columns_to_plot[i] == "left_border_fault_duration" or rows_to_plot[j] == "left_border_fault_duration":
-        sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
-        sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
+        sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left_darker),ax=axs[j,i],**reg_prms)
+        sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right_darker),ax=axs[j,i],**reg_prms)
       elif columns_to_plot[i] == "right_border_fault_duration" or rows_to_plot[j] == "right_border_fault_duration":
-        sns.regplot(data=dataframe_right_border_fault[dataframe_right_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
-        sns.regplot(data=dataframe_right_border_fault[dataframe_right_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
+        sns.regplot(data=dataframe_right_border_fault[dataframe_right_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left_darker),ax=axs[j,i],**reg_prms)
+        sns.regplot(data=dataframe_right_border_fault[dataframe_right_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right_darker),ax=axs[j,i],**reg_prms)
       elif columns_to_plot[i] == "migration_duration" or rows_to_plot[j] == "migration_duration":
-        sns.regplot(data=dataframe_migration[dataframe_migration["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
-        sns.regplot(data=dataframe_migration[dataframe_migration["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
+        sns.regplot(data=dataframe_migration[dataframe_migration["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left_darker),ax=axs[j,i],**reg_prms)
+        sns.regplot(data=dataframe_migration[dataframe_migration["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right_darker),ax=axs[j,i],**reg_prms)
       else:
-        sns.regplot(data=dataframe_cratons[dataframe_cratons["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
-        sns.regplot(data=dataframe_cratons[dataframe_cratons["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
+        sns.regplot(data=dataframe_cratons[dataframe_cratons["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left_darker),ax=axs[j,i],**reg_prms)
+        sns.regplot(data=dataframe_cratons[dataframe_cratons["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right_darker),ax=axs[j,i],**reg_prms)
 
 # Ranges and labels of the axes
 # TODO Would be great not to repeat this for both the x and y axis.
 ftsize = 6
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
 # 5o = 0,14
-migration_duration_min = 0
+""" migration_duration_min = 0
 migration_duration_max = 14
-migration_duration_ticks = [0.0,7.0,14.0]
+migration_duration_ticks = [0,7.0,14]
 LBF_duration_min = 7
 LBF_duration_max = 21
-LBF_duration_ticks = [7.0,14.0,21]
+LBF_duration_ticks = [0,7.0,14.0,21]
 RBF_duration_min = 4
 RBF_duration_max = 22
-RBF_duration_ticks = [4.0,10.0,16.0,22.0]
-OFM12_max = 4
-for ax in axs.reshape(-1):
-  if ax.get_xlabel() == 'initial_craton_distance':
-    ax.set_xlim(350,600.) # km
-    ax.set_xticks([400,450,500,550])
-    ax.set_xticklabels(craton_distance_labels)
-    ax.set_xlabel("Initial craton-rift distance [km]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'initial_fault_geometry':
-    ax.set_xlabel("Initial fault geometry [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'start_migration':
-    ax.set_xlim(5.0,10.0) # My
-    ax.set_xticks([0,5,10])
-    ax.set_xlabel("Start rift migration [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'migration_direction':
-    ax.margins(x=0.2)
-    ax.set_xlabel("Direction rift migration [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'start_left_border_fault':
-    ax.set_xlim(-0.0,10.0) # My
-    ax.set_xticks([0,5,10])
-    ax.set_xlabel("Start left border fault(s) [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'start_right_border_fault':
-    ax.set_xlim(-0.0,10.) # My
-    ax.set_xticks([0,5,10])
-    ax.set_xlabel("Start right border fault(s) [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'n_source_max':
-    ax.set_xlim(-0.,10.) # -
-    ax.set_xticks([0,2,4,6,8,10])
-    ax.set_xlabel("Max. nr of source basins [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'n_source_host_max':
-    ax.set_xlim(0,8) # -
-    ax.set_xticks([0,2,4,6,8])
-    ax.set_xlabel("Max. nr of source+host basins [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'n_OFM3_max':
-    ax.set_xlim(-0.0,5.0) # -
-    ax.set_xlabel("Max. nr of OFM3 [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'n_OFM2_max':
-    ax.set_xlim(-0.0,5.0) # -
-    ax.set_xlabel("Max. nr of OFM2 [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'n_OMF1_max':
-    ax.set_xlim(-0.0,5.0) # -
-    ax.set_xlabel("Max. nr of OFM1 [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'n_OFM12_max':
-    ax.set_xlim(-0.0,OFM12_max) # -
-    ax.set_xlabel("Max. nr of OFM12 [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'end_migration':
-    ax.set_xlim(10,25) # My
-    ax.set_xticks([10,15,20,25])
-    ax.set_xlabel("End rift migration [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'migration_duration':
-    ax.set_xlim(migration_duration_min,migration_duration_max) # My
-    ax.set_xticks(migration_duration_ticks)
-    ax.set_xlabel("Rift migration duration [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'left_border_fault_duration':
-    ax.set_xlim(LBF_duration_min,LBF_duration_max) # My
-    ax.set_xticks(LBF_duration_ticks)
-    ax.set_xlabel("Left border fault duration [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'right_border_fault_duration':
-    ax.set_xlim(RBF_duration_min,RBF_duration_max) # My
-    ax.set_xticks(RBF_duration_ticks)
-    ax.set_xlabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
+RBF_duration_ticks = [4,10,16,22]
+OFM12_max = 4 """
+# 5p settings
+migration_duration_min = 5
+migration_duration_max = 20
+migration_duration_ticks = [5.0,10.0,15.0,20]
+LBF_duration_min = 0
+LBF_duration_max = 21
+LBF_duration_ticks = [0,7.0,14.0,21]
+RBF_duration_min = 2
+RBF_duration_max = 22
+RBF_duration_ticks = [2,7.0,12.0,17,22]
+OFM12_max = 7
+if set_axes:
+  for ax in axs.reshape(-1):
+    if ax.get_xlabel() == 'initial_craton_distance':
+      ax.set_xlim(350,600.) # km
+      ax.set_xticks([400,450,500,550])
+      ax.set_xticklabels(craton_distance_labels)
+      ax.set_xlabel("Initial craton-rift distance [km]",weight="bold",fontsize=ftsize)
+    elif ax.get_xlabel() == 'initial_fault_geometry':
+      ax.set_xlabel("Initial fault geometry [-]",weight="bold",fontsize=ftsize)
+    elif ax.get_xlabel() == 'start_migration':
+      ax.set_xlim(5.0,10.0) # My
+      ax.set_xticks([0,5,10])
+      ax.set_xlabel("Start rift migration [My]",weight="bold",fontsize=ftsize)
+    elif ax.get_xlabel() == 'migration_direction':
+      ax.margins(x=0.2)
+      ax.set_xlabel("Direction rift migration [-]",weight="bold",fontsize=ftsize)
+    elif ax.get_xlabel() == 'start_left_border_fault':
+      ax.set_xlim(-0.0,10.0) # My
+      ax.set_xticks([0,5,10])
+      ax.set_xlabel("Start left border fault(s) [My]",weight="bold",fontsize=ftsize)
+    elif ax.get_xlabel() == 'start_right_border_fault':
+      ax.set_xlim(-0.0,10.) # My
+      ax.set_xticks([0,5,10])
+      ax.set_xlabel("Start right border fault(s) [My]",weight="bold",fontsize=ftsize)
+    elif ax.get_xlabel() == 'n_source_max':
+      ax.set_xlim(-0.,10.) # -
+      ax.set_xticks([0,2,4,6,8,10])
+      ax.set_xlabel("Max. nr of source basins [-]",weight="bold",fontsize=ftsize)
+    elif ax.get_xlabel() == 'n_source_host_max':
+      ax.set_xlim(2,8) # -
+      ax.set_xticks([2,4,6,8])
+      ax.set_xlabel("Max. nr of source+host basins [-]",weight="bold",fontsize=ftsize)
+    elif ax.get_xlabel() == 'n_OFM3_max':
+      ax.set_xlim(-1.0,4.0) # -
+      ax.set_xlabel("Max. nr of OFM3 [-]",weight="bold",fontsize=ftsize)
+    elif ax.get_xlabel() == 'n_OFM2_max':
+      ax.set_xlim(-0.0,5.0) # -
+      ax.set_xlabel("Max. nr of OFM2 [-]",weight="bold",fontsize=ftsize)
+    elif ax.get_xlabel() == 'n_OMF1_max':
+      ax.set_xlim(-0.0,5.0) # -
+      ax.set_xlabel("Max. nr of OFM1 [-]",weight="bold",fontsize=ftsize)
+    elif ax.get_xlabel() == 'n_OFM12_max':
+      ax.set_xlim(-0.0,OFM12_max) # -
+      ax.set_xlabel("Max. nr of OFM12 [-]",weight="bold",fontsize=ftsize)
+    elif ax.get_xlabel() == 'end_migration':
+      ax.set_xlim(10,25) # My
+      ax.set_xticks([10,15,20,25])
+      ax.set_xlabel("End rift migration [My]",weight="bold",fontsize=ftsize)
+    elif ax.get_xlabel() == 'migration_duration':
+      ax.set_xlim(migration_duration_min,migration_duration_max) # My
+      ax.set_xticks(migration_duration_ticks)
+      ax.set_xlabel("Rift migration duration [My]",weight="bold",fontsize=ftsize)
+    elif ax.get_xlabel() == 'left_border_fault_duration':
+      ax.set_xlim(LBF_duration_min,LBF_duration_max) # My
+      ax.set_xticks(LBF_duration_ticks)
+      ax.set_xlabel("Left border fault duration [My]",weight="bold",fontsize=ftsize)
+    elif ax.get_xlabel() == 'right_border_fault_duration':
+      ax.set_xlim(RBF_duration_min,RBF_duration_max) # My
+      ax.set_xticks(RBF_duration_ticks)
+      ax.set_xlabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
   
-  if ax.get_ylabel() == 'initial_craton_distance':
-    ax.set_ylim(350,600.) # km
-    ax.set_yticks([400,450,500,550])
-    ax.set_yticklabels(craton_distance_labels)
-    ax.set_ylabel("Initial craton-rift distance [km]",weight="bold",fontsize=ftsize)
-  if ax.get_ylabel() == 'initial_fault_geometry':
-    ax.set_ylabel("Initial fault geometry [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'start_migration':
-    ax.set_ylim(-0.0,10.0) # My
-    ax.set_yticks([0,5,10])
-    ax.set_ylabel("Start rift migration [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'migration_direction':
-    ax.margins(x=0.2)
-    ax.set_ylabel("Direction rift migration [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'start_left_border_fault':
-    ax.set_ylim(-0.0,10.0) # My
-    ax.set_yticks([0,5,10])
-    ax.set_ylabel("Start left border fault(s) [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'start_right_border_fault':
-    ax.set_ylim(-0.0,10.0) # My
-    ax.set_yticks([0,5,10])
-    ax.set_ylabel("Start right border fault(s) [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'start_border_fault':
-    ax.set_ylim(-0,25) # My
-    ax.set_yticks([0,10,20,25])
-    ax.set_ylabel("Start border fault(s) [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'n_source_max':
-    ax.set_ylim(-0.,10.) # -
-    ax.set_yticks([0,2,4,6,8,10])
-    ax.set_ylabel("Max. nr of source basins [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'n_source_host_max':
-    ax.set_ylim(-0.0,8.0) # -
-    ax.set_yticks([0,2,4,6,8])
-    ax.set_ylabel("Max. nr of source+host basins [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'n_OFM3_max':
-    ax.set_ylim(-0.0,5.0) # -
-    ax.set_ylabel("Max. nr of OFM3 [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'n_OFM2_max':
-    ax.set_ylim(-0.0,5.0) # -
-    ax.set_ylabel("Max. nr of OFM2 [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'n_OMF1_max':
-    ax.set_ylim(-0.0,5.0) # -
-    ax.set_ylabel("Max. nr of OFM1 [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'n_OFM12_max':
-    ax.set_ylim(-0.0,OFM12_max) # -
-    ax.set_ylabel("Max. nr of OFM12 [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'end_migration':
-    ax.set_ylim(10,25) # My
-    ax.set_yticks([10,15,20,25])
-    ax.set_ylabel("End rift migration [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'migration_duration':
-    ax.set_ylim(migration_duration_min,migration_duration_max) # My
-    ax.set_yticks(migration_duration_ticks)
-    ax.set_ylabel("Rift migration duration [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'left_border_fault_duration':
-    ax.set_ylim(LBF_duration_min,LBF_duration_max) # My
-    ax.set_yticks(LBF_duration_ticks)
-    ax.set_ylabel("Left border fault duration [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'right_border_fault_duration':
-    ax.set_ylim(RBF_duration_min,RBF_duration_max) # My
-    ax.set_yticks(RBF_duration_ticks)
-    ax.set_ylabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
+    if ax.get_ylabel() == 'initial_craton_distance':
+      ax.set_ylim(350,600.) # km
+      ax.set_yticks([400,450,500,550])
+      ax.set_yticklabels(craton_distance_labels)
+      ax.set_ylabel("Initial craton-rift distance [km]",weight="bold",fontsize=ftsize)
+    elif ax.get_ylabel() == 'initial_fault_geometry':
+      ax.set_ylabel("Initial fault geometry [-]",weight="bold",fontsize=ftsize)
+    elif ax.get_ylabel() == 'start_migration':
+      ax.set_ylim(-0.0,10.0) # My
+      ax.set_yticks([0,5,10])
+      ax.set_ylabel("Start rift migration [My]",weight="bold",fontsize=ftsize)
+    elif ax.get_ylabel() == 'migration_direction':
+      ax.margins(x=0.2)
+      ax.set_ylabel("Direction rift migration [-]",weight="bold",fontsize=ftsize)
+    elif ax.get_ylabel() == 'start_left_border_fault':
+      ax.set_ylim(-0.0,10.0) # My
+      ax.set_yticks([0,5,10])
+      ax.set_ylabel("Start left border fault(s) [My]",weight="bold",fontsize=ftsize)
+    elif ax.get_ylabel() == 'start_right_border_fault':
+      ax.set_ylim(-0.0,10.0) # My
+      ax.set_yticks([0,5,10])
+      ax.set_ylabel("Start right border fault(s) [My]",weight="bold",fontsize=ftsize)
+    elif ax.get_ylabel() == 'start_border_fault':
+      ax.set_ylim(-0,25) # My
+      ax.set_yticks([0,10,20,25])
+      ax.set_ylabel("Start border fault(s) [My]",weight="bold",fontsize=ftsize)
+    elif ax.get_ylabel() == 'n_source_max':
+      ax.set_ylim(2.,10.) # -
+      ax.set_yticks([2,4,6,8,10])
+      ax.set_ylabel("Max. nr of source basins [-]",weight="bold",fontsize=ftsize)
+    elif ax.get_ylabel() == 'n_source_host_max':
+      ax.set_ylim(-0.0,8.0) # -
+      ax.set_yticks([0,2,4,6,8])
+      ax.set_ylabel("Max. nr of source+host basins [-]",weight="bold",fontsize=ftsize)
+    elif ax.get_ylabel() == 'n_OFM3_max':
+      ax.set_ylim(-1.0,4.0) # -
+      ax.set_ylabel("Max. nr of OFM3 [-]",weight="bold",fontsize=ftsize)
+    elif ax.get_ylabel() == 'n_OFM2_max':
+      ax.set_ylim(-0.0,5.0) # -
+      ax.set_ylabel("Max. nr of OFM2 [-]",weight="bold",fontsize=ftsize)
+    elif ax.get_ylabel() == 'n_OMF1_max':
+      ax.set_ylim(-0.0,5.0) # -
+      ax.set_ylabel("Max. nr of OFM1 [-]",weight="bold",fontsize=ftsize)
+    elif ax.get_ylabel() == 'n_OFM12_max':
+      ax.set_ylim(-0.0,OFM12_max) # -
+      ax.set_ylabel("Max. nr of OFM12 [-]",weight="bold",fontsize=ftsize)
+    elif ax.get_ylabel() == 'end_migration':
+      ax.set_ylim(10,25) # My
+      ax.set_yticks([10,15,20,25])
+      ax.set_ylabel("End rift migration [My]",weight="bold",fontsize=ftsize)
+    elif ax.get_ylabel() == 'migration_duration':
+      ax.set_ylim(migration_duration_min,migration_duration_max) # My
+      ax.set_yticks(migration_duration_ticks)
+      ax.set_ylabel("Rift migration duration [My]",weight="bold",fontsize=ftsize)
+    elif ax.get_ylabel() == 'left_border_fault_duration':
+      ax.set_ylim(LBF_duration_min,LBF_duration_max) # My
+      ax.set_yticks(LBF_duration_ticks)
+      ax.set_ylabel("Left border fault duration [My]",weight="bold",fontsize=ftsize)
+    elif ax.get_ylabel() == 'right_border_fault_duration':
+      ax.set_ylim(RBF_duration_min,RBF_duration_max) # My
+      ax.set_yticks(RBF_duration_ticks)
+      ax.set_ylabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
 
 ## Name the png according to the plotted field
 plt.savefig(output_name + '_CERI_cratons.png')    
