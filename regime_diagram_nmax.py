@@ -27,13 +27,13 @@ tail = r"5p_fixed_CERI_craton_analysis.txt"
 # real file
 tail = r"5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
 
-# Structure of input file: 3x9 or 4x9 rows of the following columns:
+# Structure of input file: 4x9 rows of the following columns:
 # initial_craton_distance,initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
 columns_to_plot = ['initial_craton_distance', 'migration_duration', 'migration_direction', 'left_border_fault_duration', 'right_border_fault_duration']
 rows_to_plot = ['n_source_max', 'n_source_host_max', 'n_OFM3_max', 'n_OFM12_max']
 
-# Whether or not to set limits for and format the axes
-# Setting it to False helps in spotting unexpected outliers
+# Whether or not to set limits for and format the axes.
+# Setting it to False helps in spotting unexpected outliers.
 set_axes = True
 
 # Read the data file
@@ -45,7 +45,6 @@ dataframe['left_border_fault_duration'] = dataframe['end_left_border_fault'] - d
 dataframe['right_border_fault_duration'] = dataframe['end_right_border_fault'] - dataframe['start_right_border_fault']
 
 # Check data
-#print ("Interpretation data file: ", dataframe.dtypes)
 if not set(columns_to_plot).issubset(dataframe.columns):
   exit("The requested data columns are not available, exiting.")
 if not set(["n_OFM3_max","n_OFM2_max","n_OFM1_max","n_source_max","source_max"]).issubset(dataframe.columns):
@@ -68,24 +67,28 @@ dataframe_right_border_fault = dataframe_cratons[dataframe_cratons["right_border
 # Same for rifts, some do not stabilize within the model time.
 dataframe_migration = dataframe_cratons[dataframe_cratons["migration_duration"] <= 25]
 
-# Create empty plot
+# Use the seaborn theme,
 sns.set_theme()
-cm = 2.54  # centimeters in inches
-n_columns = len(columns_to_plot)
-n_rows = len(rows_to_plot)
+# but tweak the colors a bit
+# The colors of the data split according to migration direction
 color_left = (0.2980392156862745, 0.4470588235294118, 0.6901960784313725) #76,114,176. 
 color_right = (0.3333333333333333, 0.6588235294117647, 0.40784313725490196) #85,168,104
+# A 20% darker version of the above colors for the lines of the regression
 #60%:rgb(30, 45, 70)(0.117647058823529, 0.176470588235294, 0.274509803921569) 40%:rgb(46, 68, 106)(0.180392156862745, 0.266666666666667, 0.415686274509804) 30%:rgb(53, 79, 123)
 color_left_darker = (0.207843137254902, 0.309803921568627, 0.482352941176471) 
 #60%:rgb(34, 67, 42) 20%:rgb(68, 134, 83)(0.266666666666667, 0.525490196078431, 0.325490196078431) 40%:rgb(51, 101, 62)(0.2, 0.396078431372549, 0.243137254901961) 30%:rgb(59, 118, 73)
 color_right_darker = (0.231372549019608, 0.462745098039216, 0.286274509803922) 
+
+# Create empty plot
+n_columns = len(columns_to_plot)
+n_rows = len(rows_to_plot)
 fig, axs = plt.subplots(4,n_columns,figsize=(2*n_columns, 2*n_rows),dpi=300, sharex='col', sharey='row')
-#fig.subplots_adjust(top = 0.95, bottom = 0.06, left = 0.08, right = 0.90, hspace=0.4, wspace=0.4)
-# Regression confidence interval
+
+# Regression confidence interval (0 = don't plot)
 confidence_interval = 0
 # Which markers for which migration direction
 markers = {'L': 'o', 'C':'X', 'R': 's'}
-# Order in which style and hue is applied
+# Order in which style and hue are applied according to migration direction
 order = ["L", "C", "R"]
 # Repeated parameters for regression
 reg_prms = {"scatter":False,"robust":False,"order":1,"ci":confidence_interval}
@@ -93,15 +96,11 @@ reg_prms = {"scatter":False,"robust":False,"order":1,"ci":confidence_interval}
 # Plot requested columns by looping over column names
 for i in range(n_columns):
   for j in range(n_rows):
-    ##if i == n_columns-1 and j == 1:
-    ##  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y=rows_to_plot[j],size="source_max",sizes=(20,200),hue="migration_direction",style="migration_direction",ax=axs[j,i],legend="brief", alpha=0.7)
-      #sns.move_legend(axs[1,i], "upper right") #, bbox_to_anchor=(1, 1), fontsize=8) #,title=None, frameon=False)
-    ##else:
+    # Plot the data for all models
     sns.scatterplot(data=dataframe,x=columns_to_plot[i],y=rows_to_plot[j],size="source_max",sizes=(20,200),hue="migration_direction",hue_order=order,style="migration_direction",style_order=order,markers=markers,ax=axs[j,i],legend=False, alpha=0.7)
       
-    # Do a regression
-    # Does not work categorical data
-    # TODO precompute the data frames
+    # Do a regression on the models with cratons, with a separated regression for each migration direction
+    # Does not work categorical data.
     if columns_to_plot[i] != "migration_direction" and rows_to_plot[j] != "migration_direction" and columns_to_plot[i] != "initial_fault_geometry" and rows_to_plot[j] != "initial_fault_geometry":
       if columns_to_plot[i] == "left_border_fault_duration" or rows_to_plot[j] == "left_border_fault_duration":
         sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left_darker),ax=axs[j,i],**reg_prms)
@@ -120,7 +119,7 @@ for i in range(n_columns):
 # TODO Would be great not to repeat this for both the x and y axis.
 ftsize = 6
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
-# 5o = 0,14
+# 5o settings
 """ migration_duration_min = 0
 migration_duration_max = 14
 migration_duration_ticks = [0,7.0,14]
