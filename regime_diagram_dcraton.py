@@ -15,17 +15,18 @@ import pandas as pd
 import seaborn as sns
 plt.rcParams["font.family"] = "Arial"
 print ("Seaborn version: ", sns.__version__)
+print ("Pandas version: ", pd.__version__)
 
 # Path to models
 base = r"/Users/acglerum/Documents/Postdoc/SG_SB/Projects/CERI_cratons/"
 
-output_name = '5p_fixed_regime_diagram_dcraton'
+output_name = '5o_fixed_regime_diagram_dcraton'
 
 # File name
 # test file
 tail = r"5p_fixed_CERI_craton_analysis.txt"
 # real file
-tail = r"5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
+tail = r"5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
 
 # Structure of input file: 3x9 rows of the following columns:
 # initial_craton_distance,initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
@@ -34,6 +35,13 @@ rows_to_plot = ['migration_direction', 'migration_duration', 'left_border_fault_
 
 # Read the data file
 dataframe = pd.read_csv(base+tail, sep=",", comment='#')
+
+# Some border faults live on till the end of the simulation, they were given a value of 50 My.
+# Same for rifts, some do not stabilize within the model time.
+# To compute the duration, set their end time to 25 My, the end of the model run.
+dataframe.loc[dataframe["end_migration"] > 25, "end_migration"] = 25
+dataframe.loc[dataframe["end_left_border_fault"] > 25, "end_left_border_fault"] = 25
+dataframe.loc[dataframe["end_right_border_fault"] > 25, "end_right_border_fault"] = 25
 
 # Compute durations
 dataframe['migration_duration'] = dataframe['end_migration'] - dataframe['start_migration']
@@ -51,11 +59,50 @@ if not set(["n_OFM3_max","n_OFM2_max","n_OFM1_max","n_source_max","source_max"])
 # with 550 km, but label axis as "infinite".
 dataframe.loc[dataframe['initial_craton_distance'] == 2000, 'initial_craton_distance'] = 550
 
+# Order of initial geometries
+# 5p
+#order_geometries = ["Lside-ULCshear Lside-Rdip",
+#"ULCshear-LD Lside-Rdip",
+#"ULCshear 2Lside-Rdip",
+#"ULCshear Lside-Rdip",
+#"ULCshear Lside-Rdip Rside-Ldip",
+#"ULCshear Rside-Ldip-D Lside-Rdip",
+#"ULCshear Lside-Rdip 2Rside-Ldip",
+#"ULCshear Rside-Ldip"]
+# 5o
+order_geometries = [
+"Lside-ULCshear 2Lside-Rdip", #
+"Lside-ULCshear Lside-C Lside-Rdip", #
+"Lside-ULCshear Lside-Rdip",#
+"Lside-ULCshear",#
+"ULCshear-LD Lside-Rdip",#
+"ULCshear 3Lside-Rdip",
+"ULCshear 2Lside-Rdip",
+"ULCshear Lside-C",#
+"ULCshear Lside-Rdip", #
+"ULCshear 2Lside-Rdip Rside-Ldip",#
+"ULCshear Lside-C Rside-Ldip",#
+"ULCshear Lside-C 2Rside-Ldip",#
+"ULCshear Lside-Rdip Rside-Ldip",#
+"ULCshear Lside-Ldip Rside-Ldip",#
+"ULCshear Lside-Rdip 2Rside-Ldip",#
+"ULCshear Rside-Ldip",#
+"ULCshear 2Rside-Ldip"]#
+
+
+
+
+
+dataframe.initial_fault_geometry = dataframe.initial_fault_geometry.astype("category")
+dataframe.initial_fault_geometry = dataframe.initial_fault_geometry.cat.set_categories(order_geometries)
+dataframe.sort_values(["initial_fault_geometry"])
+
 # For the regression plots, we only want to use the craton distances of 400, 450 and 500 km,
 # as these are the ones that were actually in the model domain. Select this subset:
 dataframe_cratons = dataframe[dataframe["initial_craton_distance"].isin([400,450,500])]
 # Some border faults live on till the end of the simulation, they were given a value of 50 My.
 # This also skews the regression, so remove them.
+# TODO this isn't necessary anymore, as we already restrict the end time to 25 My
 dataframe_left_border_fault = dataframe_cratons[dataframe_cratons["left_border_fault_duration"] <= 25]
 dataframe_right_border_fault = dataframe_cratons[dataframe_cratons["right_border_fault_duration"] <= 25]
 # Same for rifts, some do not stabilize within the model time.
@@ -77,7 +124,7 @@ color_right_darker = (0.231372549019608, 0.462745098039216, 0.286274509803922)
 n_columns = len(columns_to_plot)
 n_rows = len(rows_to_plot)
 fig, axs = plt.subplots(n_rows,n_columns,figsize=(2*n_columns, 2*n_rows),dpi=300, sharex='col', sharey='row')
-fig.subplots_adjust(left = 0.2)
+#fig.subplots_adjust(left = 0.2)
 
 #print (sns.color_palette())
 #[(0.2980392156862745, 0.4470588235294118, 0.6901960784313725), 
@@ -89,7 +136,7 @@ fig.subplots_adjust(left = 0.2)
 # etc
 
 # Regression confidence interval
-confidence_interval = 95
+confidence_interval = 0
 # Which markers for which migration direction
 markers = {'L': 'o', 'C':'X', 'R': 's'}
 # Order in which style and hue are applied according to migration direction
@@ -122,27 +169,48 @@ for i in range(n_columns):
 # TODO Would be great not to repeat this for both the x and y axis.
 ftsize = 6
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
+#5p
+#initial_geometry_labels = ["L-ULC L-Rdip", "ULC-LD L-Rdip", "ULC 2L-Rdip", "ULC L-Rdip", "ULC L-Rdip R-Ldip", "ULC L-Rdip R-Ldip-D", "ULC L-Rdip 2R-Ldip","ULC R-Ldip"]
+#5o
+initial_geometry_labels = [
+"L-ULC 2L-Rdip",
+"L-ULC L-C L-Rdip",
+"L-ULC L-Rdip",
+"L-ULC",
+"ULC-LD L-Rdip",#
+"ULC 3L-Rdip",
+"ULC 2L-Rdip",
+"ULC L-C",#
+"ULC L-Rdip", #
+"ULC 2L-Rdip R-Ldip",#
+"ULC L-C R-Ldip",#
+"ULC L-C 2R-Ldip",#
+"ULC L-Rdip R-Ldip",#
+"ULC L-Ldip R-Ldip",#
+"ULC L-Rdip 2R-Ldip",#
+"ULC R-Ldip",
+"ULC 2R-Ldip"]
 # 5o
-# migration_duration_min = 0
-# migration_duration_max = 14
-# migration_duration_ticks = [0,7,14.0]
-# LBF_duration_min = 7
-# LBF_duration_max = 21
-# LBF_duration_ticks = [7,14,21]
-# RBF_duration_min = 4
-# RBF_duration_max = 22
-# RBF_duration_ticks = [4.0,10.0,16.0,22]
+migration_duration_min = 2
+migration_duration_max = 14
+migration_duration_ticks = [2,6,10,14.0]
+LBF_duration_min = 7
+LBF_duration_max = 22
+LBF_duration_ticks = [7,12,17,22]
+RBF_duration_min = 2
+RBF_duration_max = 22
+RBF_duration_ticks = [2,7,12,17,22]
 
 # 5p
-migration_duration_min = 5
-migration_duration_max = 20
-migration_duration_ticks = [5.0,10.0,15.0,20.0]
-LBF_duration_min = 2
-LBF_duration_max = 22
-LBF_duration_ticks = [2,7,12.0,17,22]
-RBF_duration_min = 2
-RBF_duration_max = 20
-RBF_duration_ticks = [2.0,8.0,14.0,20]
+# migration_duration_min = 5
+# migration_duration_max = 20
+# migration_duration_ticks = [5.0,10.0,15.0,20.0]
+# LBF_duration_min = 0
+# LBF_duration_max = 25
+# LBF_duration_ticks = [0,5,10,15,20,25]
+# RBF_duration_min = 2
+# RBF_duration_max = 22
+# RBF_duration_ticks = [2.0,7,12,17,22]
 OFM12_max = 5
 for ax in axs.reshape(-1):
   if ax.get_xlabel() == 'initial_craton_distance':
@@ -152,6 +220,8 @@ for ax in axs.reshape(-1):
     ax.set_xlabel("Initial craton-rift distance [km]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'initial_fault_geometry':
     ax.tick_params(axis='x', labelrotation=90,labelsize=3)
+    ax.set_xticks(order_geometries)
+    ax.set_xticklabels(initial_geometry_labels)
     ax.set_xlabel("Initial fault geometry [-]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'start_migration':
     ax.set_xlim(5,10) # My
