@@ -19,13 +19,13 @@ print ("Seaborn version: ", sns.__version__)
 # Path to models
 base = r"/Users/acglerum/Documents/Postdoc/SG_SB/Projects/CERI_cratons/"
 
-output_name = '5p_fixed_regime_diagram_nmax_duration'
+output_name = '5o_fixed_regime_diagram_nmax_duration'
 
 # File name
 # test file
 tail = r"5p_fixed_CERI_craton_analysis.txt"
 # real file
-tail = r"5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
+tail = r"5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
 
 # Structure of input file: 4x9 rows of the following columns:
 # initial_craton_distance,initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
@@ -38,6 +38,13 @@ set_axes = True
 
 # Read the data file
 dataframe = pd.read_csv(base+tail, sep=",", comment='#')
+
+# Some border faults live on till the end of the simulation, they were given a value of 50 My.
+# Same for rifts, some do not stabilize within the model time.
+# To compute the duration, set their end time to 25 My, the end of the model run.
+dataframe.loc[dataframe["end_migration"] > 25, "end_migration"] = 25
+dataframe.loc[dataframe["end_left_border_fault"] > 25, "end_left_border_fault"] = 25
+dataframe.loc[dataframe["end_right_border_fault"] > 25, "end_right_border_fault"] = 25
 
 # Compute durations
 dataframe['migration_duration'] = dataframe['end_migration'] - dataframe['start_migration']
@@ -55,13 +62,18 @@ if not set(["n_OFM3_max","n_OFM2_max","n_OFM1_max","n_source_max","source_max"])
 dataframe.loc[dataframe['initial_craton_distance'] == 2000, 'initial_craton_distance'] = 550
 
 # Order data according to migration direction so that direction axes have the same order
-dataframe = dataframe.sort_values(by=["migration_direction"])
+# Order in which style and hue are applied according to migration direction
+order = ["L", "C", "R"]
+dataframe.migration_direction = dataframe.migration_direction.astype("category")
+dataframe.migration_direction = dataframe.migration_direction.cat.set_categories(order)
+dataframe.sort_values(["initial_fault_geometry"])
 
 # For the regression plots, we only want to use the craton distances of 400, 450 and 500 km,
 # as these are the ones that were actually in the model domain. Select this subset:
 dataframe_cratons = dataframe[dataframe["initial_craton_distance"].isin([400,450,500])]
 # Some border faults live on till the end of the simulation, they were given a value of 50 My.
 # This also skews the regression, so remove them.
+# TODO this isn't necessary anymore, as we already restrict the end time to 25 My
 dataframe_left_border_fault = dataframe_cratons[dataframe_cratons["left_border_fault_duration"] <= 25]
 dataframe_right_border_fault = dataframe_cratons[dataframe_cratons["right_border_fault_duration"] <= 25]
 # Same for rifts, some do not stabilize within the model time.
@@ -88,8 +100,7 @@ fig, axs = plt.subplots(4,n_columns,figsize=(2*n_columns, 2*n_rows),dpi=300, sha
 confidence_interval = 0
 # Which markers for which migration direction
 markers = {'L': 'o', 'C':'X', 'R': 's'}
-# Order in which style and hue are applied according to migration direction
-order = ["L", "C", "R"]
+
 # Repeated parameters for regression
 reg_prms = {"scatter":False,"robust":False,"order":1,"ci":confidence_interval}
 
@@ -103,6 +114,7 @@ for i in range(n_columns):
     # Does not work categorical data.
     if columns_to_plot[i] != "migration_direction" and rows_to_plot[j] != "migration_direction" and columns_to_plot[i] != "initial_fault_geometry" and rows_to_plot[j] != "initial_fault_geometry":
       if columns_to_plot[i] == "left_border_fault_duration" or rows_to_plot[j] == "left_border_fault_duration":
+        # Note that with lmplot, the different fits for migration direction can be calculated in one go.
         sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left_darker),ax=axs[j,i],**reg_prms)
         sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right_darker),ax=axs[j,i],**reg_prms)
       elif columns_to_plot[i] == "right_border_fault_duration" or rows_to_plot[j] == "right_border_fault_duration":
@@ -120,27 +132,38 @@ for i in range(n_columns):
 ftsize = 6
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
 # 5o settings
-""" migration_duration_min = 0
+migration_duration_min = 0
 migration_duration_max = 14
 migration_duration_ticks = [0,7.0,14]
 LBF_duration_min = 7
 LBF_duration_max = 21
-LBF_duration_ticks = [0,7.0,14.0,21]
-RBF_duration_min = 4
-RBF_duration_max = 22
-RBF_duration_ticks = [4,10,16,22]
-OFM12_max = 4 """
-# 5p settings
-migration_duration_min = 5
-migration_duration_max = 20
-migration_duration_ticks = [5.0,10.0,15.0,20]
-LBF_duration_min = 0
-LBF_duration_max = 21
-LBF_duration_ticks = [0,7.0,14.0,21]
+LBF_duration_ticks = [7.0,14.0,21]
 RBF_duration_min = 2
 RBF_duration_max = 22
 RBF_duration_ticks = [2,7.0,12.0,17,22]
-OFM12_max = 7
+S_min = 0
+S_max = 8
+S_ticks = [0,2,4,6,8]
+SH_min = 0
+SH_max = 6
+SH_ticks = [0,2,4,6]
+OFM12_max = 4
+OFM3_min = 0
+# 5p settings
+# migration_duration_min = 5
+# migration_duration_max = 20
+# migration_duration_ticks = [5.0,10.0,15.0,20]
+# LBF_duration_min = 0
+# LBF_duration_max = 25
+# LBF_duration_ticks = [0,5,10,15,20,25]
+# RBF_duration_min = 2
+# RBF_duration_max = 22
+# RBF_duration_ticks = [2,7.0,12.0,17,22]
+# S_min = 2
+# S_max = 10
+# S_ticks = [2,4,6,8,10]
+# OFM12_max = 7
+# OFM3_min = -1
 if set_axes:
   for ax in axs.reshape(-1):
     if ax.get_xlabel() == 'initial_craton_distance':
@@ -166,15 +189,15 @@ if set_axes:
       ax.set_xticks([0,5,10])
       ax.set_xlabel("Start right border fault(s) [My]",weight="bold",fontsize=ftsize)
     elif ax.get_xlabel() == 'n_source_max':
-      ax.set_xlim(-0.,10.) # -
-      ax.set_xticks([0,2,4,6,8,10])
+      ax.set_xlim(S_min,S_max) # -
+      ax.set_xticks(S_ticks)
       ax.set_xlabel("Max. nr of source basins [-]",weight="bold",fontsize=ftsize)
     elif ax.get_xlabel() == 'n_source_host_max':
-      ax.set_xlim(2,8) # -
-      ax.set_xticks([2,4,6,8])
+      ax.set_xlim(SH_min,SH_max) # -
+      ax.set_xticks(SH_ticks)
       ax.set_xlabel("Max. nr of source+host basins [-]",weight="bold",fontsize=ftsize)
     elif ax.get_xlabel() == 'n_OFM3_max':
-      ax.set_xlim(-1.0,4.0) # -
+      ax.set_xlim(OFM3_min,4.0) # -
       ax.set_xlabel("Max. nr of OFM3 [-]",weight="bold",fontsize=ftsize)
     elif ax.get_xlabel() == 'n_OFM2_max':
       ax.set_xlim(-0.0,5.0) # -
@@ -229,15 +252,15 @@ if set_axes:
       ax.set_yticks([0,10,20,25])
       ax.set_ylabel("Start border fault(s) [My]",weight="bold",fontsize=ftsize)
     elif ax.get_ylabel() == 'n_source_max':
-      ax.set_ylim(2.,10.) # -
-      ax.set_yticks([2,4,6,8,10])
+      ax.set_ylim(S_min,S_max) # -
+      ax.set_yticks(S_ticks)
       ax.set_ylabel("Max. nr of source basins [-]",weight="bold",fontsize=ftsize)
     elif ax.get_ylabel() == 'n_source_host_max':
-      ax.set_ylim(-0.0,8.0) # -
-      ax.set_yticks([0,2,4,6,8])
+      ax.set_ylim(SH_min,SH_max) # -
+      ax.set_yticks(SH_ticks)
       ax.set_ylabel("Max. nr of source+host basins [-]",weight="bold",fontsize=ftsize)
     elif ax.get_ylabel() == 'n_OFM3_max':
-      ax.set_ylim(-1.0,4.0) # -
+      ax.set_ylim(OFM3_min,4.0) # -
       ax.set_ylabel("Max. nr of OFM3 [-]",weight="bold",fontsize=ftsize)
     elif ax.get_ylabel() == 'n_OFM2_max':
       ax.set_ylim(-0.0,5.0) # -
