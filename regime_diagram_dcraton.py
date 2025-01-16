@@ -19,13 +19,13 @@ print ("Seaborn version: ", sns.__version__)
 # Path to models
 base = r"/Users/acglerum/Documents/Postdoc/SG_SB/Projects/CERI_cratons/"
 
-output_name = '5o_fixed_regime_diagram_dcraton'
+output_name = '5p_fixed_regime_diagram_dcraton'
 
 # File name
 # test file
 tail = r"5p_fixed_CERI_craton_analysis.txt"
 # real file
-tail = r"5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
+tail = r"5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
 
 # Structure of input file: 3x9 rows of the following columns:
 # initial_craton_distance,initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
@@ -61,13 +61,22 @@ dataframe_right_border_fault = dataframe_cratons[dataframe_cratons["right_border
 # Same for rifts, some do not stabilize within the model time.
 dataframe_migration = dataframe_cratons[dataframe_cratons["migration_duration"] <= 25]
 
-# Create empty plot
+# Use the seaborn theme,
 sns.set_theme()
-cm = 2.54  # centimeters in inches
+# but tweak the colors a bit
+# The colors of the data split according to migration direction
+color_left = (0.2980392156862745, 0.4470588235294118, 0.6901960784313725) #76,114,176. 
+color_right = (0.3333333333333333, 0.6588235294117647, 0.40784313725490196) #85,168,104
+# A 20% darker version of the above colors for the lines of the regression
+#60%:rgb(30, 45, 70)(0.117647058823529, 0.176470588235294, 0.274509803921569) 40%:rgb(46, 68, 106)(0.180392156862745, 0.266666666666667, 0.415686274509804) 30%:rgb(53, 79, 123)
+color_left_darker = (0.207843137254902, 0.309803921568627, 0.482352941176471) 
+#60%:rgb(34, 67, 42) 20%:rgb(68, 134, 83)(0.266666666666667, 0.525490196078431, 0.325490196078431) 40%:rgb(51, 101, 62)(0.2, 0.396078431372549, 0.243137254901961) 30%:rgb(59, 118, 73)
+color_right_darker = (0.231372549019608, 0.462745098039216, 0.286274509803922) 
+
+# Create empty plot
 n_columns = len(columns_to_plot)
 n_rows = len(rows_to_plot)
 fig, axs = plt.subplots(n_rows,n_columns,figsize=(2*n_columns, 2*n_rows),dpi=300, sharex='col', sharey='row')
-#fig.subplots_adjust(top = 0.95, bottom = 0.06, left = 0.08, right = 0.90, hspace=0.4, wspace=0.4)
 fig.subplots_adjust(left = 0.2)
 
 #print (sns.color_palette())
@@ -81,46 +90,59 @@ fig.subplots_adjust(left = 0.2)
 
 # Regression confidence interval
 confidence_interval = 95
+# Which markers for which migration direction
+markers = {'L': 'o', 'C':'X', 'R': 's'}
+# Order in which style and hue are applied according to migration direction
+order = ["L", "C", "R"]
+# Repeated parameters for regression
+reg_prms = {"scatter":False,"robust":False,"order":1,"ci":confidence_interval}
 
 # Plot requested columns by looping over column names
 for i in range(n_columns):
   for j in range(n_rows):
-    ##if i == n_columns-1:
-    ##  sns.boxplot(data=dataframe,x=columns_to_plot[i],y=rows_to_plot[j],ax=axs[j,i],native_scale=True) #,size="source_max",sizes=(20,200),hue="n_OFM12_max",legend="brief", alpha=0.7)
-    #  sns.scatterplot(data=dataframe,x=columns_to_plot[i],y=rows_to_plot[j],size="source_max",sizes=(20,200),hue="n_OFM12_max",ax=axs[j,i],legend="brief", alpha=0.7)
-      #sns.move_legend(axs[1,i], "upper right") #, bbox_to_anchor=(1, 1), fontsize=8) #,title=None, frameon=False)
-    ##else:
-    sns.scatterplot(data=dataframe,x=columns_to_plot[i],y=rows_to_plot[j],size="source_max",sizes=(20,200),hue="migration_direction",style="migration_direction",ax=axs[j,i],legend=False, alpha=0.7)
-    # Do a regression
-    # NB robust=True is more expensive
-    # Does not work on L/R rift migration direction
+    sns.scatterplot(data=dataframe,x=columns_to_plot[i],y=rows_to_plot[j],size="source_max",sizes=(20,200),hue="migration_direction",hue_order=order,style="migration_direction",style_order=order,markers=markers,ax=axs[j,i],legend=False, alpha=0.7)
+    
+    # Do a regression on the models with cratons, with a separated regression for each migration direction
+    # Does not work categorical data.
     if columns_to_plot[i] != "migration_direction" and rows_to_plot[j] != "migration_direction" and columns_to_plot[i] != "initial_fault_geometry" and rows_to_plot[j] != "initial_fault_geometry":
       if columns_to_plot[i] == "left_border_fault_duration" or rows_to_plot[j] == "left_border_fault_duration":
-        sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=(0.2980392156862745, 0.4470588235294118, 0.6901960784313725)),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
-        sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=(0.3333333333333333, 0.6588235294117647, 0.40784313725490196)),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
+        sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left_darker),ax=axs[j,i],**reg_prms)
+        sns.regplot(data=dataframe_left_border_fault[dataframe_left_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right_darker),ax=axs[j,i],**reg_prms)
       elif columns_to_plot[i] == "right_border_fault_duration" or rows_to_plot[j] == "right_border_fault_duration":
-        sns.regplot(data=dataframe_right_border_fault[dataframe_right_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=(0.2980392156862745, 0.4470588235294118, 0.6901960784313725)),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
-        sns.regplot(data=dataframe_right_border_fault[dataframe_right_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=(0.3333333333333333, 0.6588235294117647, 0.40784313725490196)),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
+        sns.regplot(data=dataframe_right_border_fault[dataframe_right_border_fault["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left_darker),ax=axs[j,i],**reg_prms)
+        sns.regplot(data=dataframe_right_border_fault[dataframe_right_border_fault["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right_darker),ax=axs[j,i],**reg_prms)
       elif columns_to_plot[i] == "migration_duration" or rows_to_plot[j] == "migration_duration":
-        sns.regplot(data=dataframe_migration[dataframe_migration["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=(0.2980392156862745, 0.4470588235294118, 0.6901960784313725)),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
-        sns.regplot(data=dataframe_migration[dataframe_migration["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=(0.3333333333333333, 0.6588235294117647, 0.40784313725490196)),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
+        sns.regplot(data=dataframe_migration[dataframe_migration["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left_darker),ax=axs[j,i],**reg_prms)
+        sns.regplot(data=dataframe_migration[dataframe_migration["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right_darker),ax=axs[j,i],**reg_prms)
       else:
-        sns.regplot(data=dataframe_cratons[dataframe_cratons["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=(0.2980392156862745, 0.4470588235294118, 0.6901960784313725)),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
-        sns.regplot(data=dataframe_cratons[dataframe_cratons["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=(0.3333333333333333, 0.6588235294117647, 0.40784313725490196)),ax=axs[j,i],scatter=False,robust=False,order=1,ci=confidence_interval)
+        sns.regplot(data=dataframe_cratons[dataframe_cratons["migration_direction"].isin(["L"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_left_darker),ax=axs[j,i],**reg_prms)
+        sns.regplot(data=dataframe_cratons[dataframe_cratons["migration_direction"].isin(["R"])],x=columns_to_plot[i],y=rows_to_plot[j],line_kws=dict(color=color_right_darker),ax=axs[j,i],**reg_prms)
 
 # Ranges and labels of the axes
 # TODO Would be great not to repeat this for both the x and y axis.
 ftsize = 6
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
-migration_duration_min = 0
-migration_duration_max = 14
-migration_duration_ticks = [0.0,7.0,14.0]
-LBF_duration_min = 7
-LBF_duration_max = 21
-LBF_duration_ticks = [7.0,14.0,21]
-RBF_duration_min = 4
-RBF_duration_max = 22
-RBF_duration_ticks = [4.0,10.0,16.0,22.0]
+# 5o
+# migration_duration_min = 0
+# migration_duration_max = 14
+# migration_duration_ticks = [0,7,14.0]
+# LBF_duration_min = 7
+# LBF_duration_max = 21
+# LBF_duration_ticks = [7,14,21]
+# RBF_duration_min = 4
+# RBF_duration_max = 22
+# RBF_duration_ticks = [4.0,10.0,16.0,22]
+
+# 5p
+migration_duration_min = 5
+migration_duration_max = 20
+migration_duration_ticks = [5.0,10.0,15.0,20.0]
+LBF_duration_min = 2
+LBF_duration_max = 22
+LBF_duration_ticks = [2,7,12.0,17,22]
+RBF_duration_min = 2
+RBF_duration_max = 20
+RBF_duration_ticks = [2.0,8.0,14.0,20]
 OFM12_max = 5
 for ax in axs.reshape(-1):
   if ax.get_xlabel() == 'initial_craton_distance':
