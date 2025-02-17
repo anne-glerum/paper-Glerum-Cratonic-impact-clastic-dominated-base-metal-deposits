@@ -1,0 +1,3 @@
+initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
+ULCshear Lside-Rdip,3.0,5.5,7.5,22.5,7.0,19.0,R,23.0,6,1,1,0,1,1
+# OFM3 in RM from t34, L BF starts but is soon abandoned due to migration. 
