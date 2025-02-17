@@ -1,0 +1,3 @@
+initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
+Lside-ULCshear Lside-Rdip,2.0,15.0,7.5,20.5,6.5,19.0,R,50.0,4,3,1,1,1,2
+# t17 1st S L and SC. t30 R BF, but faintly present before. t38 potential OFM1 from antithetic fault that stretches into mantle lithosphere.

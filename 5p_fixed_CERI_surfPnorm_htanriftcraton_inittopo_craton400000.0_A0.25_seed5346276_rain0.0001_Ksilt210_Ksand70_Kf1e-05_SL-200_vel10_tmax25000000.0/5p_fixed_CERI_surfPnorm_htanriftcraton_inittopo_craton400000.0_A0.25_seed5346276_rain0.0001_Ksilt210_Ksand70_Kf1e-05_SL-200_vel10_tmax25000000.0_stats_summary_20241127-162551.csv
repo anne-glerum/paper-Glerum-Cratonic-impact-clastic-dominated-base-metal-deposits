@@ -1,0 +1,3 @@
+initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
+Lside-ULCshear Lside-Rdip,2.0,12.5,7.0,20.0,6.5,18.5,R,50.0,4.0,3.0,0.0,0.0,1.0,1.0
+# From t23 to t28, OFM3 in LM by travelling along the bottom of a 2nd basin. No OS according to definition, but only LC block left in SC; SC is bordered by only sediments.
