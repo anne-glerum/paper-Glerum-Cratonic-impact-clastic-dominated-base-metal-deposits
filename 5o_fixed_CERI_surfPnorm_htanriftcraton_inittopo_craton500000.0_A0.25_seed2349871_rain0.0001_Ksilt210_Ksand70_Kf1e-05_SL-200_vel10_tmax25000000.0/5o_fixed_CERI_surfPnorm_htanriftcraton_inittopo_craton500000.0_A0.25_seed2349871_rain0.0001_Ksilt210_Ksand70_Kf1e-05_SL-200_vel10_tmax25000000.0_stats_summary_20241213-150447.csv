@@ -1,0 +1,3 @@
+initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
+ULCshear Lside-C Rside-Ldip,8.0,8.0,22.0,23.5,16.0,21.5,R,50.0,4,3,1,1,1,1
+# First L and R BFs no S. Later F RM produces S, active from t25. From t27 to t33 migration structures in both directions.

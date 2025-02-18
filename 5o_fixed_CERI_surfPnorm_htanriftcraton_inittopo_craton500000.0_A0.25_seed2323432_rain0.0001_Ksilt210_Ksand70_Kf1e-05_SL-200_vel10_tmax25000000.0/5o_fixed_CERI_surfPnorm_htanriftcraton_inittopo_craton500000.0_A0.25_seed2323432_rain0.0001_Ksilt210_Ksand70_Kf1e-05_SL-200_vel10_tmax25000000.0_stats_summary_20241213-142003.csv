@@ -1,0 +1,3 @@
+initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
+ULCshear Lside-Rdip,5.0,7.0,20.0,22.0,13.5,23.0,R,50.0,3,3,2,0,2,2
+# LBF S, 1st RBF not. BF on RM that produces S active from 23. t35-37 special conditions where 1 S has 2 OFM2 and 1 OFM3 at 3 different hosts. 
