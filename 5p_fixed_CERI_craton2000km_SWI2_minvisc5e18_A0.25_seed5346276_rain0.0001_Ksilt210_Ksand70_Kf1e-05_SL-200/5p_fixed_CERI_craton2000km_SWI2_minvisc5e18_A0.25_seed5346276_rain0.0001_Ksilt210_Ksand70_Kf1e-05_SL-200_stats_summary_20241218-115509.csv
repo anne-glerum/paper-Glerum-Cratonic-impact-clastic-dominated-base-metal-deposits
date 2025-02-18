@@ -1,0 +1,4 @@
+initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
+ULCshear Rside-Ldip,5.5,3.5,21.0,16.0,7.5,18.0,L,21.0,4,2,0,0,1,1
+# Mshear Ldip. LBF never really focused. 1st S in RC, doesn't persist in R WM, then period without S. No S in LR BFs. 2nd LBF active t23, S t31, abandoned t34.
+# Early stab!
