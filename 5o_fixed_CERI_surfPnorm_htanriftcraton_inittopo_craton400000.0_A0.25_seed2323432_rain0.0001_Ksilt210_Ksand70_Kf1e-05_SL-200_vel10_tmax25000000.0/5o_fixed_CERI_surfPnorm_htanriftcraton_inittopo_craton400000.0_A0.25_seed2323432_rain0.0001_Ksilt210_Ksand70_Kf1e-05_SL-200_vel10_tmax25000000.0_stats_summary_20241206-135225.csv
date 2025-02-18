@@ -1,0 +1,3 @@
+initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
+ULCshear Lside-Rdip,4.0,6.5,21.5,14.5,14.0,20.5,L,24.5,6,3,3,0,1,1
+# First S in RBB, then S in SC during migration, then S in LM during migration and OFM3 in both margins after stab. Seems like it's going to migrate towards the right, but then transitions to the L.
