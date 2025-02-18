@@ -1,0 +1,4 @@
+initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
+ULCshear Lside-Rdip,6.5,8.5,24.5,19.0,14.0,24.0,L,50.0,3,3,3,0,1,1
+#t10 L local border fault, t16 R. t31 no active basin with S+H, but still OFM3. 1st S R, <=t42 S L, t43 new S R. t38 R border fault abandoned, t48 L abandoned. No OS.
+# Corrected from ULCshear-LD

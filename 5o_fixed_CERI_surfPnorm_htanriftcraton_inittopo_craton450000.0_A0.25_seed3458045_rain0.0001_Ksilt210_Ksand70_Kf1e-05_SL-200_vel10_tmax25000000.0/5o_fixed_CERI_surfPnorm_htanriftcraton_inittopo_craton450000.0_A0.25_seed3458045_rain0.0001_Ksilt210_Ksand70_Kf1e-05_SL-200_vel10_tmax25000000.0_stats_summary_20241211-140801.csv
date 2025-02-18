@@ -1,0 +1,3 @@
+initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
+ULCshear Lside-Rdip,5.5,7.0,18.5,24.0,13.0,23.0,R,50.0,4,4,2,0,1,1
+# t41 higher and smaller antithetic fault that connects to host cuts its border fault that connects to S. Not counted as OFM. RBS no S. RM S BF starts t18. S in RC/RM along fault dipping towards the R.
