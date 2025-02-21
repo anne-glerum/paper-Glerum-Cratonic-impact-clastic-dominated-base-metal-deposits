@@ -20,14 +20,14 @@ print ("Pandas version: ", pd.__version__)
 # Path to models
 base = r"/Users/acglerum/Documents/Postdoc/SG_SB/Projects/CERI_cratons/"
 
-output_name = '5o_fixed_regime_diagram_dcraton_cuttonewOS_'
+output_name = '5p_fixed_regime_diagram_dcraton_cuttonewOS'
 
 # File name
 # test file
 tail = r"5p_fixed_CERI_craton_analysis.txt"
 # real file
-tail = r"5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
-tail = r"5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_cuttonewOS.csv"
+tail = r"5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
+tail = r"5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_cuttonewOS.csv"
 
 # Structure of input file: 3x9 rows of the following columns:
 # initial_craton_distance,initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
@@ -61,38 +61,14 @@ if not set(["n_OFM3_max","n_OFM2_max","n_OFM1_max","n_source_max","source_max"])
 dataframe.loc[dataframe['initial_craton_distance'] == 2000, 'initial_craton_distance'] = 550
 
 # Order of initial geometries
-# 5p
-#order_geometries = ["Lside-ULCshear Lside-Rdip",
-#"ULCshear-LD Lside-Rdip",
-#"ULCshear 2Lside-Rdip",
-#"ULCshear Lside-Rdip",
-#"ULCshear Lside-Rdip Rside-Ldip",
-#"ULCshear Rside-Ldip-D Lside-Rdip",
-#"ULCshear Lside-Rdip 2Rside-Ldip",
-#"ULCshear Rside-Ldip"]
-# 5o
-order_geometries = [
-"Lside-ULCshear 2Lside-Rdip", #
-"Lside-ULCshear Lside-C Lside-Rdip", #
-"Lside-ULCshear Lside-Rdip",#
-"Lside-ULCshear",#
-"ULCshear-LD Lside-Rdip",#
-"ULCshear 3Lside-Rdip",
+order_geometries = ["Lside-ULCshear Lside-Rdip",
+"ULCshear-LD Lside-Rdip",
 "ULCshear 2Lside-Rdip",
-"ULCshear Lside-C",#
-"ULCshear Lside-Rdip", #
-"ULCshear 2Lside-Rdip Rside-Ldip",#
-"ULCshear Lside-C Rside-Ldip",#
-"ULCshear Lside-C 2Rside-Ldip",#
-"ULCshear Lside-Rdip Rside-Ldip",#
-"ULCshear Lside-Ldip Rside-Ldip",#
-"ULCshear Lside-Rdip 2Rside-Ldip",#
-"ULCshear Rside-Ldip",#
-"ULCshear 2Rside-Ldip"]#
-
-
-
-
+"ULCshear Lside-Rdip",
+"ULCshear Lside-Rdip Rside-Ldip",
+"ULCshear Rside-Ldip-D Lside-Rdip",
+"ULCshear Lside-Rdip 2Rside-Ldip",
+"ULCshear Rside-Ldip"]
 
 dataframe.initial_fault_geometry = dataframe.initial_fault_geometry.astype("category")
 dataframe.initial_fault_geometry = dataframe.initial_fault_geometry.cat.set_categories(order_geometries)
@@ -170,48 +146,16 @@ for i in range(n_columns):
 # TODO Would be great not to repeat this for both the x and y axis.
 ftsize = 6
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
-#5p
-#initial_geometry_labels = ["L-ULC L-Rdip", "ULC-LD L-Rdip", "ULC 2L-Rdip", "ULC L-Rdip", "ULC L-Rdip R-Ldip", "ULC L-Rdip R-Ldip-D", "ULC L-Rdip 2R-Ldip","ULC R-Ldip"]
-#5o
-initial_geometry_labels = [
-"L-ULC 2L-Rdip",
-"L-ULC L-C L-Rdip",
-"L-ULC L-Rdip",
-"L-ULC",
-"ULC-LD L-Rdip",#
-"ULC 3L-Rdip",
-"ULC 2L-Rdip",
-"ULC L-C",#
-"ULC L-Rdip", #
-"ULC 2L-Rdip R-Ldip",#
-"ULC L-C R-Ldip",#
-"ULC L-C 2R-Ldip",#
-"ULC L-Rdip R-Ldip",#
-"ULC L-Ldip R-Ldip",#
-"ULC L-Rdip 2R-Ldip",#
-"ULC R-Ldip",
-"ULC 2R-Ldip"]
-# 5o
-migration_duration_min = 2
-migration_duration_max = 14
-migration_duration_ticks = [2,6,10,14.0]
-LBF_duration_min = 10
-LBF_duration_max = 22
-LBF_duration_ticks = [10,14,18,22]
+initial_geometry_labels = ["L-ULC L-Rdip", "ULC-LD L-Rdip", "ULC 2L-Rdip", "ULC L-Rdip", "ULC L-Rdip R-Ldip", "ULC L-Rdip R-Ldip-D", "ULC L-Rdip 2R-Ldip","ULC R-Ldip"]
+migration_duration_min = 5
+migration_duration_max = 20
+migration_duration_ticks = [5.0,10.0,15.0,20.0]
+LBF_duration_min = 0
+LBF_duration_max = 25
+LBF_duration_ticks = [0,5,10,15,20,25]
 RBF_duration_min = 2
 RBF_duration_max = 22
-RBF_duration_ticks = [2,7,12,17,22]
-
-# 5p
-# migration_duration_min = 5
-# migration_duration_max = 20
-# migration_duration_ticks = [5.0,10.0,15.0,20.0]
-# LBF_duration_min = 0
-# LBF_duration_max = 25
-# LBF_duration_ticks = [0,5,10,15,20,25]
-# RBF_duration_min = 2
-# RBF_duration_max = 22
-# RBF_duration_ticks = [2.0,7,12,17,22]
+RBF_duration_ticks = [2.0,7,12,17,22]
 OFM12_max = 5
 for ax in axs.reshape(-1):
   if ax.get_xlabel() == 'initial_craton_distance':

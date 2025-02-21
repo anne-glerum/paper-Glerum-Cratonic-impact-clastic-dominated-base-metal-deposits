@@ -19,14 +19,14 @@ print ("Seaborn version: ", sns.__version__)
 # Path to models
 base = r"/Users/acglerum/Documents/Postdoc/SG_SB/Projects/CERI_cratons/"
 
-output_name = '5o_fixed_regime_diagram_nmax_duration_cuttonewOS'
+output_name = '5p_fixed_regime_diagram_nmax_duration_cuttonewOS'
 
 # File name
 # test file
 tail = r"5p_fixed_CERI_craton_analysis.txt"
 # real file
-tail = r"5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
-tail = r"5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_cuttonewOS.csv"
+tail = r"5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
+tail = r"5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_cuttonewOS.csv"
 
 # Structure of input file: 4x9 rows of the following columns:
 # initial_craton_distance,initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
@@ -132,39 +132,23 @@ for i in range(n_columns):
 # TODO Would be great not to repeat this for both the x and y axis.
 ftsize = 6
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
-# 5o settings
-migration_duration_min = 0
-migration_duration_max = 14
-migration_duration_ticks = [0,7.0,14]
-LBF_duration_min = 7
-LBF_duration_max = 21
-LBF_duration_ticks = [7.0,14.0,21]
+migration_duration_min = 5
+migration_duration_max = 20
+migration_duration_ticks = [5.0,10.0,15.0,20]
+LBF_duration_min = 0
+LBF_duration_max = 25
+LBF_duration_ticks = [0,5,10,15,20,25]
 RBF_duration_min = 2
 RBF_duration_max = 22
 RBF_duration_ticks = [2,7.0,12.0,17,22]
-S_min = 0
-S_max = 8
-S_ticks = [0,2,4,6,8]
+S_min = 2
+S_max = 10
+S_ticks = [2,4,6,8,10]
 SH_min = 0
-SH_max = 6
-SH_ticks = [0,2,4,6]
-OFM12_max = 4
-OFM3_min = 0
-# 5p settings
-# migration_duration_min = 5
-# migration_duration_max = 20
-# migration_duration_ticks = [5.0,10.0,15.0,20]
-# LBF_duration_min = 0
-# LBF_duration_max = 25
-# LBF_duration_ticks = [0,5,10,15,20,25]
-# RBF_duration_min = 2
-# RBF_duration_max = 22
-# RBF_duration_ticks = [2,7.0,12.0,17,22]
-# S_min = 2
-# S_max = 10
-# S_ticks = [2,4,6,8,10]
-# OFM12_max = 7
-# OFM3_min = -1
+SH_max = 8
+SH_ticks = [0,2,4,6,8]
+OFM12_max = 7
+OFM3_min = -1
 if set_axes:
   for ax in axs.reshape(-1):
     if ax.get_xlabel() == 'initial_craton_distance':
@@ -261,7 +245,7 @@ if set_axes:
       ax.set_yticks(SH_ticks)
       ax.set_ylabel("Max. nr of source+host basins [-]",weight="bold",fontsize=ftsize)
     elif ax.get_ylabel() == 'n_OFM3_max':
-      ax.set_ylim(OFM3_min,4.0) # -
+      ax.set_ylim(OFM3_min,3.0) # -
       ax.set_ylabel("Max. nr of OFM3 [-]",weight="bold",fontsize=ftsize)
     elif ax.get_ylabel() == 'n_OFM2_max':
       ax.set_ylim(-0.0,5.0) # -
