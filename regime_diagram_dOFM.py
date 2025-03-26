@@ -244,19 +244,20 @@ for m in models:
   if Path(m).exists():
     path = base + m
     stat_files = sorted(Path(path).glob('*stats_2*'))
+    ASPECT_statistics_file = path + '/statistics'
   if len(stat_files) == 1:
     # Read the data file
     filename = m + "/" + stat_files[0].name
     dataframe_stats = pd.read_csv(filename, sep=",") #,converters={'time': int,'n_OFM1': int,'n_OFM2': int, 'n_OFM3': int})
     if "craton400" in m:
-      dataframe_stats['initial_craton_distance'] = 400
-      print ("400")
+      dataframe_stats['initial_craton_distance'] = 50
+      print ("50")
     elif "craton450" in m:
-      dataframe_stats['initial_craton_distance'] = 450
-      print ("450")
+      dataframe_stats['initial_craton_distance'] = 100
+      print ("100")
     elif "craton500" in m:
-      dataframe_stats['initial_craton_distance'] = 500
-      print ("500")
+      dataframe_stats['initial_craton_distance'] = 150
+      print ("150")
     else:
       dataframe_stats['initial_craton_distance'] = 2000
     dataframe_stats['time'] = dataframe_stats['time'].div(2)
@@ -285,7 +286,7 @@ for m in models:
   else:
     print ("Multiple or no summary files for model: ", m)
 
-  # Plot
+  # Plot border fault activity and migration over time
   dataframe_model = dataframe.iloc[model_index]
   border_fault_data = {'time': [dataframe_model['start_left_border_fault'],dataframe_model['end_left_border_fault'],
                                 dataframe_model['start_right_border_fault'],dataframe_model['end_right_border_fault'],
@@ -296,6 +297,19 @@ for m in models:
   sns.lineplot(data=df_model_border_faults,x='time',y='type',hue='type',ax=axs[0,0],palette=palette_n_OFM,legend=False) 
   #sns.lineplot(data=df_model_border_faults,x='time',y='type',hue='type',ax=axs[0,0],palette=palette_n_OFM,legend=True) 
 
+  # Plot source area over time
+  if Path(ASPECT_statistics_file).exists():
+    # The correct columns are selected with usecols.
+    # When no visu output file name is given, the respective line will have a lot of
+    # placeholder spaces. We need to remove them before genfromtxt can deal with the
+    # statistics file. 
+    with open(ASPECT_statistics_file) as f:
+      clean_lines = (re.sub('\s+',' ',line) for line in f)
+      t,source_area = np.genfromtxt(clean_lines, comments='#', usecols=(1,62), delimiter=' ', unpack=True)
+    # time in My and area in km2
+    dataframe_ASPECT = pd.DataFrame({'time': t/1e6, 'source_area': source_area/1e6})
+
+    sns.lineplot(data=dataframe_ASPECT,x='time',y='source_area', color=colors[0], ax=axs[1,0],palette=palette_n_OFM,legend=False) 
 
 # Ranges and labels of the axes
 # TODO Would be great not to repeat this for both the x and y axis.
