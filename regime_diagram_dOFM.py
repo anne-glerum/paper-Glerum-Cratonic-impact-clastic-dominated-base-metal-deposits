@@ -222,13 +222,13 @@ color8=[0.96494, 0.62693, 0.46486]
 color9=[0.99277, 0.70769, 0.71238]
 colors = [ 
           color1, 
-          color2, 
-          color3, 
-          color4, 
+#          color2, 
+#          color3, 
+#          color4, 
           color5, 
-          color6, 
+#          color6, 
           color7, 
-          color8, 
+#          color8, 
           color9,
          ] 
 counter = 0
@@ -287,10 +287,14 @@ for m in models:
 
   # Plot
   dataframe_model = dataframe.iloc[model_index]
-  border_fault_data = {'LBF': [dataframe_model['start_left_border_fault'],dataframe_model['end_left_border_fault']]}
+  border_fault_data = {'time': [dataframe_model['start_left_border_fault'],dataframe_model['end_left_border_fault'],
+                                dataframe_model['start_right_border_fault'],dataframe_model['end_right_border_fault'],
+                                dataframe_model['start_migration'],dataframe_model['end_migration']],
+                       'value': [1, 1.2, 1, 1.2, 1.4, 1.4],
+                       'type': ['LBF', 'RBF', 'LBF', 'RBF', 'MIG', 'MIG']}
   df_model_border_faults = pd.DataFrame(border_fault_data)
-  #sns.scatterplot(data=dataframe_model,x="time",y="n_OFM3",ax=axs[0,0],hue="index",palette=palette_n_OFM,legend=False) #,size="n_OFM12",sizes=(0,200))
-  #sns.scatterplot(data=dataframe_model,x="time",y="n_OFM2",ax=axs[1,0],hue="index",palette=palette_n_OFM,legend=False) #,size="n_OFM12",sizes=(0,200))
+  sns.lineplot(data=df_model_border_faults,x='time',y='type',hue='type',ax=axs[0,0],palette=palette_n_OFM,legend=False) 
+  #sns.lineplot(data=df_model_border_faults,x='time',y='type',hue='type',ax=axs[0,0],palette=palette_n_OFM,legend=True) 
 
 
 # Ranges and labels of the axes
