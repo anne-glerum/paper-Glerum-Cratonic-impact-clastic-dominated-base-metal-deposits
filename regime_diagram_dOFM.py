@@ -182,7 +182,8 @@ color_right_darker = (0.231372549019608, 0.462745098039216, 0.286274509803922)
 n_columns = 3
 n_rows = 3
 fig, axs = plt.subplots(n_rows,n_columns,figsize=(2*n_columns, 2*n_rows),dpi=300, sharex='col', sharey='row')
-#fig.subplots_adjust(left = 0.2)
+fig.subplots_adjust(hspace = 0.05)
+fig.subplots_adjust(wspace = 0.05)
 
 #print (sns.color_palette())
 #[(0.2980392156862745, 0.4470588235294118, 0.6901960784313725), 
@@ -327,17 +328,17 @@ for m in models:
     else:
       marker = "o"
       df_stats_n_OFM3['numtype_OFM'] = 3 - df_stats_n_OFM3['n_OFM3']/10
-    jitter = (jitter_max - jitter_min) * np.random.random_sample(len(df_stats_n_OFM2.index)) + jitter_max
-    df_stats_n_OFM2["numtype_OFM"] = df_stats_n_OFM2["numtype_OFM"] + jitter
-    
+    jitter = (jitter_max - jitter_min) * np.random.random_sample(len(df_stats_n_OFM3.index)) + jitter_max
+    df_stats_n_OFM3["numtype_OFM"] = df_stats_n_OFM3["numtype_OFM"] + jitter
+
     # Plot OFMs over time
     # Only plot legend in first column
     set_legend = False
-    if column_number == 0:
-      set_legend = True
-    sns.stripplot(data=df_stats_n_OFM3,x="time",y="numtype_OFM",ax=axs[2,column_number],hue="n_OFM3",marker=marker,palette=palette_n_OFM,alpha=0.7,legend=False)
-    sns.stripplot(data=df_stats_n_OFM2,x="time",y="numtype_OFM",ax=axs[2,column_number],hue="n_OFM2",marker=marker,palette=palette_n_OFM,alpha=0.7,legend=False)
-    sns.stripplot(data=df_stats_n_OFM1,x="time",y="numtype_OFM",ax=axs[2,column_number],hue="n_OFM1",marker=marker,palette=palette_n_OFM,alpha=0.7,legend=set_legend)
+    #if column_number == 2:
+    #  set_legend = True
+    sns.stripplot(data=df_stats_n_OFM3,x="time",y="numtype_OFM",ax=axs[2,column_number],hue="n_OFM3",native_scale=True,size=4,marker=marker,palette=palette_n_OFM,alpha=0.7,legend=False)
+    sns.stripplot(data=df_stats_n_OFM2,x="time",y="numtype_OFM",ax=axs[2,column_number],hue="n_OFM2",native_scale=True,size=4,marker=marker,palette=palette_n_OFM,alpha=0.7,legend=False)
+    sns.stripplot(data=df_stats_n_OFM1,x="time",y="numtype_OFM",ax=axs[2,column_number],hue="n_OFM1",native_scale=True,size=4,marker=marker,palette=palette_n_OFM,alpha=0.7,legend=set_legend)
 
     counter += 1
 
@@ -380,7 +381,7 @@ for m in models:
 
 # Ranges and labels of the axes
 # TODO Would be great not to repeat this for both the x and y axis.
-ftsize = 8
+
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
 #5p
 #initial_geometry_labels = ["L-ULC L-Rdip", "ULC-LD L-Rdip", "ULC 2L-Rdip", "ULC L-Rdip", "ULC L-Rdip R-Ldip", "ULC L-Rdip R-Ldip-D", "ULC L-Rdip 2R-Ldip","ULC R-Ldip"]
@@ -425,7 +426,13 @@ RBF_duration_ticks = [2,7,12,17,22]
 # RBF_duration_max = 22
 # RBF_duration_ticks = [2.0,7,12,17,22]
 OFM12_max = 5
+ftsize = 10
+axs[0,0].set_title("50 km",weight="bold",fontsize=ftsize)
+axs[0,1].set_title("100 km",weight="bold",fontsize=ftsize)
+axs[0,2].set_title("150 km",weight="bold",fontsize=ftsize)
+fig.suptitle('Craton edge distance',weight="bold", fontsize=ftsize)
 for ax in axs.reshape(-1):
+  ax.tick_params(axis='both', labelsize=8)
   if ax.get_xlabel() == 'initial_craton_distance':
     ax.set_xlim(350,600) # km
     ax.set_xticks([400,450,500,550])
@@ -435,6 +442,8 @@ for ax in axs.reshape(-1):
     ax.set_xlim(-2,27) # My
     ax.set_xticks([0,5,10,15,20,25])
     ax.set_xlabel("Time [My]",weight="bold",fontsize=ftsize)
+  else:
+    print ("This axis label doesn't exist.")
   
   if ax.get_ylabel() == 'initial_craton_distance':
     ax.set_ylim(350,600) # km
@@ -457,53 +466,11 @@ for ax in axs.reshape(-1):
     ax.set_yticks([1,2,3])
     ax.set_yticklabels(["MIG","RBF","LBF"])
     ax.set_ylim(0.7,3.3)
-  elif ax.get_ylabel() == 'start_left_border_fault':
-    ax.set_ylim(0,10) # My
-    ax.set_yticks([0,5,10])
-    ax.set_ylabel("Start left border fault(s) [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'start_right_border_fault':
-    ax.set_ylim(0,10) # My
-    ax.set_yticks([0,5,10])
-    ax.set_ylabel("Start right border fault(s) [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'start_border_fault':
-    ax.set_ylim(0,25) # My
-    ax.set_yticks([0,10,20,25])
-    ax.set_ylabel("Start border fault(s) [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'n_source_max':
-    ax.set_ylim(-0.,10.) # -
-    ax.set_ylabel("Max. nr of source basins [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'n_source_host_max':
-    ax.set_ylim(-0.,10.) # -
-    ax.set_ylabel("Max. nr of source+host basins [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'n_OFM3_max':
-    ax.set_ylim(-1.0,5.0) # -
-    ax.set_ylabel("Max. nr of OFM3 [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'n_OFM2_max':
-    ax.set_ylim(-0.0,5.0) # -
-    ax.set_ylabel("Max. nr of OFM2 [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'n_OMF1_max':
-    ax.set_ylim(-0.0,5.0) # -
-    ax.set_ylabel("Max. nr of OFM1 [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'n_OFM12_max':
-    ax.set_ylim(-0.0,OFM12_max) # -
-    ax.set_ylabel("Max. nr of OFM12 [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'end_migration':
-    ax.set_ylim(10,25) # My
-    ax.set_yticks([10,15,20,25])
-    ax.set_ylabel("End rift migration [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'migration_duration':
-    ax.set_ylim(migration_duration_min,migration_duration_max) # My
-    ax.set_yticks(migration_duration_ticks)
-    ax.set_ylabel("Rift migration duration [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'left_border_fault_duration':
-    ax.set_ylim(LBF_duration_min,LBF_duration_max) # My
-    ax.set_yticks(LBF_duration_ticks)
-    ax.set_ylabel("Left border fault duration [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'right_border_fault_duration':
-    ax.set_ylim(RBF_duration_min,RBF_duration_max) # My
-    ax.set_yticks(RBF_duration_ticks)
-    ax.set_ylabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
+  else:
+    print ("This axis label doesn't exist.")
 
 ## Name the png according to the plotted field
+#plt.tight_layout()
+fig.align_ylabels(axs[:, 0])
 plt.savefig(output_name + '_CERI_cratons.png')    
 print ("Output in: ", output_name + '_CERI_cratons.png')
