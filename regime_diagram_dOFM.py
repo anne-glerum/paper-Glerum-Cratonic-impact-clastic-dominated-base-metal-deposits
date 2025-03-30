@@ -33,7 +33,6 @@ tail = r"5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksa
 tail = r"5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_cuttonewOS.csv"
 
 ###### Model names ######
-model_index = 8
 models = [
 '5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
@@ -48,16 +47,16 @@ models = [
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #
 ##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 ##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 ##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 ##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
@@ -95,10 +94,6 @@ models = [
 ##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 ##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 ]
-# Structure of input file: 3x9 rows of the following columns:
-# initial_craton_distance,initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
-columns_to_plot = ['time', 'time']
-rows_to_plot = ['n_OFM3', 'n_OFM2', 'n_OFM1']
 
 # Read the data file
 dataframe = pd.read_csv(base+tail, sep=",", comment='#')
@@ -119,9 +114,6 @@ dataframe['right_border_fault_duration'] = dataframe['end_right_border_fault'] -
 #dataframe['index'] = dataframe[
 
 # Check data
-#print ("Interpretation data file: ", dataframe.dtypes)
-#if not set(columns_to_plot).issubset(dataframe.columns):
-#  exit("The requested data columns are not available, exiting.")
 if not set(["n_OFM3_max","n_OFM2_max","n_OFM1_max","n_source_max","source_max"]).issubset(dataframe.columns):
   exit("The requested data columns are not available, exiting.")
 
@@ -187,8 +179,8 @@ color_left_darker = (0.207843137254902, 0.309803921568627, 0.482352941176471)
 color_right_darker = (0.231372549019608, 0.462745098039216, 0.286274509803922) 
 
 # Create empty plot
-n_columns = len(columns_to_plot)
-n_rows = len(rows_to_plot)
+n_columns = 3
+n_rows = 3
 fig, axs = plt.subplots(n_rows,n_columns,figsize=(2*n_columns, 2*n_rows),dpi=300, sharex='col', sharey='row')
 #fig.subplots_adjust(left = 0.2)
 
@@ -239,13 +231,19 @@ paths = [base+m for m in models]
 ASPECT_time_steps = ['00000','00001','00002','00003','00004','00005','00006','00007','00008','00009','00010','00011','00012','00013','00014','00015','00016','00017','00018','00019','00020','00021','00022','00023','00024','00025','00026','00027','00028','00029','00030','00031','00032','00033','00034','00035','00036','00037','00038','00039','00040','00041','00042','00043','00044','00045','00046','00047','00048','00049','00050']
 
 ###### Loop over requested models ######
+n_450 = 0
+n_500 = 0
 for m in models:
+
+  column_number = 0
+  model_index = 0
 
   if Path(m).exists():
     path = base + m
     stat_files = sorted(Path(path).glob('*stats_2*'))
     ASPECT_statistics_file = path + '/statistics'
   if len(stat_files) == 1:
+
     # Read the data file
     filename = m + "/" + stat_files[0].name
     dataframe_stats = pd.read_csv(filename, sep=",") #,converters={'time': int,'n_OFM1': int,'n_OFM2': int, 'n_OFM3': int})
@@ -254,32 +252,92 @@ for m in models:
       print ("50")
     elif "craton450" in m:
       dataframe_stats['initial_craton_distance'] = 100
-      print ("100")
+      column_number = 1
+      n_450 += 1
+      print ("100 " + str(n_450))
     elif "craton500" in m:
       dataframe_stats['initial_craton_distance'] = 150
-      print ("150")
+      column_number = 2
+      n_500 += 1
+      print ("150 " + str(n_500))
     else:
       dataframe_stats['initial_craton_distance'] = 2000
+      column_number = 3
+    if "1236549" in m:
+      model_index = column_number * 9 + 0
+    elif "2323432" in m:
+      model_index = column_number * 9 + 1
+    elif "2349871" in m:
+      model_index = column_number * 9 + 2
+    elif "2928465" in m:
+      model_index = column_number * 9 + 3
+    elif "3458045" in m:
+      model_index = column_number * 9 + 4
+    elif "5346276" in m:
+      model_index = column_number * 9 + 5
+    elif "7646354" in m:
+      model_index = column_number * 9 + 6
+    elif "9023857" in m:
+      model_index = column_number * 9 + 7
+    elif "9872345" in m:
+      model_index = column_number * 9 + 8
     dataframe_stats['time'] = dataframe_stats['time'].div(2)
     dataframe_stats['n_OFM12'] = dataframe_stats['n_OFM1'] + dataframe_stats['n_OFM2']
     dataframe_stats = dataframe_stats.assign(**{"index": counter})
 
+    # Create a dataframe for each OFM and
+    # give a numerical value (1,2,3) based on OFM type,
+    # + (0.1,0.2,0.3,0.4) based on number of OFM of that type
+    # with a negative or positive sign based on the simulation number
+    # for that craton edge distance
+    # + a random jitter between 0 and 0.01.
+    jitter_min = -0.005
+    jitter_max = 0.005
+    jitter = (jitter_max - jitter_min) * np.random.random_sample(150) + jitter_max
     df_stats_n_OFM1 = dataframe_stats.copy()
     df_stats_n_OFM1 = df_stats_n_OFM1[df_stats_n_OFM1["n_OFM1"] > 0]
     df_stats_n_OFM1['type_OFM'] = 'OFM1'
+    if (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1):
+      marker = "D"
+      df_stats_n_OFM1['numtype_OFM'] = 1 + df_stats_n_OFM1['n_OFM1']/10
+    else:
+      marker = "o"
+      df_stats_n_OFM1['numtype_OFM'] = 1 - df_stats_n_OFM1['n_OFM1']/10
+
+    jitter = (jitter_max - jitter_min) * np.random.random_sample(len(df_stats_n_OFM1.index)) + jitter_max
+    df_stats_n_OFM1["numtype_OFM"] = df_stats_n_OFM1["numtype_OFM"] + jitter
     
     df_stats_n_OFM2 = dataframe_stats.copy()
     df_stats_n_OFM2 = df_stats_n_OFM2[df_stats_n_OFM2["n_OFM2"] > 0]
     df_stats_n_OFM2['type_OFM'] = 'OFM2'
+    if (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1):
+      marker = "D"
+      df_stats_n_OFM2['numtype_OFM'] = 2 + df_stats_n_OFM2['n_OFM2']/10
+    else:
+      marker = "o"
+      df_stats_n_OFM2['numtype_OFM'] = 2 - df_stats_n_OFM2['n_OFM2']/10
+    jitter = (jitter_max - jitter_min) * np.random.random_sample(len(df_stats_n_OFM2.index)) + jitter_max
+    df_stats_n_OFM2["numtype_OFM"] = df_stats_n_OFM2["numtype_OFM"] + jitter
     
     df_stats_n_OFM3 = dataframe_stats.copy()
     df_stats_n_OFM3 = df_stats_n_OFM3[df_stats_n_OFM3["n_OFM3"] > 0]
-    df_stats_n_OFM3['type_OFM'] = 'OFM3'
-
+    if (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1):
+      marker = "D"
+      df_stats_n_OFM3['numtype_OFM'] = 3 + df_stats_n_OFM3['n_OFM3']/10
+    else:
+      marker = "o"
+      df_stats_n_OFM3['numtype_OFM'] = 3 - df_stats_n_OFM3['n_OFM3']/10
+    jitter = (jitter_max - jitter_min) * np.random.random_sample(len(df_stats_n_OFM2.index)) + jitter_max
+    df_stats_n_OFM2["numtype_OFM"] = df_stats_n_OFM2["numtype_OFM"] + jitter
+    
     # Plot OFMs over time
-    sns.stripplot(data=df_stats_n_OFM3,x="time",y="type_OFM",ax=axs[2,0],hue="n_OFM3",palette=palette_n_OFM,legend=False)
-    sns.stripplot(data=df_stats_n_OFM2,x="time",y="type_OFM",ax=axs[2,0],hue="n_OFM2",palette=palette_n_OFM,legend=False)
-    sns.stripplot(data=df_stats_n_OFM1,x="time",y="type_OFM",ax=axs[2,0],hue="n_OFM1",palette=palette_n_OFM,legend=True)
+    # Only plot legend in first column
+    set_legend = False
+    if column_number == 0:
+      set_legend = True
+    sns.stripplot(data=df_stats_n_OFM3,x="time",y="numtype_OFM",ax=axs[2,column_number],hue="n_OFM3",marker=marker,palette=palette_n_OFM,alpha=0.7,legend=False)
+    sns.stripplot(data=df_stats_n_OFM2,x="time",y="numtype_OFM",ax=axs[2,column_number],hue="n_OFM2",marker=marker,palette=palette_n_OFM,alpha=0.7,legend=False)
+    sns.stripplot(data=df_stats_n_OFM1,x="time",y="numtype_OFM",ax=axs[2,column_number],hue="n_OFM1",marker=marker,palette=palette_n_OFM,alpha=0.7,legend=set_legend)
 
     counter += 1
 
@@ -287,15 +345,21 @@ for m in models:
     print ("Multiple or no summary files for model: ", m)
 
   # Plot border fault activity and migration over time
+  dy = -0.1
+  if (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1):
+    dy = 0.1
   dataframe_model = dataframe.iloc[model_index]
   border_fault_data = {'time': [dataframe_model['start_left_border_fault'],dataframe_model['end_left_border_fault'],
                                 dataframe_model['start_right_border_fault'],dataframe_model['end_right_border_fault'],
                                 dataframe_model['start_migration'],dataframe_model['end_migration']],
-                       'value': [1, 1.2, 1, 1.2, 1.4, 1.4],
-                       'type': ['LBF', 'RBF', 'LBF', 'RBF', 'MIG', 'MIG']}
+                       'value': [3 + dy, 3 + dy, 2 + dy, 2 + dy, 1 + dy, 1 + dy],
+                       'type': ['LBF', 'LBF', 'RBF', 'RBF', 'MIG', 'MIG']}
   df_model_border_faults = pd.DataFrame(border_fault_data)
-  sns.lineplot(data=df_model_border_faults,x='time',y='type',hue='type',ax=axs[0,0],palette=palette_n_OFM,legend=False) 
-  #sns.lineplot(data=df_model_border_faults,x='time',y='type',hue='type',ax=axs[0,0],palette=palette_n_OFM,legend=True) 
+  if dy < 0:
+    sns.lineplot(data=df_model_border_faults,x='time',y='value',hue='type',ax=axs[0,column_number],palette=palette_n_OFM,legend=False)
+  else:
+    sns.lineplot(data=df_model_border_faults,x='time',y='value',hue='type',style=True,dashes=[(2,2)],ax=axs[0,column_number],palette=palette_n_OFM,legend=False)
+   
 
   # Plot source area over time
   if Path(ASPECT_statistics_file).exists():
@@ -309,11 +373,14 @@ for m in models:
     # time in My and area in km2
     dataframe_ASPECT = pd.DataFrame({'time': t/1e6, 'source_area': source_area/1e6})
 
-    sns.lineplot(data=dataframe_ASPECT,x='time',y='source_area', color=colors[0], ax=axs[1,0],palette=palette_n_OFM,legend=False) 
+    if dy < 0:
+      sns.lineplot(data=dataframe_ASPECT,x='time',y='source_area', color=colors[0], ax=axs[1,column_number],palette=palette_n_OFM,legend=False) 
+    else:
+      sns.lineplot(data=dataframe_ASPECT,x='time',y='source_area', color=colors[1], style=True, dashes=[(2,2)], ax=axs[1,column_number],palette=palette_n_OFM,legend=False) 
 
 # Ranges and labels of the axes
 # TODO Would be great not to repeat this for both the x and y axis.
-ftsize = 6
+ftsize = 8
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
 #5p
 #initial_geometry_labels = ["L-ULC L-Rdip", "ULC-LD L-Rdip", "ULC 2L-Rdip", "ULC L-Rdip", "ULC L-Rdip R-Ldip", "ULC L-Rdip R-Ldip-D", "ULC L-Rdip 2R-Ldip","ULC R-Ldip"]
@@ -364,75 +431,32 @@ for ax in axs.reshape(-1):
     ax.set_xticks([400,450,500,550])
     ax.set_xticklabels(craton_distance_labels)
     ax.set_xlabel("Initial craton-rift distance [km]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'initial_fault_geometry':
-    ax.tick_params(axis='x', labelrotation=90,labelsize=3)
-    ax.set_xticks(order_geometries)
-    ax.set_xticklabels(initial_geometry_labels)
-    ax.set_xlabel("Initial fault geometry [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'start_migration':
-    ax.set_xlim(5,10) # My
-    ax.set_xticks([0,5,10])
-    ax.set_xlabel("Start rift migration [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'migration_direction':
-    ax.margins(x=0.2)
-    ax.set_xlabel("Direction rift migration [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'start_left_border_fault':
-    ax.set_xlim(0,10) # My
-    ax.set_xticks([0,5,10])
-    ax.set_xlabel("Start left border fault(s) [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'start_right_border_fault':
-    ax.set_xlim(0,10) # My
-    ax.set_xticks([0,5,10])
-    ax.set_xlabel("Start right border fault(s) [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'n_source_max':
-    ax.set_xlim(0,10) # -
-    ax.set_xlabel("Max. nr of source basins [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'n_source_host_max':
-    ax.set_xlim(0,10) # -
-    ax.set_xlabel("Max. nr of source+host basins [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'n_OFM3_max':
-    ax.set_xlim(0,5.0) # -
-    ax.set_xlabel("Max. nr of OFM3 [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'n_OFM2_max':
-    ax.set_xlim(0,5) # -
-    ax.set_xlabel("Max. nr of OFM2 [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'n_OMF1_max':
-    ax.set_xlim(0,5) # -
-    ax.set_xlabel("Max. nr of OFM1 [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'n_OFM12_max':
-    ax.set_xlim(0,OFM12_max) # -
-    ax.set_xlabel("Max. nr of OFM12 [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'end_migration':
-    ax.set_xlim(10,25) # My
-    ax.set_xticks([10,15,20,25])
-    ax.set_xlabel("End rift migration [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'migration_duration':
-    ax.set_xlim(migration_duration_min,migration_duration_max) # My
-    ax.set_xticks(migration_duration_ticks)
-    ax.set_xlabel("Rift migration duration [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'left_border_fault_duration':
-    ax.set_xlim(LBF_duration_min,LBF_duration_max) # My
-    ax.set_xticks(LBF_duration_ticks)
-    ax.set_xlabel("Left border fault duration [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'right_border_fault_duration':
-    ax.set_xlim(RBF_duration_min,RBF_duration_max) # My
-    ax.set_xticks(RBF_duration_ticks)
-    ax.set_xlabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
+  elif ax.get_xlabel() == 'time':
+    ax.set_xlim(-2,27) # My
+    ax.set_xticks([0,5,10,15,20,25])
+    ax.set_xlabel("Time [My]",weight="bold",fontsize=ftsize)
   
   if ax.get_ylabel() == 'initial_craton_distance':
     ax.set_ylim(350,600) # km
     ax.set_yticks([400,450,500,550])
     ax.set_yticklabels(craton_distance_labels)
     ax.set_ylabel("Initial craton-rift distance [km]",weight="bold",fontsize=ftsize)
-  if ax.get_ylabel() == 'initial_fault_geometry':
-    ax.set_ylabel("Initial fault geometry [-]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'start_migration':
-    ax.set_ylim(0,10) # My
-    ax.set_yticks([0,5,10])
-    ax.set_ylabel("Start rift migration [My]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'migration_direction':
-    ax.margins(x=0.2)
-    ax.set_ylabel("Direction rift migration [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_ylabel() == 'type_OFM':
+    ax.set_ylabel("OFM type [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_ylabel() == 'numtype_OFM':
+    ax.set_ylabel("OFM type [-]",weight="bold",fontsize=ftsize)
+    ax.set_ylim(0.5,3.5)
+    ax.set_yticks([1,2,3])
+    ax.set_yticklabels(["OFM1", "OFM2", "OFM3"])
+  elif ax.get_ylabel() == 'source_area':
+    ax.set_ylim(-2,72) # km2
+    ax.set_yticks([0,10,20,30,40,50,60,70])
+    ax.set_ylabel(r"Source area [km$^2$]",weight="bold",fontsize=ftsize)
+  elif ax.get_ylabel() == 'value':
+    ax.set_ylabel("Tectonic event [-]",weight="bold",fontsize=ftsize)
+    ax.set_yticks([1,2,3])
+    ax.set_yticklabels(["MIG","RBF","LBF"])
+    ax.set_ylim(0.7,3.3)
   elif ax.get_ylabel() == 'start_left_border_fault':
     ax.set_ylim(0,10) # My
     ax.set_yticks([0,5,10])
