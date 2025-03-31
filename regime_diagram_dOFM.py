@@ -25,7 +25,7 @@ print ("Matplotlib version: ", matplotlib.__version__)
 # Path to models
 base = r"/Users/acglerum/Documents/Postdoc/SG_SB/Projects/CERI_cratons/"
 
-output_name = '5p_fixed_regime_diagram_dOFM_craton400km_cuttonewOS_test'
+output_name = '5p_fixed_regime_diagram_dOFM_cuttonewOS'
 
 # File name
 # real file
@@ -33,6 +33,7 @@ tail = r"5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksa
 tail = r"5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_cuttonewOS.csv"
 
 ###### Model names ######
+# List left-migrating before right-migrating sims
 models = [
 '5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
@@ -44,55 +45,25 @@ models = [
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 '5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #
-##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 ##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##@!'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 ]
 
 # Read the data file
@@ -121,51 +92,6 @@ if not set(["n_OFM3_max","n_OFM2_max","n_OFM1_max","n_source_max","source_max"])
 # with 550 km, but label axis as "infinite".
 dataframe.loc[dataframe['initial_craton_distance'] == 2000, 'initial_craton_distance'] = 550
 
-# Order of initial geometries
-# 5p
-#order_geometries = ["Lside-ULCshear Lside-Rdip",
-#"ULCshear-LD Lside-Rdip",
-#"ULCshear 2Lside-Rdip",
-#"ULCshear Lside-Rdip",
-#"ULCshear Lside-Rdip Rside-Ldip",
-#"ULCshear Rside-Ldip-D Lside-Rdip",
-#"ULCshear Lside-Rdip 2Rside-Ldip",
-#"ULCshear Rside-Ldip"]
-# 5o
-order_geometries = [
-"Lside-ULCshear 2Lside-Rdip", #
-"Lside-ULCshear Lside-C Lside-Rdip", #
-"Lside-ULCshear Lside-Rdip",#
-"Lside-ULCshear",#
-"ULCshear-LD Lside-Rdip",#
-"ULCshear 3Lside-Rdip",
-"ULCshear 2Lside-Rdip",
-"ULCshear Lside-C",#
-"ULCshear Lside-Rdip", #
-"ULCshear 2Lside-Rdip Rside-Ldip",#
-"ULCshear Lside-C Rside-Ldip",#
-"ULCshear Lside-C 2Rside-Ldip",#
-"ULCshear Lside-Rdip Rside-Ldip",#
-"ULCshear Lside-Ldip Rside-Ldip",#
-"ULCshear Lside-Rdip 2Rside-Ldip",#
-"ULCshear Rside-Ldip",#
-"ULCshear 2Rside-Ldip"]#
-
-dataframe.initial_fault_geometry = dataframe.initial_fault_geometry.astype("category")
-dataframe.initial_fault_geometry = dataframe.initial_fault_geometry.cat.set_categories(order_geometries)
-dataframe.sort_values(["initial_fault_geometry"])
-
-# For the regression plots, we only want to use the craton distances of 400, 450 and 500 km,
-# as these are the ones that were actually in the model domain. Select this subset:
-dataframe_cratons = dataframe[dataframe["initial_craton_distance"].isin([400,450,500])]
-# Some border faults live on till the end of the simulation, they were given a value of 50 My.
-# This also skews the regression, so remove them.
-# TODO this isn't necessary anymore, as we already restrict the end time to 25 My
-dataframe_left_border_fault = dataframe_cratons[dataframe_cratons["left_border_fault_duration"] <= 25]
-dataframe_right_border_fault = dataframe_cratons[dataframe_cratons["right_border_fault_duration"] <= 25]
-# Same for rifts, some do not stabilize within the model time.
-dataframe_migration = dataframe_cratons[dataframe_cratons["migration_duration"] <= 25]
-
 # Use the seaborn theme,
 sns.set_theme()
 # but tweak the colors a bit
@@ -184,24 +110,6 @@ n_rows = 3
 fig, axs = plt.subplots(n_rows,n_columns,figsize=(2*n_columns, 2*n_rows),dpi=300, sharex='col', sharey='row')
 fig.subplots_adjust(hspace = 0.05)
 fig.subplots_adjust(wspace = 0.05)
-
-#print (sns.color_palette())
-#[(0.2980392156862745, 0.4470588235294118, 0.6901960784313725), 
-# (0.8666666666666667, 0.5176470588235295, 0.3215686274509804),
-# (0.3333333333333333, 0.6588235294117647, 0.40784313725490196),
-# (0.7686274509803922, 0.3058823529411765, 0.3215686274509804),
-# (0.5058823529411764, 0.4470588235294118, 0.7019607843137254),
-# (0.5764705882352941, 0.47058823529411764, 0.3764705882352941),
-# etc
-
-# Regression confidence interval
-confidence_interval = 0
-# Which markers for which migration direction
-markers = {'L': 'o', 'C':'X', 'R': 's'}
-# Order in which style and hue are applied according to migration direction
-order = ["L", "C", "R"]
-# Repeated parameters for regression
-reg_prms = {"scatter":False,"robust":False,"order":1,"ci":confidence_interval}
 
 # Batlow
 color1=[0.0051932, 0.098238, 0.34984]
@@ -227,11 +135,10 @@ colors = [
 counter = 0
 palette_n_OFM = sns.color_palette(palette=colors)
 
-###### Create file paths ######
-paths = [base+m for m in models]
-ASPECT_time_steps = ['00000','00001','00002','00003','00004','00005','00006','00007','00008','00009','00010','00011','00012','00013','00014','00015','00016','00017','00018','00019','00020','00021','00022','00023','00024','00025','00026','00027','00028','00029','00030','00031','00032','00033','00034','00035','00036','00037','00038','00039','00040','00041','00042','00043','00044','00045','00046','00047','00048','00049','00050']
-
 ###### Loop over requested models ######
+# Only one 50 km craton edge run will be plotted, and it migrates to the right,
+# so give it a value of 2.
+n_400 = 2
 n_450 = 0
 n_500 = 0
 for m in models:
@@ -266,22 +173,31 @@ for m in models:
       column_number = 3
     if "1236549" in m:
       model_index = column_number * 9 + 0
+      sim_color = color1
     elif "2323432" in m:
       model_index = column_number * 9 + 1
+      sim_color = color2
     elif "2349871" in m:
       model_index = column_number * 9 + 2
+      sim_color = color3
     elif "2928465" in m:
       model_index = column_number * 9 + 3
+      sim_color = color4
     elif "3458045" in m:
       model_index = column_number * 9 + 4
+      sim_color = color5
     elif "5346276" in m:
       model_index = column_number * 9 + 5
+      sim_color = color6
     elif "7646354" in m:
       model_index = column_number * 9 + 6
+      sim_color = color7
     elif "9023857" in m:
       model_index = column_number * 9 + 7
+      sim_color = color8
     elif "9872345" in m:
       model_index = column_number * 9 + 8
+      sim_color = color9
     dataframe_stats['time'] = dataframe_stats['time'].div(2)
     dataframe_stats['n_OFM12'] = dataframe_stats['n_OFM1'] + dataframe_stats['n_OFM2']
     dataframe_stats = dataframe_stats.assign(**{"index": counter})
@@ -292,13 +208,14 @@ for m in models:
     # with a negative or positive sign based on the simulation number
     # for that craton edge distance
     # + a random jitter between 0 and 0.01.
+    # Left-migrating simulations are listed first, they will have a negative shift.
     jitter_min = -0.005
     jitter_max = 0.005
     jitter = (jitter_max - jitter_min) * np.random.random_sample(150) + jitter_max
     df_stats_n_OFM1 = dataframe_stats.copy()
     df_stats_n_OFM1 = df_stats_n_OFM1[df_stats_n_OFM1["n_OFM1"] > 0]
     df_stats_n_OFM1['type_OFM'] = 'OFM1'
-    if (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1):
+    if (column_number == 0 and n_400 > 1) or (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1):
       marker = "D"
       df_stats_n_OFM1['numtype_OFM'] = 1 + df_stats_n_OFM1['n_OFM1']/10
     else:
@@ -311,7 +228,7 @@ for m in models:
     df_stats_n_OFM2 = dataframe_stats.copy()
     df_stats_n_OFM2 = df_stats_n_OFM2[df_stats_n_OFM2["n_OFM2"] > 0]
     df_stats_n_OFM2['type_OFM'] = 'OFM2'
-    if (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1):
+    if (column_number == 0 and n_400 > 1) or (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1):
       marker = "D"
       df_stats_n_OFM2['numtype_OFM'] = 2 + df_stats_n_OFM2['n_OFM2']/10
     else:
@@ -322,7 +239,7 @@ for m in models:
     
     df_stats_n_OFM3 = dataframe_stats.copy()
     df_stats_n_OFM3 = df_stats_n_OFM3[df_stats_n_OFM3["n_OFM3"] > 0]
-    if (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1):
+    if (column_number == 0 and n_400 > 1) or (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1):
       marker = "D"
       df_stats_n_OFM3['numtype_OFM'] = 3 + df_stats_n_OFM3['n_OFM3']/10
     else:
@@ -332,13 +249,9 @@ for m in models:
     df_stats_n_OFM3["numtype_OFM"] = df_stats_n_OFM3["numtype_OFM"] + jitter
 
     # Plot OFMs over time
-    # Only plot legend in first column
-    set_legend = False
-    #if column_number == 2:
-    #  set_legend = True
     sns.stripplot(data=df_stats_n_OFM3,x="time",y="numtype_OFM",ax=axs[2,column_number],hue="n_OFM3",native_scale=True,size=4,marker=marker,palette=palette_n_OFM,alpha=0.7,legend=False)
     sns.stripplot(data=df_stats_n_OFM2,x="time",y="numtype_OFM",ax=axs[2,column_number],hue="n_OFM2",native_scale=True,size=4,marker=marker,palette=palette_n_OFM,alpha=0.7,legend=False)
-    sns.stripplot(data=df_stats_n_OFM1,x="time",y="numtype_OFM",ax=axs[2,column_number],hue="n_OFM1",native_scale=True,size=4,marker=marker,palette=palette_n_OFM,alpha=0.7,legend=set_legend)
+    sns.stripplot(data=df_stats_n_OFM1,x="time",y="numtype_OFM",ax=axs[2,column_number],hue="n_OFM1",native_scale=True,size=4,marker=marker,palette=palette_n_OFM,alpha=0.7,legend=False)
 
     counter += 1
 
@@ -347,7 +260,7 @@ for m in models:
 
   # Plot border fault activity and migration over time
   dy = -0.1
-  if (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1):
+  if (column_number == 0 and n_400 > 1) or (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1):
     dy = 0.1
   dataframe_model = dataframe.iloc[model_index]
   border_fault_data = {'time': [dataframe_model['start_left_border_fault'],dataframe_model['end_left_border_fault'],
@@ -356,7 +269,7 @@ for m in models:
                        'value': [3 + dy, 3 + dy, 2 + dy, 2 + dy, 1 + dy, 1 + dy],
                        'type': ['LBF', 'LBF', 'RBF', 'RBF', 'MIG', 'MIG']}
   df_model_border_faults = pd.DataFrame(border_fault_data)
-  if dy < 0:
+  if dy > 0:
     sns.lineplot(data=df_model_border_faults,x='time',y='value',hue='type',ax=axs[0,column_number],palette=palette_n_OFM,legend=False)
   else:
     sns.lineplot(data=df_model_border_faults,x='time',y='value',hue='type',style=True,dashes=[(2,2)],ax=axs[0,column_number],palette=palette_n_OFM,legend=False)
@@ -371,61 +284,21 @@ for m in models:
     with open(ASPECT_statistics_file) as f:
       clean_lines = (re.sub('\s+',' ',line) for line in f)
       t,source_area = np.genfromtxt(clean_lines, comments='#', usecols=(1,62), delimiter=' ', unpack=True)
+    # Interpolate onto less timesteps so the dashes/dots of the lines are not distorted.
+    mean_t = np.arange(0, 25e6, 25000)
+    interpolated_source_area = np.interp(mean_t, t, source_area)
     # time in My and area in km2
-    dataframe_ASPECT = pd.DataFrame({'time': t/1e6, 'source_area': source_area/1e6})
+    dataframe_ASPECT = pd.DataFrame({'time': mean_t/1e6, 'source_area': interpolated_source_area/1e6})
 
-    if dy < 0:
-      sns.lineplot(data=dataframe_ASPECT,x='time',y='source_area', color=colors[0], ax=axs[1,column_number],palette=palette_n_OFM,legend=False) 
+    if dy > 0:
+      sns.lineplot(data=dataframe_ASPECT,x='time',y='source_area', color=sim_color, ax=axs[1,column_number],palette=palette_n_OFM,legend=False) 
     else:
-      sns.lineplot(data=dataframe_ASPECT,x='time',y='source_area', color=colors[1], style=True, dashes=[(2,2)], ax=axs[1,column_number],palette=palette_n_OFM,legend=False) 
+      sns.lineplot(data=dataframe_ASPECT,x='time',y='source_area', color=sim_color, style=True, dashes=[(2,2)], ax=axs[1,column_number],palette=palette_n_OFM,legend=False) 
 
 # Ranges and labels of the axes
 # TODO Would be great not to repeat this for both the x and y axis.
 
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
-#5p
-#initial_geometry_labels = ["L-ULC L-Rdip", "ULC-LD L-Rdip", "ULC 2L-Rdip", "ULC L-Rdip", "ULC L-Rdip R-Ldip", "ULC L-Rdip R-Ldip-D", "ULC L-Rdip 2R-Ldip","ULC R-Ldip"]
-#5o
-initial_geometry_labels = [
-"L-ULC 2L-Rdip",
-"L-ULC L-C L-Rdip",
-"L-ULC L-Rdip",
-"L-ULC",
-"ULC-LD L-Rdip",#
-"ULC 3L-Rdip",
-"ULC 2L-Rdip",
-"ULC L-C",#
-"ULC L-Rdip", #
-"ULC 2L-Rdip R-Ldip",#
-"ULC L-C R-Ldip",#
-"ULC L-C 2R-Ldip",#
-"ULC L-Rdip R-Ldip",#
-"ULC L-Ldip R-Ldip",#
-"ULC L-Rdip 2R-Ldip",#
-"ULC R-Ldip",
-"ULC 2R-Ldip"]
-# 5o
-migration_duration_min = 2
-migration_duration_max = 14
-migration_duration_ticks = [2,6,10,14.0]
-LBF_duration_min = 7
-LBF_duration_max = 22
-LBF_duration_ticks = [7,12,17,22]
-RBF_duration_min = 2
-RBF_duration_max = 22
-RBF_duration_ticks = [2,7,12,17,22]
-
-# 5p
-# migration_duration_min = 5
-# migration_duration_max = 20
-# migration_duration_ticks = [5.0,10.0,15.0,20.0]
-# LBF_duration_min = 0
-# LBF_duration_max = 25
-# LBF_duration_ticks = [0,5,10,15,20,25]
-# RBF_duration_min = 2
-# RBF_duration_max = 22
-# RBF_duration_ticks = [2.0,7,12,17,22]
-OFM12_max = 5
 ftsize = 10
 axs[0,0].set_title("50 km",weight="bold",fontsize=ftsize)
 axs[0,1].set_title("100 km",weight="bold",fontsize=ftsize)
@@ -433,24 +306,14 @@ axs[0,2].set_title("150 km",weight="bold",fontsize=ftsize)
 fig.suptitle('Craton edge distance',weight="bold", fontsize=ftsize)
 for ax in axs.reshape(-1):
   ax.tick_params(axis='both', labelsize=8)
-  if ax.get_xlabel() == 'initial_craton_distance':
-    ax.set_xlim(350,600) # km
-    ax.set_xticks([400,450,500,550])
-    ax.set_xticklabels(craton_distance_labels)
-    ax.set_xlabel("Initial craton-rift distance [km]",weight="bold",fontsize=ftsize)
-  elif ax.get_xlabel() == 'time':
+  if ax.get_xlabel() == 'time':
     ax.set_xlim(-2,27) # My
     ax.set_xticks([0,5,10,15,20,25])
     ax.set_xlabel("Time [My]",weight="bold",fontsize=ftsize)
   else:
-    print ("This axis label doesn't exist.")
+    print ("This x-axis label wasn't expected.")
   
-  if ax.get_ylabel() == 'initial_craton_distance':
-    ax.set_ylim(350,600) # km
-    ax.set_yticks([400,450,500,550])
-    ax.set_yticklabels(craton_distance_labels)
-    ax.set_ylabel("Initial craton-rift distance [km]",weight="bold",fontsize=ftsize)
-  elif ax.get_ylabel() == 'type_OFM':
+  if ax.get_ylabel() == 'type_OFM':
     ax.set_ylabel("OFM type [-]",weight="bold",fontsize=ftsize)
   elif ax.get_ylabel() == 'numtype_OFM':
     ax.set_ylabel("OFM type [-]",weight="bold",fontsize=ftsize)
@@ -467,10 +330,10 @@ for ax in axs.reshape(-1):
     ax.set_yticklabels(["MIG","RBF","LBF"])
     ax.set_ylim(0.7,3.3)
   else:
-    print ("This axis label doesn't exist.")
+    print ("TThis y-axis label wasn't expected.")
 
-## Name the png according to the plotted field
-#plt.tight_layout()
+## Save figure
+# Make sure the y-axes labels align left
 fig.align_ylabels(axs[:, 0])
-plt.savefig(output_name + '_CERI_cratons.png')    
+plt.savefig(output_name + '_CERI_cratons.png',dpi=300)    
 print ("Output in: ", output_name + '_CERI_cratons.png')
