@@ -18,16 +18,16 @@ dx = 312.5
 x_width = 700e3
 x = np.arange(0,x_width+dx,dx)
 
-topo_craton = 360 #450 #750 #m
+topo_craton = 360 #m
 topo_rift = 0 #1040 #m
 topo_normal = 0 #m
 rift_axis = 350e3 #m
-craton_edge = 400e3 #m
+craton_edge = 550e3 #m
 sigma_craton = 10e3 #m 
 sigma_rift = 60e3 #m
 
 # delete old file if it exists
-total_file_name = base_file_name + "_edge" + str(craton_edge) + "_sigma" + str(sigma_craton) + ".txt"
+total_file_name = base_file_name + "_topo" + str(topo_craton) + "_edge" + str(craton_edge) + "_sigma" + str(sigma_craton) + ".txt"
 file_exists = os.path.exists(total_file_name)
 if file_exists:
   os.remove(total_file_name)

@@ -17,10 +17,10 @@ output_name = "5p_fixed_sourcearea_"
 # break-up
 # The average of the maximum source area [km2]
 average_source_area = [
-12.34,19.71,26.06,12.34,
+12.34,12.34,12.34,12.34,
 19.71,19.71,19.71,19.71,
 26.06,26.06,26.06,26.06,
-0.00, 0.00, 0.0, 0.
+24.524675,24.524675,24.524675,24.524675
 ]
 
 # The max of the average source area
@@ -28,21 +28,21 @@ max_average_source_area = [
 11.92,11.92,11.92,11.92,
 18.53,18.53,18.53,18.53,
 23.37,23.37,23.37,23.37,
-0.00,0.00,0.00,0.00
+21.862173,21.862173,21.862173,21.862173,
 ]
 
 # Only considering basins not in OSC
 # 5p_fixed_surfPnorm_htanriftcraton_inittopo
 fav_basins = [
-[3,2,0,0,5,2,1,1,5,2,2,1,0,0,0,0],
-[3,1,0,0,3,2,1,0,5,1,1,1,0,0,0,0],
-[3,3,0,0,1,1,1,0,2,1,1,1,0,0,0,0],
-[3,3,1,1,2,2,1,0,4,4,1,4,0,0,0,0],
-[3,3,0,1,2,1,1,1,4,1,0,1,0,0,0,0],
-[3,2,1,1,4,1,1,0,5,3,1,2,0,0,0,0],
-[2,2,0,0,6,3,1,0,6,6,0,3,0,0,0,0],
-[2,2,0,0,3,2,1,0,5,3,0,3,0,0,0,0],
-[2,2,0,1,4,1,1,1,3,1,0,0,0,0,0,0],
+[3,2,0,0,5,2,1,1,5,2,2,1,4,2,1,2],
+[3,1,0,0,3,2,1,0,5,1,1,1,5,1,1,1],
+[3,3,0,0,1,1,1,0,2,1,1,1,5,3,1,2],
+[3,3,1,1,2,2,1,0,4,4,1,4,7,4,2,3],
+[3,3,0,1,2,1,1,1,4,1,0,1,5,1,1,0],
+[3,2,1,1,4,1,1,0,5,3,1,2,1,0,0,0],
+[2,2,0,0,6,3,1,0,6,6,0,3,7,6,2,4],
+[2,2,0,0,3,2,1,0,5,3,0,3,2,2,1,1],
+[2,2,0,1,4,1,1,1,3,1,0,0,4,3,1,3],
        ]
 # 5p_fixed_craton correct edge and surfPnorm
 #fav_basins = [
@@ -57,8 +57,8 @@ fav_basins = [
 #[3,2,0,0,4,1,0,1,1,1,0,1,0,0,0,0],
 #       ]
 
-rift_types = ('50', '100', '150', '200')
-columns = ('', '50', '', '', '', '100', '', '', '', '150', '', '', '', '200', '', '')
+rift_types = ('50', '100', '150', 'inf')
+columns = ('', '50', '', '', '', '100', '', '', '', '150', '', '', '', 'inf', '', '')
 
 rift_types_locations = [2.5, 7.5, 12.5, 17.5]
 
@@ -178,12 +178,12 @@ ax2.yaxis.tick_right()
 ax2.yaxis.set_label_position('right') 
 ax2.tick_params(axis='y', color=color8, labelcolor=color8)
 ax2.spines['right'].set_color(color8)
-ax2.set_ylim(0,35)
+ax2.set_ylim(0,30)
 ax2.set_yticks([0,10,20,30])
 
 # Plot line indicating the average maximum source area per rift type
-#max_source_area_array = np.array(average_source_area)
-max_source_area_array = np.array(max_average_source_area)
+max_source_area_array = np.array(average_source_area)
+#max_source_area_array = np.array(max_average_source_area)
 max_source = max_source_area_array.max()
 min_source = max_source_area_array.min()
 # Create a second set of x-coordinates such that the line is
@@ -193,8 +193,8 @@ index_2 = [0, 1.5, 3, 5.0,
            10.0, 11.5, 13,15.0,
            15.0, 16.5, 18,20.0]
 for column in range(n_cols): 
-#    ax2.plot(index_2, np.divide(average_source_area,1e6),color=color8)
-    ax2.plot(index_2, max_average_source_area,color=color8)
+    ax2.plot(index_2, average_source_area,color=color8)
+#    ax2.plot(index_2, max_average_source_area,color=color8)
 
 field = 'traffic_light'
 fig.savefig(output_name + '_CERI_' + field + '_noVHS_inactive_active.png',bbox_inches='tight', dpi=300)    

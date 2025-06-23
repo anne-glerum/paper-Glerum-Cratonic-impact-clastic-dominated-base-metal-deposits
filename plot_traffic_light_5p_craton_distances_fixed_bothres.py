@@ -191,6 +191,8 @@ ax.set_xlabel("Craton distance [km]", weight="bold")
 #ax.text(7.1,3.85,'S+H',rotation='vertical',ha='center',fontsize=15)
 #ax.text(8.1,3.85,'S+H+IF',rotation='vertical',ha='center',fontsize=15)
 #ax.text(9.1,3.85,'S+H+AF',rotation='vertical',ha='center',fontsize=15)
+ax.text(8.1,2.3,'OFM3',rotation='vertical',ha='center',fontsize=14)
+ax.text(9.1,2.3,'OFM1+OFM2',rotation='vertical',ha='center',fontsize=14)
 
 # Second subplot
 # Transparent background
