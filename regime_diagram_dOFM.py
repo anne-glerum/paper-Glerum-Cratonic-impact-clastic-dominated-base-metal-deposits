@@ -25,7 +25,7 @@ print ("Matplotlib version: ", matplotlib.__version__)
 # Path to models
 base = r"/Users/acglerum/Documents/Postdoc/SG_SB/Projects/CERI_cratons/"
 
-output_name = '5p_fixed_regime_diagram_dOFM_cuttonewOS'
+output_name = '5p_fixed_regime_diagram_dOFM_cuttonewOS_plusinf'
 
 # File name
 # real file
@@ -64,6 +64,16 @@ models = [
 '5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 '5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 ##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#
+'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+#'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+#'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+#'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+#'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+#'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+#'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+#'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200'
 ]
 
 # Read the data file
@@ -105,7 +115,7 @@ color_left_darker = (0.207843137254902, 0.309803921568627, 0.482352941176471)
 color_right_darker = (0.231372549019608, 0.462745098039216, 0.286274509803922) 
 
 # Create empty plot
-n_columns = 3
+n_columns = 4
 n_rows = 3
 fig, axs = plt.subplots(n_rows,n_columns,figsize=(2*n_columns, 2*n_rows),dpi=300, sharex='col', sharey='row')
 fig.subplots_adjust(hspace = 0.05)
@@ -141,6 +151,7 @@ palette_n_OFM = sns.color_palette(palette=colors)
 n_400 = 2
 n_450 = 0
 n_500 = 0
+n_2000 = 0
 for m in models:
 
   column_number = 0
@@ -171,6 +182,7 @@ for m in models:
     else:
       dataframe_stats['initial_craton_distance'] = 2000
       column_number = 3
+      n_2000 += 1
     if "1236549" in m:
       model_index = column_number * 9 + 0
       sim_color = color1
@@ -215,7 +227,7 @@ for m in models:
     df_stats_n_OFM1 = dataframe_stats.copy()
     df_stats_n_OFM1 = df_stats_n_OFM1[df_stats_n_OFM1["n_OFM1"] > 0]
     df_stats_n_OFM1['type_OFM'] = 'OFM1'
-    if (column_number == 0 and n_400 > 1) or (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1):
+    if (column_number == 0 and n_400 > 1) or (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1) or (column_number == 3 and n_2000 > 1):
       marker = "D"
       df_stats_n_OFM1['numtype_OFM'] = 1 + df_stats_n_OFM1['n_OFM1']/10
     else:
@@ -228,7 +240,7 @@ for m in models:
     df_stats_n_OFM2 = dataframe_stats.copy()
     df_stats_n_OFM2 = df_stats_n_OFM2[df_stats_n_OFM2["n_OFM2"] > 0]
     df_stats_n_OFM2['type_OFM'] = 'OFM2'
-    if (column_number == 0 and n_400 > 1) or (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1):
+    if (column_number == 0 and n_400 > 1) or (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1) or (column_number == 3 and n_2000 > 1):
       marker = "D"
       df_stats_n_OFM2['numtype_OFM'] = 2 + df_stats_n_OFM2['n_OFM2']/10
     else:
@@ -239,7 +251,7 @@ for m in models:
     
     df_stats_n_OFM3 = dataframe_stats.copy()
     df_stats_n_OFM3 = df_stats_n_OFM3[df_stats_n_OFM3["n_OFM3"] > 0]
-    if (column_number == 0 and n_400 > 1) or (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1):
+    if (column_number == 0 and n_400 > 1) or (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1) or (column_number == 3 and n_2000 > 1):
       marker = "D"
       df_stats_n_OFM3['numtype_OFM'] = 3 + df_stats_n_OFM3['n_OFM3']/10
     else:
@@ -260,7 +272,7 @@ for m in models:
 
   # Plot border fault activity and migration over time
   dy = -0.1
-  if (column_number == 0 and n_400 > 1) or (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1):
+  if (column_number == 0 and n_400 > 1) or (column_number == 1 and n_450 > 1) or (column_number == 2 and n_500 > 1) or (column_number == 3 and n_2000 > 1):
     dy = 0.1
   dataframe_model = dataframe.iloc[model_index]
   border_fault_data = {'time': [dataframe_model['start_left_border_fault'],dataframe_model['end_left_border_fault'],
@@ -303,20 +315,21 @@ ftsize = 10
 axs[0,0].set_title("50 km",weight="bold",fontsize=ftsize)
 axs[0,1].set_title("100 km",weight="bold",fontsize=ftsize)
 axs[0,2].set_title("150 km",weight="bold",fontsize=ftsize)
+axs[0,3].set_title("inf",weight="bold",fontsize=ftsize)
 fig.suptitle('Craton edge distance',weight="bold", fontsize=ftsize)
 for ax in axs.reshape(-1):
-  ax.tick_params(axis='both', labelsize=8)
+  ax.tick_params(axis='both', labelsize=10)
   if ax.get_xlabel() == 'time':
-    ax.set_xlim(-2,27) # My
+    ax.set_xlim(0,27) # My
     ax.set_xticks([0,5,10,15,20,25])
-    ax.set_xlabel("Time [My]",weight="bold",fontsize=ftsize)
+    ax.set_xlabel("Time [My]",weight="bold",fontsize=1.5*ftsize)
   else:
     print ("This x-axis label wasn't expected.")
   
   if ax.get_ylabel() == 'type_OFM':
-    ax.set_ylabel("OFM type [-]",weight="bold",fontsize=ftsize)
+    ax.set_ylabel("OFM type [-]",weight="bold",fontsize=1.9*ftsize)
   elif ax.get_ylabel() == 'numtype_OFM':
-    ax.set_ylabel("OFM type [-]",weight="bold",fontsize=ftsize)
+    ax.set_ylabel("OFM type [-]",weight="bold",fontsize=1.9*ftsize)
     ax.set_ylim(0.5,3.5)
     ax.set_yticks([1,2,3])
     ax.set_yticklabels(["OFM1", "OFM2", "OFM3"])
@@ -330,7 +343,7 @@ for ax in axs.reshape(-1):
     ax.set_yticklabels(["MIG","RBF","LBF"])
     ax.set_ylim(0.7,3.3)
   else:
-    print ("TThis y-axis label wasn't expected.")
+    print ("This y-axis label wasn't expected.")
 
 ## Save figure
 # Make sure the y-axes labels align left

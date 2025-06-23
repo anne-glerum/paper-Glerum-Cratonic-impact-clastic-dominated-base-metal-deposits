@@ -17,27 +17,26 @@ from os import mkdir
 
 # Path to models
 #base = r"/Users/acglerum/Documents/Postdoc/SB_CRYSTALS/HLRN/HLRN/FastScapeASPECT_cratons/"
-#base = r"/Users/acglerum/Documents/Postdoc/SB_CRYSTALS/HLRN/HLRN/FastScapeASPECT/"
 base = r"./"
-#model = "5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
-#model = "5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton400000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
-#model = "5p_fixed_CERI_craton450km_notopopert_RBIPS5kmnosubres_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
-#model = "5p_fixed_CERI_craton450km_notopopert_RBIPS5kmnosubres_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
-#model = "5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
-#model = "5p_fixed_CERI_notopopert_RBIPS5kmnosubres_craton500000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel5_tmax25000000.0"
-# CERI
-#model = "5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200"
-#model = "5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200"
-model = "5p_fixed_CERI_flatsurfacet0_craton450000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
+#model = "5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
+model = "5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
 
 path = base + model
 if not exists(model):
    print ("Creating new model dir")
    mkdir(model)
 
+# original Camera settings
+#renderView1.CameraPosition = [384380.5030903542, -526868.7089745248, 530565.0653625994]
+#renderView1.CameraFocalPoint = [350625.0, 25625.0, 0.04999995231662449]
+camera_position = [350000, -526868.7089745248, 530565.0653625994]
+camera_focal_point = [350000.0, 25625.0, 0.04999995231662449]
+
+
+
 # the range of the topography color bar
-topo_min = -3500
-topo_max = 1500
+topo_min = -5000
+topo_max = 1000
 topo_SL = -200
 #searange = np.linspace(topo_min,topo_SL,128, endpoint=False)
 searange = np.linspace(topo_min,topo_SL,128, endpoint=True)
@@ -49,12 +48,12 @@ print ("Size fullrange", np.size(fullrange))
 # the topography exaggeration
 topo_exag = 5
 
-plot_topo = False
+plot_topo = True
 plot_catchment = False
-plot_erosionrate = True
+plot_erosionrate = False
 plot_drainage = False
 plot_erosion = False
-plot_labels = False
+plot_labels = True
 plot_every = 1
 
 # catchment range color bar
@@ -415,7 +414,7 @@ topographyLUTColorBar = GetScalarBar(topographyLUT, renderView1)
 # Properties modified on topographyLUTColorBar
 topographyLUTColorBar.AutoOrient = 0
 topographyLUTColorBar.Orientation = 'Horizontal'
-topographyLUTColorBar.WindowLocation = 'UpperCenter'
+topographyLUTColorBar.WindowLocation = 'Upper Center'
 topographyLUTColorBar.Title = 'Topography [m]'
 
 # Properties modified on topographyLUTColorBar
@@ -429,7 +428,8 @@ topographyLUTColorBar.RangeLabelFormat = '%-#6.0f'
 
 # Add label at SL
 topographyLUTColorBar.UseCustomLabels = 1
-topographyLUTColorBar.CustomLabels = [topo_min, topo_SL, topo_max]
+#topographyLUTColorBar.CustomLabels = [topo_min, topo_SL, topo_max]
+topographyLUTColorBar.CustomLabels = [topo_min, -200, 0, topo_max]
 
 # Exaggerate vertical
 
@@ -455,8 +455,8 @@ if plot_topo and plot_labels:
       #FrameWindow=[0, 51])
 
 # current camera placement for renderView1
-renderView1.CameraPosition = [384380.5030903542, -526868.7089745248, 530565.0653625994]
-renderView1.CameraFocalPoint = [350625.0, 25625.0, 0.04999995231662449]
+renderView1.CameraPosition = camera_position
+renderView1.CameraFocalPoint = camera_focal_point
 renderView1.CameraViewUp = [0.0, 0.6929298137240902, 0.7210050438466415]
 renderView1.CameraParallelScale = 351560.1389158084
 
@@ -464,7 +464,7 @@ topography000Display.SetScalarBarVisibility(renderView1, False)
 
 # save animation
 if plot_topo: 
-  SaveAnimation(model + '/FastScape_topography_'+str(topo_min)+ '_'+str(topo_max)+'_' + str(topo_exag) + '_nolabels.png', renderView1, ImageResolution=[1551, 810],
+  SaveAnimation(model + '/FastScape_topography_'+str(topo_min)+ '_'+str(topo_max)+'_' + str(topo_exag) + '_nolabels5.png', renderView1, ImageResolution=[1551, 810],
       FrameWindow=[0, 51])
 
 # set scalar coloring
@@ -514,7 +514,7 @@ drainage_areaLUTColorBar = GetScalarBar(drainage_areaLUT, renderView1)
 # Properties modified on drainage_areaLUTColorBar
 drainage_areaLUTColorBar.AutoOrient = 0
 drainage_areaLUTColorBar.Orientation = 'Horizontal'
-drainage_areaLUTColorBar.WindowLocation = 'UpperCenter'
+drainage_areaLUTColorBar.WindowLocation = 'Upper Center'
 drainage_areaLUTColorBar.Title = 'Drainage area [m2]'
 
 # Rescale transfer function
@@ -556,7 +556,7 @@ renderView1.CameraParallelScale = 351560.1389158084
 
 # save animation
 if plot_drainage: 
-  SaveAnimation(model + '/FastScape_drainagearea_' + str(topo_exag) + '_nolabels_.png', renderView1, ImageResolution=[1551, 810],
+  SaveAnimation(model + '/FastScape_drainagearea_' + str(topo_exag) + '_nolabels5_.png', renderView1, ImageResolution=[1551, 810],
       FrameWindow=[0, 51])
 
 ## set scalar coloring
@@ -627,7 +627,7 @@ if plot_drainage:
 ## Properties modified on erosion_rateLUTColorBar
 #erosion_rateLUTColorBar.AutoOrient = 0
 #erosion_rateLUTColorBar.Orientation = 'Horizontal'
-#erosion_rateLUTColorBar.WindowLocation = 'UpperCenter'
+#erosion_rateLUTColorBar.WindowLocation = 'Upper Center'
 #
 ## Properties modified on erosion_rateLUTColorBar
 #erosion_rateLUTColorBar.AutomaticLabelFormat = 0
@@ -658,7 +658,7 @@ if plot_drainage:
 #
 ## save animation
 #if plot_erosionrate: 
-#  SaveAnimation(model + '/FastScape_erosionrate_' + str(topo_exag) + '_nolabels_.png', renderView1, ImageResolution=[1551, 810],
+#  SaveAnimation(model + '/FastScape_erosionrate_' + str(topo_exag) + '_nolabels5_.png', renderView1, ImageResolution=[1551, 810],
 #      FrameWindow=[0, 51])
 
 # set scalar coloring
@@ -688,7 +688,7 @@ catchmentLUTColorBar = GetScalarBar(catchmentLUT, renderView1)
 # Properties modified on catchmentLUTColorBar
 catchmentLUTColorBar.AutoOrient = 0
 catchmentLUTColorBar.Orientation = 'Horizontal'
-catchmentLUTColorBar.WindowLocation = 'UpperCenter'
+catchmentLUTColorBar.WindowLocation = 'Upper Center'
 catchmentLUTColorBar.Title = 'Catchment area [m2]'
 
 # Rescale transfer function
@@ -725,7 +725,7 @@ renderView1.CameraParallelScale = 351560.1389158084
 
 # save animation
 if plot_catchment: 
-  SaveAnimation(model + '/FastScape_catchment_' + str(topo_exag) + '_nolabels_.png', renderView1, ImageResolution=[1512, 810],
+  SaveAnimation(model + '/FastScape_catchment_' + str(topo_exag) + '_nolabels5_.png', renderView1, ImageResolution=[1512, 810],
       FrameWindow=[0, 51])
 
 # set scalar coloring
@@ -755,7 +755,7 @@ erosion_rateLUTColorBar = GetScalarBar(erosion_rateLUT, renderView1)
 # Properties modified on erosion_rateLUTColorBar
 erosion_rateLUTColorBar.AutoOrient = 0
 erosion_rateLUTColorBar.Orientation = 'Horizontal'
-erosion_rateLUTColorBar.WindowLocation = 'UpperCenter'
+erosion_rateLUTColorBar.WindowLocation = 'Upper Center'
 erosion_rateLUTColorBar.Title = 'Erosion rate [m/yr]'
 
 # Rescale transfer function
@@ -792,7 +792,7 @@ renderView1.CameraParallelScale = 351560.1389158084
 
 # save animation
 if plot_erosionrate: 
-  SaveAnimation(model + '/FastScape_erosion_rate_' + str(topo_exag) + '_nolabels_.png', renderView1, ImageResolution=[1512, 810],
+  SaveAnimation(model + '/FastScape_erosion_rate_' + str(topo_exag) + '_nolabels5_.png', renderView1, ImageResolution=[1512, 810],
       FrameWindow=[0, 51])
 
 # set scalar coloring
@@ -822,7 +822,7 @@ total_erosionLUTColorBar = GetScalarBar(total_erosionLUT, renderView1)
 # Properties modified on total_erosionLUTColorBar
 total_erosionLUTColorBar.AutoOrient = 0
 total_erosionLUTColorBar.Orientation = 'Horizontal'
-total_erosionLUTColorBar.WindowLocation = 'UpperCenter'
+total_erosionLUTColorBar.WindowLocation = 'Upper Center'
 total_erosionLUTColorBar.Title = 'Total erosion [m]'
 
 # Rescale transfer function
@@ -862,7 +862,7 @@ renderView1.CameraParallelScale = 351560.1389158084
 
 # save animation
 if plot_erosion: 
-  SaveAnimation(model + '/FastScape_total_erosion_' + str(topo_exag) + '_nolabels_.png', renderView1, ImageResolution=[1512, 810],
+  SaveAnimation(model + '/FastScape_total_erosion_' + str(topo_exag) + '_nolabels5_.png', renderView1, ImageResolution=[1512, 810],
       FrameWindow=[0, 51])
 
 #### saving camera placements for all active views

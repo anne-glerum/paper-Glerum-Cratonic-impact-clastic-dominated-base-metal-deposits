@@ -23,7 +23,7 @@ topo_rift = 0 # m
 topo_normal = 0 # m
 rift_axis = 350e3 # m
 craton_edge = 500e3 # m
-sigma_craton = 10e3 # m 
+sigma_craton = 5e3 # m
 sigma_rift = 60e3 # m
 
 # delete old file if it exists

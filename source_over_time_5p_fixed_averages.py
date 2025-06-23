@@ -19,10 +19,11 @@ rc("xtick", labelsize= 12)
 rc("font", size=12)
 rc("axes", titlesize=15, labelsize=12)
 #rc('axes', linewidth=3)
-rc("legend", fontsize=8)
+rc("legend", fontsize=7)
 
 # Path to models
 base = r"/Users/acglerum/Documents/Postdoc/SB_CRYSTALS/HLRN/HLRN/FastScapeASPECT_cratons/"
+base = r"./"
 
 # Model names
 models = [
@@ -169,15 +170,15 @@ models = [
 #'5p_fixed_CERI_surfPnorm_noinittopo_craton400000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_noinittopo_craton400000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_noinittopo_craton400000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
@@ -187,15 +188,15 @@ models = [
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_fixedCout_craton400000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_fixedCout_craton400000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_fixedCout_craton400000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
@@ -211,6 +212,7 @@ models = [
 #output_name = '5p_fixed_correctinittopo_craton500km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5p_fixed_flatsurfacet0_craton450km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5p_fixed_craton500km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
+#output_name = '5p_fixed_cratonall_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5p_fixed_steepedge_craton400km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5p_fixed_surfPnorm_craton400km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5p_fixed_surfPnorm_craton450km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
@@ -218,29 +220,49 @@ models = [
 #output_name = '5p_fixed_surfPnorm_craton550km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5p_fixed_surfPnorm_720inittopo_craton400km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5p_fixed_surfPnorm_noinittopo_craton400km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
-output_name = '5p_fixed_surfPnorm_htanriftcraton_inittopo_craton500km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
+#output_name = '5p_fixed_surfPnorm_htanriftcraton_inittopo_craton450km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5p_fixed_surfPnorm_htanriftcraton_inittopo_craton450km_NA1NA5NA7_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
+#output_name = '5p_fixed_surfPnorm_htanriftcraton_inittopo_craton450km_NA2NA3NA4NA6NA8NA9_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5p_fixed_surfPnorm_htanriftcraton_inittopo_craton500km_NA1NA5NA7_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5p_fixed_surfPnorm_htanriftcraton_inittopo_craton450km_NA6NA8NA9_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5p_fixed_surfPnorm_htanriftcraton_inittopo_craton500km_NA4NA8NA9_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5p_fixed_surfPnorm_htanriftcraton_inittopo_craton500km_NA2NA3NA6_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5p_fixed_surfPnorm_htanriftcraton_inittopo_craton500km_NA2NA3NA6NA8NA9_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
-#output_name = '5p_fixed_surfPnorm_htanriftcraton_inittopo_craton450km_NA2NA3NA4NA6NA8NA9_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5p_fixed_surfPnorm_htanriftcraton_inittopo_craton500km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5p_fixed_surfPnorm_htanriftcraton_inittopo_fixedCout_craton400km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
+output_name = '5p_fixed_surfPnorm_htanriftcraton_inittopo_craton400km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
+#output_name = '5p_fixed_surfPnorm_htanriftcraton_inittopo_craton500km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 
 
 labels = [
-          'NA-1',
-          'NA-2',
-          'NA-3',
-          'NA-4',
-          'NA-5',
-          'NA-6',
-          'NA-7',
-          'NA-8',
-          'NA-9',
-          'NA-av.',
+          'NA-1-50km',
+          'NA-2-50km',
+          'NA-3-50km',
+          'NA-4-50km',
+          'NA-5-50km',
+          'NA-6-50km',
+          'NA-7-50km',
+          'NA-8-50km',
+          'NA-9-50km',
+          'NA-1-150km',
+          'NA-2-150km',
+          'NA-3-150km',
+          'NA-4-150km',
+          'NA-5-150km',
+          'NA-6-150km',
+          'NA-7-150km',
+          'NA-8-150km',
+          'NA-9-150km',
+          'NA-1-100km',
+          'NA-2-100km',
+          'NA-3-100km',
+          'NA-4-100km',
+          'NA-5-100km',
+          'NA-6-100km',
+          'NA-7-100km',
+          'NA-8-100km',
+          'NA-9-100km',
+#          'NA-av.',
          ]
 
 # Batlow
@@ -255,31 +277,39 @@ color8=[0.96494, 0.62693, 0.46486]
 color9=[0.99277, 0.70769, 0.71238]
 color10=[0.98332, 0.79091, 0.95375]
 colors = [
-#          color1, 
+          color1, 
           color2, 
           color3, 
           color4, 
-#          color5, 
+          color5, 
           color6, 
-#          color7, 
+          color7, 
           color8, 
           color9,
-          color10,
+#          color10,
          ]
 cmap = plt.cm.get_cmap(cm.batlow)
 
 linestyles = [
               'solid', 
-              'dashed',
-              'dotted', 
               'solid', 
-              'dotted', 
-              'dashdot',
-              'dashdot',
-              'dashdot',
+              'solid', 
+              'solid', 
+              'solid', 
+              'solid', 
+              'solid', 
+              'solid', 
+              'solid', 
+              'solid', 
               'dashed',
               'dashed',
-              'dashdot',
+              'dashed',
+              'dashed',
+              'dashed',
+              'solid', 
+              'dashed',
+              'solid', 
+              'solid', 
              ]
 markers = [
            '','','','','','','','','',''
@@ -325,7 +355,7 @@ for p in paths:
   
       # Plot the area in km2 in 
       # categorical batlow colors.
-      plt.plot(t/1e6,source_area/1e6,color=colors[counter],linestyle='solid',label=labels[counter],marker=markers[counter],markevery=dmark,fillstyle='none')
+      plt.plot(t/1e6,source_area/1e6,color=colors[counter],linestyle=linestyles[counter],label=labels[counter],marker=markers[counter],markevery=dmark,fillstyle='none')
   
       # Compute the max source area over the 25 My and all runs
       max_source = max(source_area.max(),max_source)
@@ -346,7 +376,7 @@ print ("Average max source area:", f"{(average_max_source/n_models/1e6):0.2f}", 
 print ("Max average source area:", f"{((average_source_area/n_models).max()/1e6):0.2f}", "km2. ")
 
 # Plot the average source area over time (divide by nine to get the average)
-plt.plot(mean_t/1e6,average_source_area/n_models/1e6,color=colors[counter],linestyle='solid',label=labels[counter],marker=markers[counter],markevery=dmark,fillstyle='none',linewidth=3)
+#plt.plot(mean_t/1e6,average_source_area/n_models/1e6,color=colors[counter],linestyle='solid',label=labels[counter],marker=markers[counter],markevery=dmark,fillstyle='none',linewidth=3)
 
 # Labelling of plot
 plt.xlabel("Time [My]",weight="bold")

@@ -359,18 +359,18 @@ axs[0,2].set_title("150 km",weight="bold",fontsize=ftsize)
 axs[0,3].set_title("inf",weight="bold",fontsize=ftsize)
 fig.suptitle('Craton edge distance',weight="bold", fontsize=ftsize)
 for ax in axs.reshape(-1):
-  ax.tick_params(axis='both', labelsize=8)
+  ax.tick_params(axis='both', labelsize=10)
   if ax.get_xlabel() == 'time':
-    ax.set_xlim(-2,27) # My
+    ax.set_xlim(0,27) # My
     ax.set_xticks([0,5,10,15,20,25])
-    ax.set_xlabel("Time [My]",weight="bold",fontsize=ftsize)
+    ax.set_xlabel("Time [My]",weight="bold",fontsize=1.5*ftsize)
   else:
     print ("This x-axis label wasn't expected.")
   
   if ax.get_ylabel() == 'type_OFM':
-    ax.set_ylabel("OFM type [-]",weight="bold",fontsize=ftsize)
+    ax.set_ylabel("OFM type [-]",weight="bold",fontsize=1.9*ftsize)
   elif ax.get_ylabel() == 'numtype_OFM':
-    ax.set_ylabel("OFM type [-]",weight="bold",fontsize=ftsize)
+    ax.set_ylabel("OFM type [-]",weight="bold",fontsize=1.9*ftsize)
     ax.set_ylim(0.5,3.5)
     ax.set_yticks([1,2,3])
     ax.set_yticklabels(["OFM1", "OFM2", "OFM3"])

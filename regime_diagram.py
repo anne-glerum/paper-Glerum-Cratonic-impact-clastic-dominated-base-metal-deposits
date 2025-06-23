@@ -20,7 +20,6 @@ import seaborn as sns
 plt.rcParams["font.family"] = "Arial"
 rc("xtick", labelsize= 12)
 rc("font", size=12)
-rc("axes", titlesize=15, labelsize=12)
 #rc('axes', linewidth=3)
 rc("legend", fontsize=8)
 
@@ -60,9 +59,9 @@ models = [
 #'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
          ]
 
-output_name = '5p_fixed_regime_'
+output_name = '5p_fixed_regime_diagram_'
 
-to_plot = ['start_migration', 'max_OFM3']
+to_plot = ['start_migration', 'n_OFM3_max']
 
 labels = [
 #          'NA-1',
@@ -121,7 +120,10 @@ markers = [
 dmark = 200
 
 # File name
+# test file
 tail = r"5p_fixed_CERI_craton_analysis.txt"
+# real file
+tail = r"5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
 
 # Read the data file
 dataframe = pd.read_csv(base+tail, sep=",")
@@ -130,83 +132,141 @@ dataframe = pd.read_csv(base+tail, sep=",")
 print ("Interpretation data file: ", dataframe.dtypes)
 if not set(to_plot).issubset(dataframe.columns):
   exit("The requested data columns are not available, exiting.")
-if not set(["max_OFM3","max_OFM2","max_OFM1","max_source"]).issubset(dataframe.columns):
+if not set(["n_OFM3_max","n_OFM2_max","n_OFM1_max","n_source_max"]).issubset(dataframe.columns):
   exit("The requested data columns are not available, exiting.")
 
 # Create empty plot
 sns.set_theme()
 cm = 2.54  # centimeters in inches
-fig, axs = plt.subplots(2,4) #,figsize=(6, 2),dpi=300)
+fig, axs = plt.subplots(4,4,figsize=(8, 8),dpi=300, sharex='col')
+fig.subplots_adjust(top = 0.95, bottom = 0.06, left = 0.08, right = 0.80, hspace=0.4, wspace=0.4)
 
 # Plot requested columns
-#dataframe.plot.scatter(x=to_plot[0],y=to_plot[1],alpha=0.5,s=dataframe["max_source"]*10,color=cmap(dataframe["max_OFM1"]/5))
-sns.scatterplot(data=dataframe,x=to_plot[0],y=to_plot[1],size="max_source",sizes=(0,200),hue="max_OFM1",ax=axs[0,0],legend=False)
-sns.scatterplot(data=dataframe,x=to_plot[1],y=to_plot[0],size="max_source",sizes=(0,200),hue="max_OFM1",ax=axs[1,0],legend=True)
+# Structure of input file -> 9*8 combinations -> pick subset
+#name,initial_craton_distance,initial_fault_geometry,start_migration,migration_direction,start_border_fault,max_source_basins,max_source_host_basins,max_OFM3,max_OFM2,n_OFM12_max,end_migration,max_source
+#initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
+
+# First column
+sns.scatterplot(data=dataframe,x="initial_craton_distance",y="start_left_border_fault",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[0,0],legend=False)
+sns.scatterplot(data=dataframe,x="initial_craton_distance",y="start_migration",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[1,0],legend=False)
+sns.scatterplot(data=dataframe,x="initial_craton_distance",y="end_migration",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[2,0],legend=False)
+sns.scatterplot(data=dataframe,x="initial_craton_distance",y="migration_direction",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[3,0],legend=False)
+
+# Second column
+sns.scatterplot(data=dataframe,x="start_migration",y="start_left_border_fault",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[0,1],legend=False)
+sns.scatterplot(data=dataframe,x="start_migration",y="n_source_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[1,1],legend=False)
+sns.scatterplot(data=dataframe,x="start_migration",y="end_migration",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[2,1],legend=False)
+sns.scatterplot(data=dataframe,x="start_migration",y="migration_direction",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[3,1],legend=False)
+
+# Third column
+sns.scatterplot(data=dataframe,x="end_migration",y="start_left_border_fault",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[0,2],legend=False)
+sns.scatterplot(data=dataframe,x="end_migration",y="n_source_max",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[1,2],legend=False)
+sns.scatterplot(data=dataframe,x="end_migration",y="start_migration",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[2,2],legend=False)
+sns.scatterplot(data=dataframe,x="end_migration",y="migration_direction",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[3,2],legend=False)
+
+# Fourth column
+sns.scatterplot(data=dataframe,x="start_left_border_fault",y="initial_fault_geometry",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[0,3],legend=False)
+#axs[0,3].xaxis.set_visible(False)
+#axs[0,3].set_xlabel("")
+sns.scatterplot(data=dataframe,x="start_left_border_fault",y="start_migration",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[1,3],legend=True)
+sns.move_legend(axs[1,3], "upper left", bbox_to_anchor=(1, 1)) #,title=None, frameon=False)
+sns.scatterplot(data=dataframe,x="start_left_border_fault",y="end_migration",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[2,3],legend=False)
+sns.scatterplot(data=dataframe,x="start_left_border_fault",y="migration_direction",size="n_OFM12_max",sizes=(0,200),hue="n_OFM12_max",ax=axs[3,3],legend=False)
 
 # Ranges and labels of the axes
-axs[0,0].set_title("Initial rift-craton distance: " + str(dataframe["initial_craton_distance"][0]) + " km", weight="bold")
-#
-#if to_plot[0] == 'initial_craton_distance':
-#  plt.xlim(-1.5,151.5) # km
-#  plt.xlabel("Initial craton-rift distance [km]",weight="bold")
-##if to_plot[0] == 'initial_fault_geometry':
-##  plt.xlim(-1.5,151.5) # km
-#elif to_plot[0] == 'start_migration':
-#  plt.xlim(-0.25,25.25) # My
-#  plt.xlabel("Start rift migration [My]",weight="bold")
-##if to_plot[0] == 'narrow_margin':
-#elif to_plot[0] == 'start_border_fault':
-#  plt.xlim(-0.25,25.25) # My
-#  plt.xlabel("Start source basin border fault(s) [My]",weight="bold")
-#elif to_plot[0] == 'max_source_basins':
-#  plt.xlim(-0.1,10.1) # -
-#  plt.xlabel("Max. nr of source basins [-]",weight="bold")
-#elif to_plot[0] == 'max_source_host_basins':
-#  plt.xlim(-0.1,10.1) # -
-#  plt.xlabel("Max. nr of source+host basins [-]",weight="bold")
-#elif to_plot[0] == 'max_OFM3':
-#  plt.xlim(-0.05,5.05) # -
-#  plt.xlabel("Max. nr of OFM3 [-]",weight="bold")
-#elif to_plot[0] == 'max_OFM2':
-#  plt.xlim(-0.05,5.05) # -
-#  plt.xlabel("Max. nr of OFM2 [-]",weight="bold")
-#elif to_plot[0] == 'max_OMF1':
-#  plt.xlim(-0.05,5.05) # -
-#  plt.xlabel("Max. nr of OFM1 [-]",weight="bold")
-#elif to_plot[0] == 'end_migration':
-#  plt.xlim(-0.25,25.25) # My
-#  plt.xlabel("End rift migration [My]",weight="bold")
-#
-#if to_plot[1] == 'initial_craton_distance':
-#  plt.ylim(-1.5,151.5) # km
-#  plt.ylabel("Initial craton-rift distance [km]",weight="bold")
-##if to_plot[1] == 'initial_fault_geometry':
-##  plt.ylim(-1.5,151.5) # km
-#elif to_plot[1] == 'start_migration':
-#  plt.ylim(-0.25,25.25) # My
-#  plt.ylabel("Start rift migration [My]",weight="bold")
-##if to_plot[1] == 'narrow_margin':
-#elif to_plot[1] == 'start_border_fault':
-#  plt.ylim(-0.25,25.25) # My
-#  plt.ylabel("Start source basin border fault(s) [My]",weight="bold")
-#elif to_plot[1] == 'max_source_basins':
-#  plt.ylim(-0.1,10.1) # -
-#  plt.ylabel("Max. nr of source basins [-]",weight="bold")
-#elif to_plot[1] == 'max_source_host_basins':
-#  plt.ylim(-0.1,10.1) # -
-#  plt.ylabel("Max. nr of source+host basins [-]",weight="bold")
-#elif to_plot[1] == 'max_OFM3':
-#  plt.ylim(-0.05,5.05) # -
-#  plt.ylabel("Max. nr of OFM3 [-]",weight="bold")
-#elif to_plot[1] == 'max_OFM2':
-#  plt.ylim(-0.05,5.05) # -
-#  plt.ylabel("Max. nr of OFM2 [-]",weight="bold")
-#elif to_plot[1] == 'max_OMF1':
-#  plt.ylim(-0.05,5.05) # -
-#  plt.ylabel("Max. nr of OFM1 [-]",weight="bold")
-#elif to_plot[1] == 'end_migration':
-#  plt.ylim(-0.25,25.25) # My
-#  plt.ylabel("End rift migration [My]",weight="bold")
+ftsize = 6
+for ax in axs.reshape(-1):
+  if ax.get_xlabel() == 'initial_craton_distance':
+    ax.set_xlim(345,555.) # km
+    ax.set_xticks([400,450,500])
+    ax.set_xlabel("Initial craton-rift distance [km]",weight="bold",fontsize=ftsize)
+  elif ax.get_xlabel() == 'initial_fault_geometry':
+    ax.set_xlabel("Initial fault geometry [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_xlabel() == 'start_migration':
+#    ax.set_xlim(4.90,10.10) # My
+    ax.set_xticks([0,5,10])
+    ax.set_xlabel("Start rift migration [My]",weight="bold",fontsize=ftsize)
+  elif ax.get_xlabel() == 'migration_direction':
+    ax.set_xticks(["L","C","R"])
+    ax.set_xlabel("Direction rift migration [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_xlabel() == 'start_left_border_fault':
+    ax.set_xlim(-0.10,10.10) # My
+    ax.set_xticks([0,5,10])
+    ax.set_xlabel("Start left border fault(s) [My]",weight="bold",fontsize=ftsize)
+  elif ax.get_xlabel() == 'start_right_border_fault':
+    ax.set_xlim(-0.10,10.10) # My
+    ax.set_xticks([0,5,10])
+    ax.set_xlabel("Start right border fault(s) [My]",weight="bold",fontsize=ftsize)
+  elif ax.get_xlabel() == 'n_source_max':
+    ax.set_xlim(-0.1,10.1) # -
+    ax.set_xlabel("Max. nr of source basins [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_xlabel() == 'n_source_host_max':
+    ax.set_xlim(-0.1,10.1) # -
+    ax.set_xlabel("Max. nr of source+host basins [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_xlabel() == 'n_OFM3_max':
+    ax.set_xlim(-0.05,5.05) # -
+    ax.set_xlabel("Max. nr of OFM3 [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_xlabel() == 'n_OFM2_max':
+    ax.set_xlim(-0.05,5.05) # -
+    ax.set_xlabel("Max. nr of OFM2 [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_xlabel() == 'n_OMF1_max':
+    ax.set_xlim(-0.05,5.05) # -
+    ax.set_xlabel("Max. nr of OFM1 [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_xlabel() == 'n_OMF12_max':
+    ax.set_xlim(-0.05,5.05) # -
+    ax.set_xlabel("Max. nr of OFM12 [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_xlabel() == 'end_migration':
+    ax.set_xlim(9.75,25.25) # My
+    ax.set_xticks([10,15,20,25])
+    ax.set_xlabel("End rift migration [My]",weight="bold",fontsize=ftsize)
+  
+  if ax.get_ylabel() == 'initial_craton_distance':
+    ax.set_ylim(345,555) # km
+    ax.set_yticks([400,450,500])
+    ax.set_ylabel("Initial craton-rift distance [km]",weight="bold",fontsize=ftsize)
+  if ax.get_ylabel() == 'initial_fault_geometry':
+    ax.set_ylabel("Initial fault geometry [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_ylabel() == 'start_migration':
+    ax.set_ylim(-0.10,10.10) # My
+    ax.set_yticks([0,5,10])
+    ax.set_ylabel("Start rift migration [My]",weight="bold",fontsize=ftsize)
+  elif ax.get_ylabel() == 'migration_direction':
+    ax.set_yticks(["L","C","R"])
+    ax.set_ylabel("Direction rift migration [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_ylabel() == 'start_left_border_fault':
+    ax.set_ylim(-0.10,10.10) # My
+    ax.set_yticks([0,5,10])
+    ax.set_ylabel("Start left border fault(s) [My]",weight="bold",fontsize=ftsize)
+  elif ax.get_ylabel() == 'start_right_border_fault':
+    ax.set_ylim(-0.10,10.10) # My
+    ax.set_yticks([0,5,10])
+    ax.set_ylabel("Start right border fault(s) [My]",weight="bold",fontsize=ftsize)
+  elif ax.get_ylabel() == 'start_border_fault':
+    ax.set_ylim(-0.25,25.25) # My
+    ax.set_yticks([0,10,20,25])
+    ax.set_ylabel("Start border fault(s) [My]",weight="bold",fontsize=ftsize)
+  elif ax.get_ylabel() == 'n_source_max':
+    ax.set_ylim(-0.1,10.1) # -
+    ax.set_ylabel("Max. nr of source basins [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_ylabel() == 'n_source_host_max':
+    ax.set_ylim(-0.1,10.1) # -
+    ax.set_ylabel("Max. nr of source+host basins [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_ylabel() == 'n_OFM3_max':
+    ax.set_ylim(-0.05,5.05) # -
+    ax.set_ylabel("Max. nr of OFM3 [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_ylabel() == 'n_OFM2_max':
+    ax.set_ylim(-0.05,5.05) # -
+    ax.set_ylabel("Max. nr of OFM2 [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_ylabel() == 'n_OMF1_max':
+    ax.set_ylim(-0.05,5.05) # -
+    ax.set_ylabel("Max. nr of OFM1 [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_ylabel() == 'n_OMF12_max':
+    ax.set_ylim(-0.05,5.05) # -
+    ax.set_ylabel("Max. nr of OFM12 [-]",weight="bold",fontsize=ftsize)
+  elif ax.get_ylabel() == 'end_migration':
+    ax.set_ylim(9.75,25.25) # My
+    ax.set_yticks([10,15,20,25])
+    ax.set_ylabel("End rift migration [My]",weight="bold",fontsize=ftsize)
 
 # Axis labels
 #ax = plt.gca()
@@ -214,7 +274,7 @@ axs[0,0].set_title("Initial rift-craton distance: " + str(dataframe["initial_cra
 #plt.ticklabel_format(axis='y',useOffset=False)
 #plt.xticks(np.arange(0,30,5))
 ##plt.yticks([0,50,100,150,200,210])
-plt.show()
+#plt.show()
 
 ## Labelling of plot
 ## Manually place legend in lower right corner. 
@@ -227,7 +287,5 @@ plt.show()
 #plt.tight_layout()
 #
 ## Name the png according to the plotted field
-## Change as needed
-#field='source_area_'
-#plt.savefig(output_name + '_CERI_' + str(field) + '.png')    
-#print ("Output in: ", output_name + '_CERI_' + str(field) + '.png')
+plt.savefig(output_name + '_CERI_cratons.png')    
+print ("Output in: ", output_name + '_CERI_cratons.png')
