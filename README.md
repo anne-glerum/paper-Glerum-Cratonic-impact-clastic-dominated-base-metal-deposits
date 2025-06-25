@@ -81,7 +81,7 @@ The ASPECT version in Zenodo archive https://doi.org/10.5281/zenodo.10048075 can
 3. make
 
 ## Preprocessing
-The folder /preprocessing_scripts contains python 3.9.17 scripts to generate and plot initial topography and lithospheric layer thicknesses for the craton that are in isostatic balance with the reference lithosphere. The resulting initial topography files are provided in the folder /prms
+The folder /preprocessing_scripts contains python 3.9.17 scripts to generate and plot initial topography and lithospheric layer thicknesses for the craton that are in isostatic balance with the reference lithosphere. The resulting initial topography files are provided in their respective subfolder in folder /prms.
 
 ## Postprocessing
 Images of model results were created with the ParaView 5.13.1 python scripts and statefiles in the folder /postprocessing_scripts (sedtype_fav_ore_form_8.py files and pvsm state files for ASPECT and FS.py for FastScape).
@@ -91,14 +91,17 @@ To count the occurrences of source rock, host rock and their overlaps of faults,
 2. identify_OS_and_write_new_stats_summary.py (update that takes into account the start of oceanic spreading)
 3. create_stats_summary.py (summarize results of each simulation)
 4. create_stats_summary_suite.py (summarize results of each suite of 9 simulations)
-The different plots of the results in the Supplement are made with:
-regime_diagram_dOFM.py
-regime_diagram_dOFM_5o.py
-regime_diagram_dcraton.py
-regime_diagram_dcraton_5p.py
-regime_diagram_nmax.py
+
+The different plots of the results in the Supplement are made with:  
+regime_diagram_dOFM.py  
+regime_diagram_dOFM_5o.py  
+regime_diagram_dcraton.py  
+regime_diagram_dcraton_5p.py  
+regime_diagram_nmax.py  
 regime_diagram_nmax_5p.py
-Figure 9 was created with:
-plot_traffic_light_5o_craton_distances_fixed_bothres.py
-plot_traffic_light_5p_craton_distances_fixed_bothres.py
-Note that only the base path will need to be adapted for the scripts to find the simulations.
+
+Figure 9 was created with:  
+plot_traffic_light_5o_craton_distances_fixed_bothres.py  
+plot_traffic_light_5p_craton_distances_fixed_bothres.py  
+
+Note that in most scripts the parameter 'base' will need to be adapted to the path to the simulations on your system.
