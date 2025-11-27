@@ -77,10 +77,10 @@ plt.scatter(df["Lon."], df["Lat."], s=df["Scaled Total Zn+Pb (Mt)"], color=df["C
 
 ##### Other plot items #####
 ax.coastlines(linewidths=(0.5,))
-ax.text(145, -50, "Carpentaria", fontsize=6, rotation='horizontal', va='center', ha='center')
-ax.text(-125, 30, "N-Am Cordillera", fontsize=6, rotation=-50, va='center', ha='center')
-ax.plot([145, 140], [-46, -20], linestyle='solid', linewidth=0.5, color='black', marker='', transform=ccrs.PlateCarree(), zorder=11)
-ax.plot([-122, -130], [33, 60], linestyle='solid', linewidth=0.5, color='black', marker='', transform=ccrs.PlateCarree(), zorder=11)
+##ax.text(145, -50, "Carpentaria", fontsize=6, rotation='horizontal', va='center', ha='center')
+##ax.text(-125, 30, "N-Am Cordillera", fontsize=6, rotation=-50, va='center', ha='center')
+##ax.plot([145, 140], [-46, -20], linestyle='solid', linewidth=0.5, color='black', marker='', transform=ccrs.PlateCarree(), zorder=11)
+##ax.plot([-122, -130], [33, 60], linestyle='solid', linewidth=0.5, color='black', marker='', transform=ccrs.PlateCarree(), zorder=11)
 #ax.set_title('LAB depth contoured at 170 km')
 
 ##### Legend #####
