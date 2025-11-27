@@ -75,7 +75,7 @@ dataframe.initial_fault_geometry = dataframe.initial_fault_geometry.astype("cate
 dataframe.initial_fault_geometry = dataframe.initial_fault_geometry.cat.set_categories(order_geometries)
 dataframe.sort_values(["initial_fault_geometry"],inplace=True)
 
-# Shorten the initial fault geometry category names for the tick lables
+# Shorten the initial fault geometry category names for the tick labels
 initial_geometry_labels = ["L-ULC L-Rdip", 
                            "ULC-LD L-Rdip",
                            "ULC 2L-Rdip",

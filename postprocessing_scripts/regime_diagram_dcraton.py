@@ -18,7 +18,7 @@ print ("Seaborn version: ", sns.__version__)
 print ("Pandas version: ", pd.__version__)
 
 # Path to models
-base = r"/Users/acglerum/Documents/Postdoc/SG_SB/Projects/CERI_cratons/"
+base = r"/Users/acglerum/Documents/Postdoc/SG_SB/Projects/CERI_cratons/postprocessing_scripts/"
 
 output_name = '5o_fixed_regime_diagram_dcraton_cuttonewOS_'
 
@@ -28,6 +28,7 @@ tail = r"5p_fixed_CERI_craton_analysis.txt"
 # real file
 tail = r"5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
 tail = r"5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_cuttonewOS.csv"
+tail = r"5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_cuttonewOS_revisionupdates.csv"
 
 # Structure of input file: 3x9 rows of the following columns:
 # initial_craton_distance,initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
@@ -61,21 +62,12 @@ if not set(["n_OFM3_max","n_OFM2_max","n_OFM1_max","n_source_max","source_max"])
 dataframe.loc[dataframe['initial_craton_distance'] == 2000, 'initial_craton_distance'] = 550
 
 # Order of initial geometries
-# 5p
-#order_geometries = ["Lside-ULCshear Lside-Rdip",
-#"ULCshear-LD Lside-Rdip",
-#"ULCshear 2Lside-Rdip",
-#"ULCshear Lside-Rdip",
-#"ULCshear Lside-Rdip Rside-Ldip",
-#"ULCshear Rside-Ldip-D Lside-Rdip",
-#"ULCshear Lside-Rdip 2Rside-Ldip",
-#"ULCshear Rside-Ldip"]
 # 5o
 order_geometries = [
 "Lside-ULCshear 2Lside-Rdip", #
 "Lside-ULCshear Lside-C Lside-Rdip", #
 "Lside-ULCshear Lside-Rdip",#
-"Lside-ULCshear",#
+"ULCshear-LD Lside-Rdip Lside-Ldip",#
 "ULCshear-LD Lside-Rdip",#
 "ULCshear 3Lside-Rdip",
 "ULCshear 2Lside-Rdip",
@@ -91,12 +83,31 @@ order_geometries = [
 "ULCshear 2Rside-Ldip"]#
 
 
-
-
-
 dataframe.initial_fault_geometry = dataframe.initial_fault_geometry.astype("category")
 dataframe.initial_fault_geometry = dataframe.initial_fault_geometry.cat.set_categories(order_geometries)
-dataframe.sort_values(["initial_fault_geometry"])
+dataframe.sort_values(["initial_fault_geometry"],inplace=True)
+
+# Shorten the initial fault geometry category names for the tick labels
+# Make sure they are in the same order as the now sorted geometries
+#5o
+initial_geometry_labels = [
+"L-ULC 2L-Rdip", #
+"L-ULC L-C L-Rdip", #
+"L-ULC L-Rdip", #
+"ULC-LD L-Rdip L-Ldip", #
+"ULC-LD L-Rdip", #
+"ULC 3L-Rdip", #
+"ULC 2L-Rdip", #
+"ULC L-C", #
+"ULC L-Rdip", #
+"ULC 2L-Rdip R-Ldip", #
+"ULC L-C R-Ldip", #
+"ULC L-C 2R-Ldip", #
+"ULC L-Rdip R-Ldip", #
+"ULC L-Ldip R-Ldip", #
+"ULC L-Rdip 2R-Ldip", #
+"ULC R-Ldip",#
+"ULC 2R-Ldip"] #
 
 # For the regression plots, we only want to use the craton distances of 400, 450 and 500 km,
 # as these are the ones that were actually in the model domain. Select this subset:
@@ -170,27 +181,6 @@ for i in range(n_columns):
 # TODO Would be great not to repeat this for both the x and y axis.
 ftsize = 6
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
-#5p
-#initial_geometry_labels = ["L-ULC L-Rdip", "ULC-LD L-Rdip", "ULC 2L-Rdip", "ULC L-Rdip", "ULC L-Rdip R-Ldip", "ULC L-Rdip R-Ldip-D", "ULC L-Rdip 2R-Ldip","ULC R-Ldip"]
-#5o
-initial_geometry_labels = [
-"L-ULC 2L-Rdip",
-"L-ULC L-C L-Rdip",
-"L-ULC L-Rdip",
-"L-ULC",
-"ULC-LD L-Rdip",#
-"ULC 3L-Rdip",
-"ULC 2L-Rdip",
-"ULC L-C",#
-"ULC L-Rdip", #
-"ULC 2L-Rdip R-Ldip",#
-"ULC L-C R-Ldip",#
-"ULC L-C 2R-Ldip",#
-"ULC L-Rdip R-Ldip",#
-"ULC L-Ldip R-Ldip",#
-"ULC L-Rdip 2R-Ldip",#
-"ULC R-Ldip",
-"ULC 2R-Ldip"]
 # 5o
 migration_duration_min = 2
 migration_duration_max = 14
@@ -336,5 +326,5 @@ for ax in axs.reshape(-1):
     ax.set_ylabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
 
 ## Name the png according to the plotted field
-plt.savefig(output_name + '_CERI_cratons.png')    
-print ("Output in: ", output_name + '_CERI_cratons.png')
+plt.savefig(output_name + '_CERI_cratons_fixedgeoms.png')
+print ("Output in: ", output_name + '_CERI_cratons_fixedgeoms.png')
