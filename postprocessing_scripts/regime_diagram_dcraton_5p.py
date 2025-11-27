@@ -18,7 +18,7 @@ print ("Seaborn version: ", sns.__version__)
 print ("Pandas version: ", pd.__version__)
 
 # Path to models
-base = r"/Users/acglerum/Documents/Postdoc/SG_SB/Projects/CERI_cratons/"
+base = r"/Users/acglerum/Documents/Postdoc/SG_SB/Projects/CERI_cratons/postprocessing_scripts/"
 
 output_name = '5p_fixed_regime_diagram_dcraton_cuttonewOS'
 
@@ -66,13 +66,25 @@ order_geometries = ["Lside-ULCshear Lside-Rdip",
 "ULCshear 2Lside-Rdip",
 "ULCshear Lside-Rdip",
 "ULCshear Lside-Rdip Rside-Ldip",
+"ULCshear Cwide",
 "ULCshear Rside-Ldip-D Lside-Rdip",
 "ULCshear Lside-Rdip 2Rside-Ldip",
 "ULCshear Rside-Ldip"]
 
 dataframe.initial_fault_geometry = dataframe.initial_fault_geometry.astype("category")
 dataframe.initial_fault_geometry = dataframe.initial_fault_geometry.cat.set_categories(order_geometries)
-dataframe.sort_values(["initial_fault_geometry"])
+dataframe.sort_values(["initial_fault_geometry"],inplace=True)
+
+# Shorten the initial fault geometry category names for the tick lables
+initial_geometry_labels = ["L-ULC L-Rdip", 
+                           "ULC-LD L-Rdip",
+                           "ULC 2L-Rdip",
+                           "ULC L-Rdip",
+                           "ULC L-Rdip R-Ldip",
+                           "ULC Cwide",
+                           "ULC L-Rdip R-Ldip-D",
+                           "ULC L-Rdip 2R-Ldip",
+                           "ULC R-Ldip"]
 
 # For the regression plots, we only want to use the craton distances of 400, 450 and 500 km,
 # as these are the ones that were actually in the model domain. Select this subset:
@@ -146,7 +158,6 @@ for i in range(n_columns):
 # TODO Would be great not to repeat this for both the x and y axis.
 ftsize = 6
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
-initial_geometry_labels = ["L-ULC L-Rdip", "ULC-LD L-Rdip", "ULC 2L-Rdip", "ULC L-Rdip", "ULC L-Rdip R-Ldip", "ULC L-Rdip R-Ldip-D", "ULC L-Rdip 2R-Ldip","ULC R-Ldip"]
 migration_duration_min = 5
 migration_duration_max = 20
 migration_duration_ticks = [5.0,10.0,15.0,20.0]
@@ -280,5 +291,5 @@ for ax in axs.reshape(-1):
     ax.set_ylabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
 
 ## Name the png according to the plotted field
-plt.savefig(output_name + '_CERI_cratons.png')    
-print ("Output in: ", output_name + '_CERI_cratons.png')
+plt.savefig(output_name + '_CERI_cratons_fixedgeoms.png')
+print ("Output in: ", output_name + '_CERI_cratons_fixedgeoms.png')
