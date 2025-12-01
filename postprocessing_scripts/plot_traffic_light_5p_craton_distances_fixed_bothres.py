@@ -3,14 +3,15 @@ import matplotlib.pyplot as plt
 import matplotlib.axes as Axes
 plt.rcParams["font.family"] = "Arial"
 from matplotlib import rc
-rc("xtick", labelsize= 15)
+rc("xtick", labelsize= 10)
+rc("ytick", labelsize= 10)
 #rc("pdf", fonttype=42)
-rc("font", size=15)
-rc("axes", titlesize=25, labelsize=15)
+rc("font", size=12)
+rc("axes", titlesize=25, labelsize=12)
 rc("legend", fontsize=10)
 #print (plt.rcParams.keys())
 
-output_name = "5p_fixed_sourcearea_hightrescomplete_cuttonewOS_"
+output_name = "5p_fixed_sourcearea_hightrescomplete_cuttonewOS_sigma_"
 
 
 # The maximum average occurs before
@@ -43,6 +44,10 @@ fav_basins = [
 [4.5,3.33,0.89,1.67,5.33,2.56,1.11,1.78,6.33,3.67,1.11,2.44,6.0,4.22,1.44,3.22],
 [4.5,3.33,0.89,1.67,5.33,2.56,1.11,1.78,6.33,3.67,1.11,2.44,6.0,4.22,1.44,3.22],
 ]
+
+# Analysis at every 0.5 My, cuttonewOS
+# TEST DATA!
+fav_basins_stddevs = [0.1,1.33,0.89,0.67,1.33,1.56,0.11,0.78,1.33,1.67,0.11,1.44,1.0,1.22,0.44,1.22]
 
 # Analysis at every 0.5 My
 #fav_basins = [
@@ -153,9 +158,12 @@ for row in range(n_rows):
                    colors_red[8], colors_orange[8],colors_green[8],colors_darkgreen[7],
                    colors_red[8], colors_orange[8],colors_green[8],colors_darkgreen[7]]
     #ax.bar(index, np.divide(fav_basins[row],9.), bar_width, bottom=y_offset, color=list_colors, align='center',tick_label=columns)
-    rects = ax.bar(index, np.divide(fav_basins[row],9.), bar_width, bottom=y_offset, color=list_colors, align='center')
     if row == 8:
-      ax.bar_label(rects, padding=3, fmt='%1.1f', fontsize=10)
+      rects = ax.bar(index, np.divide(fav_basins[row],9.), width=bar_width, yerr=fav_basins_stddevs, bottom=y_offset, color=list_colors, align='center', ecolor='grey', capsize=5)
+    else:
+      rects = ax.bar(index, np.divide(fav_basins[row],9.), width=bar_width, bottom=y_offset, color=list_colors, align='center')
+#    if row == 8:
+#      ax.bar_label(rects, padding=3, fmt='%1.1f', fontsize=10)
     y_offset = y_offset + np.divide(fav_basins[row],9.)
     cell_text.append(['%1.1f' % (x) for x in fav_basins[row]])
     for b in range(9):
@@ -191,8 +199,8 @@ ax.set_xlabel("Craton distance [km]", weight="bold")
 #ax.text(7.1,3.85,'S+H',rotation='vertical',ha='center',fontsize=15)
 #ax.text(8.1,3.85,'S+H+IF',rotation='vertical',ha='center',fontsize=15)
 #ax.text(9.1,3.85,'S+H+AF',rotation='vertical',ha='center',fontsize=15)
-ax.text(8.1,2.3,'OFM3',rotation='vertical',ha='center',fontsize=14)
-ax.text(9.1,2.3,'OFM1+OFM2',rotation='vertical',ha='center',fontsize=14)
+##ax.text(8.1,2.3,'OFM3',rotation='vertical',ha='center',fontsize=14)
+##ax.text(9.1,2.3,'OFM1+OFM2',rotation='vertical',ha='center',fontsize=14)
 
 # Second subplot
 # Transparent background
