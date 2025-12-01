@@ -106,8 +106,11 @@ models = [
 ]
 
 ###### Create dataframes to store output data ######
-dataframe_summary = pd.DataFrame(columns=['n_source_max','n_source_host_max','n_OFM3_max','n_OFM12_max'])
+# means and standard deviations
+dataframe_summary = pd.DataFrame(columns=['n_source_max','n_source_host_max','n_OFM3_max','n_OFM12_max', 'stddev_n_source_max','stddev_n_source_host_max','stddev_n_OFM3_max','stddev_n_OFM12_max'],dtype=np.float64)
 dataframe_summary_sampled = pd.DataFrame(columns=['n_source_max','n_source_host_max','n_OFM3_max','n_OFM12_max'])
+
+dataframe_list_all = []
 
 n_source_max = 0
 n_source_host_max = 0
@@ -124,19 +127,22 @@ n_models_sampled = 0
 for m in models:
 
   ###### Read timestep output file ######
-  if Path(m).exists():
-    path = base + m
+  path = base + m
+  if Path(path).exists():
     summary_files = sorted(Path(path).glob('*stats_summary_cuttonewOS_2*'))
     if len(summary_files) == 1:
         n_models += 1
         print(f"{summary_files[0].name}\n")
-        filename = m + "/" + summary_files[0].name
+        filename = path + "/" + summary_files[0].name
         dataframe = pd.read_csv(filename)
 
         n_source_max += dataframe['n_source_max'][0]
         n_source_host_max += dataframe['n_source_host_max'][0]
         n_OFM3_max += dataframe['n_OFM3_max'][0]
         n_OFM12_max += dataframe['n_OFM12_max'][0]
+
+        # Add data to list that stores all data to do some statistics
+        dataframe_list_all.append(dataframe)
     else:
       print ("Multiple or no summary files for model: ", m)
       continue
@@ -144,7 +150,7 @@ for m in models:
     if len(summary_files) == 1:
         n_models_sampled += 1
         print(f"{summary_files[0].name}\n")
-        filename = m + "/" + summary_files[0].name
+        filename = path + "/" + summary_files[0].name
         dataframe = pd.read_csv(filename)
 
         n_source_max_sampled += dataframe['n_source_max'][0]
@@ -154,6 +160,10 @@ for m in models:
     else:
       print ("Multiple or no sampled summary files for model: ", m)
       continue
+
+
+# Merge all dataframes into one
+dataframe_all = pd.concat(dataframe_list_all)
 
 ###### Fill the summary table with averages ######
 print("Nr of valid model summaries: ", n_models)
@@ -167,8 +177,13 @@ dataframe_summary_sampled.loc[0,'n_source_host_max'] = n_source_host_max_sampled
 dataframe_summary_sampled.loc[0,'n_OFM3_max'] = n_OFM3_max_sampled/n_models_sampled
 dataframe_summary_sampled.loc[0,'n_OFM12_max'] = n_OFM12_max_sampled/n_models_sampled
 
+###### Fill the summary table with standard deviation
+dataframe_summary.loc[0,'stddev_n_source_max'] = dataframe_all['n_source_max'].std()
+dataframe_summary.loc[0,'stddev_n_source_host_max'] = dataframe_all['n_source_host_max'].std()
+dataframe_summary.loc[0,'stddev_n_OFM3_max'] = dataframe_all['n_OFM3_max'].std()
+dataframe_summary.loc[0,'stddev_n_OFM12_max'] = dataframe_all['n_OFM12_max'].std()
+
 # ###### Write summary output file with same timestamp ######
-# TODO float formatting does not work
 dataframe_summary.to_csv(base_output_file+"_"+timestr+".csv",index=False,na_rep='nan',float_format='%.3f')
 #dataframe_summary_sampled.to_csv(base_output_file+"_sampled_"+timestr+".csv",index=False,na_rep='nan',float_format='%.3f')
 print("File created: " + base_output_file+"_"+timestr+".csv")
