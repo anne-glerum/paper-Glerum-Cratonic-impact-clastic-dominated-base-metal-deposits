@@ -1,3 +1,6 @@
+# Initially based on https://matplotlib.org/stable/gallery/misc/table_demo.html#sphx-glr-gallery-misc-table-demo-py (or something similar),
+# but later reduced to only showing solid color bars without the table. Therefore this script seems overly complicated.
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.axes as Axes
@@ -9,9 +12,8 @@ rc("ytick", labelsize= 10)
 rc("font", size=12)
 rc("axes", titlesize=25, labelsize=12)
 rc("legend", fontsize=10)
-#print (plt.rcParams.keys())
 
-output_name = "5p_fixed_sourcearea_hightrescomplete_cuttonewOS_sigma_"
+output_name = "5p_fixed_sourcearea_hightrescomplete_cuttonewOS_stddev_"
 
 
 # The maximum average occurs before
@@ -22,6 +24,13 @@ average_source_area = [
 19.71,19.71,19.71,19.71,
 26.06,26.06,26.06,26.06,
 24.524675,24.524675,24.524675,24.524675
+]
+# The standard devation of the maximum source area [km2]
+average_source_area_stddev = [
+2.91,2.91,2.91,2.91,
+19.44,19.44,19.44,19.44,
+5.68,5.68,5.68,5.68,
+10.21,10.21,10.21,10.21,
 ]
 
 # The max of the average source area
@@ -46,8 +55,12 @@ fav_basins = [
 ]
 
 # Analysis at every 0.5 My, cuttonewOS
-# TEST DATA!
-fav_basins_stddevs = [0.1,1.33,0.89,0.67,1.33,1.56,0.11,0.78,1.33,1.67,0.11,1.44,1.0,1.22,0.44,1.22]
+# n_source_max,n_source_host_max,n_OFM3_max,n_OFM12_max, stddev_n_source_max,stddev_n_source_host_max,stddev_n_OFM3_max,stddev_n_OFM12_max
+# 400: 4.556,3.333,0.889,1.667, 0.527,0.500,0.601,0.500
+# 450: 5.333,2.556,1.111,1.778, 1.118,0.726,0.333,0.667
+# 500: 6.333,3.667,1.111,2.444, 1.500,1.658,0.601,1.509
+#2000: 6.000,4.222,1.444,3.222, 1.118,1.641,0.726,1.563
+fav_basins_stddevs = [0.527,0.500,0.601,0.500,1.118,0.726,0.333,0.667,1.500,1.658,0.601,1.509,1.118,1.641,0.726,1.563]
 
 # Analysis at every 0.5 My
 #fav_basins = [
@@ -115,8 +128,6 @@ colors_orange = plt.cm.Oranges(np.linspace(0, 0.5, len(rows)))
 colors_red = plt.cm.Reds(np.linspace(0, 0.5, len(rows)))
 n_rows = len(fav_basins)
 n_cols = len(columns)
-print ("Darkgreen", colors_darkgreen[7])
-print ("Green", colors_green[8])
 
 # Color for max average source area and its y-axis
 color1=[0.0051932, 0.098238, 0.34984]
@@ -125,6 +136,12 @@ color3=[0.10684, 0.34977, 0.38455]
 color4=[0.23136, 0.4262, 0.33857]
 color7=[0.81169, 0.57519, 0.25257]
 color8='blue'
+
+# Color for the error bars
+colors_ebar = [colors_red[5], colors_orange[5], colors_green[5], colors_darkgreen[3],
+               colors_red[5], colors_orange[5], colors_green[5], colors_darkgreen[3],
+               colors_red[5], colors_orange[5], colors_green[5], colors_darkgreen[3],
+               colors_red[5], colors_orange[5], colors_green[5], colors_darkgreen[3]]
 
 # The x-coordinate of the bars
 index = np.arange(n_cols) + 0.5
@@ -158,10 +175,11 @@ for row in range(n_rows):
                    colors_red[8], colors_orange[8],colors_green[8],colors_darkgreen[7],
                    colors_red[8], colors_orange[8],colors_green[8],colors_darkgreen[7]]
     #ax.bar(index, np.divide(fav_basins[row],9.), bar_width, bottom=y_offset, color=list_colors, align='center',tick_label=columns)
+    rects = ax.bar(index, np.divide(fav_basins[row],9.), width=bar_width, bottom=y_offset, color=list_colors, align='center')
     if row == 8:
-      rects = ax.bar(index, np.divide(fav_basins[row],9.), width=bar_width, yerr=fav_basins_stddevs, bottom=y_offset, color=list_colors, align='center', ecolor='grey', capsize=5)
-    else:
-      rects = ax.bar(index, np.divide(fav_basins[row],9.), width=bar_width, bottom=y_offset, color=list_colors, align='center')
+    #  rects = ax.bar(index, np.divide(fav_basins[row],9.), width=bar_width, yerr=fav_basins_stddevs, bottom=y_offset, color=list_colors, align='center', ecolor='grey', capsize=5)
+      for i, (rect, error, color) in enumerate(zip(rects, fav_basins_stddevs, colors_ebar)):
+        ax.errorbar(rect.get_x() + rect.get_width()/2, np.divide(fav_basins[row],9.)[i]+y_offset[i], yerr=error, color=color, capsize=4, capthick=1)
 #    if row == 8:
 #      ax.bar_label(rects, padding=3, fmt='%1.1f', fontsize=10)
     y_offset = y_offset + np.divide(fav_basins[row],9.)
@@ -170,9 +188,9 @@ for row in range(n_rows):
       if fav_basins[row][b] > 0:
         counter[b] += 1
 
-total_basins_average = 6
+total_basins_average = 7
 ax.set_yticks(np.arange((int(np.max(total_basins_average)+2))))
-ax.set_ylim=(0,int(np.max(total_basins_average)+1))
+#ax.set_ylim=(0,int(np.max(total_basins_average)+4))
 
 # Plot vertical lines separating the groups of three bars
 ax.plot([5.0,5.0],[0,int(np.max(total_basins_average)+1)],color='0.75',linestyle='dashed')
@@ -195,12 +213,12 @@ ax.set_xlabel("Craton distance [km]", weight="bold")
 #plt.title('Number of favorable basins per ICRD')
 
 # Label the colors
-#ax.text(6.1,3.85,'S',rotation='vertical',ha='center',fontsize=15)
-#ax.text(7.1,3.85,'S+H',rotation='vertical',ha='center',fontsize=15)
+ax.text(6.04,0.13,'source',rotation='vertical',ha='center',fontsize=8,color=colors_red[5])
+ax.text(7.04,0.13,'source+host',rotation='vertical',ha='center',fontsize=8,color=colors_orange[5])
 #ax.text(8.1,3.85,'S+H+IF',rotation='vertical',ha='center',fontsize=15)
 #ax.text(9.1,3.85,'S+H+AF',rotation='vertical',ha='center',fontsize=15)
-##ax.text(8.1,2.3,'OFM3',rotation='vertical',ha='center',fontsize=14)
-##ax.text(9.1,2.3,'OFM1+OFM2',rotation='vertical',ha='center',fontsize=14)
+ax.text(8.04,0.13,'OFM3',rotation='vertical',ha='center',fontsize=8,color=colors_green[5])
+ax.text(9.04,0.13,'OFM1&2',rotation='vertical',ha='center',fontsize=8,color=colors_darkgreen[3])
 
 # Second subplot
 # Transparent background
@@ -210,8 +228,8 @@ ax2.yaxis.tick_right()
 ax2.yaxis.set_label_position('right') 
 ax2.tick_params(axis='y', color=color8, labelcolor=color8)
 ax2.spines['right'].set_color(color8)
-ax2.set_ylim(0,30)
-ax2.set_yticks([0,10,20,30])
+ax2.set_ylim(0,40)
+ax2.set_yticks([0,10,20,30,40])
 
 # Plot line indicating the average maximum source area per rift type
 max_source_area_array = np.array(average_source_area)
@@ -225,6 +243,7 @@ index_2 = [0, 1.5, 3, 5.0,
            10.0, 11.5, 13,15.0,
            15.0, 16.5, 18,20.0]
 for column in range(n_cols): 
+    ax2.fill_between(index_2, np.subtract(average_source_area,average_source_area_stddev), np.add(average_source_area,average_source_area_stddev),color=color8,alpha=0.005)
     ax2.plot(index_2, average_source_area,color=color8)
 #    ax2.plot(index_2, max_average_source_area,color=color8)
 
