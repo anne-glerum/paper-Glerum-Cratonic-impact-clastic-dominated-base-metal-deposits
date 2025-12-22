@@ -1,2 +1,3 @@
 initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
-ULCshear Lside-Rdip Rside-Ldip,3.5,3.5,9.0,22.0,8.0,22.5,R,21.5,6,5,0,2,2,4
+ULCshear Lside-Rdip-D Rside-Ldip,4.0,5.0,9.0,22.0,8.0,22.5,R,21.5,6,5,0,2,2,4
+#ULCshear Lside-Rdip Rside-Ldip,3.5,3.5,9.0,22.0,8.0,22.5,R,21.5,6,5,0,2,2,4

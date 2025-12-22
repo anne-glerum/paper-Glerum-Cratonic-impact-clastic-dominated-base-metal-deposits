@@ -65,8 +65,7 @@ order_geometries = ["Lside-ULCshear Lside-Rdip",
 "ULCshear-LD Lside-Rdip",
 "ULCshear 2Lside-Rdip",
 "ULCshear Lside-Rdip",
-"ULCshear Lside-Rdip Rside-Ldip",
-"ULCshear Cwide",
+"ULCshear Lside-Rdip-D Rside-Ldip",
 "ULCshear Rside-Ldip-D Lside-Rdip",
 "ULCshear Lside-Rdip 2Rside-Ldip",
 "ULCshear Rside-Ldip"]
@@ -80,8 +79,7 @@ initial_geometry_labels = ["L-ULC L-Rdip",
                            "ULC-LD L-Rdip",
                            "ULC 2L-Rdip",
                            "ULC L-Rdip",
-                           "ULC L-Rdip R-Ldip",
-                           "ULC Cwide",
+                           "ULC L-Rdip-D R-Ldip",
                            "ULC L-Rdip R-Ldip-D",
                            "ULC L-Rdip 2R-Ldip",
                            "ULC R-Ldip"]
@@ -156,7 +154,7 @@ for i in range(n_columns):
 
 # Ranges and labels of the axes
 # TODO Would be great not to repeat this for both the x and y axis.
-ftsize = 6
+ftsize = 7
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
 migration_duration_min = 5
 migration_duration_max = 20
@@ -172,7 +170,7 @@ for ax in axs.reshape(-1):
   if ax.get_xlabel() == 'initial_craton_distance':
     ax.set_xlim(350,600) # km
     ax.set_xticks([400,450,500,550])
-    ax.set_xticklabels(craton_distance_labels)
+    ax.set_xticklabels(craton_distance_labels,fontsize=ftsize)
     ax.set_xlabel("Initial craton edge distance [km]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'initial_fault_geometry':
     ax.tick_params(axis='x', labelrotation=90,labelsize=3)
@@ -229,10 +227,11 @@ for ax in axs.reshape(-1):
     ax.set_xticks(RBF_duration_ticks)
     ax.set_xlabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
   
+  ax.tick_params(axis='y', labelsize=ftsize)
   if ax.get_ylabel() == 'initial_craton_distance':
     ax.set_ylim(350,600) # km
     ax.set_yticks([400,450,500,550])
-    ax.set_yticklabels(craton_distance_labels)
+    ax.set_yticklabels(craton_distance_labels,fontsize=ftsize)
     ax.set_ylabel("Initial craton edge distance [km]",weight="bold",fontsize=ftsize)
   if ax.get_ylabel() == 'initial_fault_geometry':
     ax.set_ylabel("Initial fault geometry [-]",weight="bold",fontsize=ftsize)
