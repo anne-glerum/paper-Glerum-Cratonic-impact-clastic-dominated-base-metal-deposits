@@ -67,21 +67,20 @@ order_geometries = [
 "Lside-ULCshear 2Lside-Rdip", #
 "Lside-ULCshear Lside-C Lside-Rdip", #
 "Lside-ULCshear Lside-Rdip",#
-"ULCshear-LD Lside-Rdip Lside-Ldip",#
+#"ULCshear-LD Lside-Rdip Lside-Ldip",#
 "ULCshear-LD Lside-Rdip",#
-"ULCshear 3Lside-Rdip",
+"ULCshear 3Lside-Rdip Rside-Ldip",
 "ULCshear 2Lside-Rdip",
 "ULCshear Lside-C",#
 "ULCshear Lside-Rdip", #
 "ULCshear 2Lside-Rdip Rside-Ldip",#
 "ULCshear Lside-C Rside-Ldip",#
 "ULCshear Lside-C 2Rside-Ldip",#
-"ULCshear Lside-Rdip Rside-Ldip",#
+"ULCshear Lside-Rdip-D Rside-Ldip",#
 "ULCshear Lside-Ldip Rside-Ldip",#
 "ULCshear Lside-Rdip 2Rside-Ldip",#
 "ULCshear Rside-Ldip",#
 "ULCshear 2Rside-Ldip"]#
-
 
 dataframe.initial_fault_geometry = dataframe.initial_fault_geometry.astype("category")
 dataframe.initial_fault_geometry = dataframe.initial_fault_geometry.cat.set_categories(order_geometries)
@@ -94,16 +93,16 @@ initial_geometry_labels = [
 "L-ULC 2L-Rdip", #
 "L-ULC L-C L-Rdip", #
 "L-ULC L-Rdip", #
-"ULC-LD L-Rdip L-Ldip", #
+#"ULC-LD L-Rdip L-Ldip", #
 "ULC-LD L-Rdip", #
-"ULC 3L-Rdip", #
+"ULC 3L-Rdip R-Ldip", #
 "ULC 2L-Rdip", #
 "ULC L-C", #
 "ULC L-Rdip", #
 "ULC 2L-Rdip R-Ldip", #
 "ULC L-C R-Ldip", #
 "ULC L-C 2R-Ldip", #
-"ULC L-Rdip R-Ldip", #
+"ULC L-Rdip-D R-Ldip", #
 "ULC L-Ldip R-Ldip", #
 "ULC L-Rdip 2R-Ldip", #
 "ULC R-Ldip",#
@@ -179,7 +178,7 @@ for i in range(n_columns):
 
 # Ranges and labels of the axes
 # TODO Would be great not to repeat this for both the x and y axis.
-ftsize = 6
+ftsize = 7
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
 # 5o
 migration_duration_min = 2
@@ -207,7 +206,7 @@ for ax in axs.reshape(-1):
   if ax.get_xlabel() == 'initial_craton_distance':
     ax.set_xlim(350,600) # km
     ax.set_xticks([400,450,500,550])
-    ax.set_xticklabels(craton_distance_labels)
+    ax.set_xticklabels(craton_distance_labels,fontsize=ftsize)
     ax.set_xlabel("Initial craton edge distance [km]",weight="bold",fontsize=ftsize)
   elif ax.get_xlabel() == 'initial_fault_geometry':
     ax.tick_params(axis='x', labelrotation=90,labelsize=3)
@@ -264,10 +263,11 @@ for ax in axs.reshape(-1):
     ax.set_xticks(RBF_duration_ticks)
     ax.set_xlabel("Right border fault duration [My]",weight="bold",fontsize=ftsize)
   
+  ax.tick_params(axis='y', labelsize=ftsize)
   if ax.get_ylabel() == 'initial_craton_distance':
     ax.set_ylim(350,600) # km
     ax.set_yticks([400,450,500,550])
-    ax.set_yticklabels(craton_distance_labels)
+    ax.set_yticklabels(craton_distance_labels,fontsize=ftsize)
     ax.set_ylabel("Initial craton edge distance [km]",weight="bold",fontsize=ftsize)
   if ax.get_ylabel() == 'initial_fault_geometry':
     ax.set_ylabel("Initial fault geometry [-]",weight="bold",fontsize=ftsize)
