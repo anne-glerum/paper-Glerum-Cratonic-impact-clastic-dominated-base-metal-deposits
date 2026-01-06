@@ -139,12 +139,23 @@ fig.subplots_adjust(wspace = 0.05)
 
 ###### Loop over requested models ######
 total_OFMs = np.zeros((2,4))
+total_OFMs_L = np.zeros((2,4))
+total_OFMs_R = np.zeros((2,4))
 total_OFM1s = np.zeros((2,4))
 total_OFM2s = np.zeros((2,4))
+total_OFM12s_R = np.zeros((2,4))
+total_OFM12s_L = np.zeros((2,4))
+total_timesteps_OFM12s = np.zeros((2,4))
+total_timesteps_OFM12s_L = np.zeros((2,4))
+total_timesteps_OFM12s_R = np.zeros((2,4))
 total_timesteps_OFMs = np.zeros((2,4))
+n_R = np.zeros((2,4))
+n_L = np.zeros((2,4))
 for m in models:
 
-  print ("Reading model: ", m)
+  
+  
+  #print ("Reading model: ", m)
   path = base + m
 
   if Path(path).exists():  
@@ -155,13 +166,15 @@ for m in models:
 
   if len(summary_files) == 1:
     filename = path + "/" + summary_files[0].name
-    dataframe_summary = pd.read_csv(filename)
+    dataframe_summary = pd.read_csv(filename,comment="#")
 
     start_spreading_step = np.int64(dataframe_summary["start_oceanic_spreading"][0] * 2)
-    print ("Start oceanic spreading: ", start_spreading_step)
+    #print ("Start oceanic spreading: ", start_spreading_step)
+    migration_direction = dataframe_summary["migration_direction"][0]
+    #print ("Migration direction: ", migration_direction)
 
   else:
-    print ("Multiple or no summary files for model: ", m)
+    print ("Multiple or no summary files for model: ", m, len(summary_files))
     exit()
 
   if len(stat_files) == 1:
@@ -193,12 +206,14 @@ for m in models:
       tmp_total_OFMs = dataframe_stats_cut['n_OFM1'].sum() + dataframe_stats_cut['n_OFM2'].sum() + dataframe_stats_cut['n_OFM3'].sum()
       tmp_total_OFM1s = dataframe_stats_cut['n_OFM1'].sum()
       tmp_total_OFM2s = dataframe_stats_cut['n_OFM2'].sum()
+      tmp_timesteps_OFM12s = np.count_nonzero(dataframe_stats_cut['n_OFM1'] + dataframe_stats_cut['n_OFM2'])
       tmp_timesteps_OFMs = np.count_nonzero(dataframe_stats_cut['n_OFM1'] + dataframe_stats_cut['n_OFM2'] + dataframe_stats_cut['n_OFM3'])
     else:
       tmp_total_OFMs = dataframe_stats['n_OFM1'].sum() + dataframe_stats['n_OFM2'].sum() + dataframe_stats['n_OFM3'].sum()
       tmp_total_OFM1s = dataframe_stats['n_OFM1'].sum()
       tmp_total_OFM2s = dataframe_stats['n_OFM2'].sum()
       dataframe_stats['n_OFM123'] = dataframe_stats['n_OFM1'] + dataframe_stats['n_OFM2'] + dataframe_stats['n_OFM3']
+      tmp_timesteps_OFM12s = np.count_nonzero(dataframe_stats['n_OFM1'] + dataframe_stats['n_OFM2'])
       tmp_timesteps_OFMs = np.count_nonzero(dataframe_stats['n_OFM123'])
 
     # print("Total all OFMs:", dataframe_stats['n_OFM1'].sum() + dataframe_stats['n_OFM2'].sum() + dataframe_stats['n_OFM3'].sum())
@@ -214,18 +229,48 @@ for m in models:
     total_OFMs[column_number][distance_number] += tmp_total_OFMs
     total_OFM1s[column_number][distance_number] += tmp_total_OFM1s
     total_OFM2s[column_number][distance_number] += tmp_total_OFM2s
+    total_timesteps_OFM12s[column_number][distance_number] += tmp_timesteps_OFM12s
     total_timesteps_OFMs[column_number][distance_number] += tmp_timesteps_OFMs
+    if migration_direction == "R":
+      total_OFM12s_R[column_number][distance_number] += tmp_total_OFM1s + tmp_total_OFM2s
+      total_timesteps_OFM12s_R[column_number][distance_number] += tmp_timesteps_OFM12s
+      n_R[column_number][distance_number] += 1
+    elif migration_direction == "L":
+      total_OFM12s_L[column_number][distance_number] += tmp_total_OFM1s + tmp_total_OFM2s
+      total_timesteps_OFM12s_L[column_number][distance_number] += tmp_timesteps_OFM12s
+      n_L[column_number][distance_number] += 1
+
 
   else:
     print ("Multiple or no stats files for model: ", m)
     exit()
 
+# Print
+print ("Nr. of right migrating rifts: ", n_R)
+print ("Nr. of left migrating rifts: ", n_L)
+#print ("Nr. of OFM12s right migrating rifts: ", total_OFM12s_R)
+#print ("Nr. of OFM12s left migrating rifts: ", total_OFM12s_L)
 
 # Average the total OFMs and OFM1s per suite
+# This can give warnings when dividing zero by zero for the numbers
+# split into left and right migrating rifts.
+# However, the result is a NaN, which is not plotted,
+# so it's okay. Other numbers are not affected.
 total_OFMs = total_OFMs/9.
 total_OFM1s = total_OFM1s/9.
 total_OFM2s = total_OFM2s/9.
+total_OFM12s = total_OFM1s + total_OFM2s
+total_OFM12s_R = total_OFM12s_R/n_R
+total_OFM12s_L = total_OFM12s_L/n_L
+total_timesteps_OFM12s = total_timesteps_OFM12s/9.
+total_timesteps_OFM12s_R = total_timesteps_OFM12s_R/n_R
+total_timesteps_OFM12s_L = total_timesteps_OFM12s_L/n_L
 total_timesteps_OFMs = total_timesteps_OFMs/9.
+#print ("Average nr. of OFM12s right migrating rifts: ", total_OFM12s_R)
+#print ("Average nr. of OFM12s left migrating rifts: ", total_OFM12s_L)
+
+#print ("Average timesteps with OFM12s right migrating rifts: ", total_timesteps_OFM12s_R)
+#print ("Average timesteps with OFM12s left migrating rifts: ", total_timesteps_OFM12s_L)
 
 ##### PLOT #####
 ## Plot the average total OFMs and OFM1s per suite
@@ -240,35 +285,56 @@ axs[0][1].scatter(distances,total_OFMs[1], color=color_1)
 
 axs[1][0].scatter(distances,total_OFM1s[0], color=color_3, label="Total OFM1s")
 axs[1][1].scatter(distances,total_OFM1s[1], color=color_3)
+axs[1][0].scatter(distances,total_OFM2s[0], color=color_4, label="Total OFM2s")
+axs[1][1].scatter(distances,total_OFM2s[1], color=color_4)
 
-axs[2][0].scatter(distances,total_OFM2s[0], color=color_4, label="Total OFM2s")
-axs[2][1].scatter(distances,total_OFM2s[1], color=color_4)
+axs[2][0].scatter(distances,total_OFM12s_R[0], color="pink", label="Total OFM12s R", s=60)
+axs[2][1].scatter(distances,total_OFM12s_R[1], color="pink", s=60)
+axs[2][0].scatter(distances,total_OFM12s_L[0], color="red", label="Total OFM12s L", s=60)
+axs[2][1].scatter(distances,total_OFM12s_L[1], color="red", s=60)
+axs[2][0].scatter(distances,total_OFM12s[0], color=color_4, label="Total OFM12s")
+axs[2][1].scatter(distances,total_OFM12s[1], color=color_4)
 
-axs[3][0].scatter(distances,total_timesteps_OFMs[0], color=color_2, label="Timesteps OFMs")
-axs[3][1].scatter(distances,total_timesteps_OFMs[1], color=color_2)
+axs[3][0].scatter(distances,total_timesteps_OFM12s_R[0], color="pink", label="Timesteps OFM12s R", s=60)
+axs[3][1].scatter(distances,total_timesteps_OFM12s_R[1], color="pink", s=60)
+axs[3][0].scatter(distances,total_timesteps_OFM12s_L[0], color="red", label="Timesteps OFM12s L", s=60)
+axs[3][1].scatter(distances,total_timesteps_OFM12s_L[1], color="red", s=60)
+axs[3][0].scatter(distances,total_timesteps_OFM12s[0], color=color_3, label="Timesteps OFM12s")
+axs[3][1].scatter(distances,total_timesteps_OFM12s[1], color=color_3)
+axs[3][0].scatter(distances,total_timesteps_OFMs[0], color=color_4, label="Timesteps OFMs")
+axs[3][1].scatter(distances,total_timesteps_OFMs[1], color=color_4)
 
 # Ranges and labels of the axes
 craton_distance_labels = ["50", "100", "150", r"$\infty$"]
-ftsize = 10
-axs[0][0].set_title("Narrow asymmetric",weight="bold",fontsize=ftsize)
-axs[0][1].set_title("Wide",weight="bold",fontsize=ftsize)
+ftsize = 7
+axs[0][0].set_title("Narrow asymmetric",weight="bold",fontsize=ftsize+2)
+axs[0][1].set_title("Wide",weight="bold",fontsize=ftsize+2)
 
-axs[0][0].set_ylabel("Av. total OFMs",weight="bold",fontsize=ftsize)
+axs[0][0].set_ylabel("Av. total OFMs",weight="bold",fontsize=ftsize+2)
 axs[0][0].set_yticks([0,10,20,30,40])
-axs[1][0].set_ylabel("Av. total OFM1s",weight="bold",fontsize=ftsize)
-axs[1][0].set_yticks([0,2,4,6])
-axs[2][0].set_ylabel("Av. total OFM2s",weight="bold",fontsize=ftsize)
-axs[2][0].set_yticks([0,4,8,12,16])
-axs[3][0].set_xlabel("Craton edge distance",weight="bold",fontsize=ftsize)
-axs[3][0].set_xticks([50,100,150,200])
-axs[3][0].set_xticklabels(["50","100","150","inf"])
-
-axs[3][1].set_xlabel("Craton edge distance [km]",weight="bold",fontsize=ftsize)
-axs[3][1].set_xticks([50,100,150,200])
-axs[3][1].set_xticklabels(["50","100","150","inf"])
-
-axs[3][0].set_ylabel("Av. timesteps with OFMs",weight="bold",fontsize=ftsize)
+axs[0][0].set_yticklabels(["0","10","20","30","40"],fontsize=ftsize)
+axs[1][0].set_ylabel("Av. total OFM1/2s",weight="bold",fontsize=ftsize+2)
+axs[1][0].set_yticks([0,4,8,12,16])
+axs[1][0].set_yticklabels(["0","4","8","12","16"],fontsize=ftsize)
+axs[2][0].set_ylabel("Av. total OFM12s",weight="bold",fontsize=ftsize+2)
+axs[2][0].set_yticks([0,4,8,12,16,20,24])
+axs[2][0].set_yticklabels(["0","4","8","12","16","20","24"],fontsize=ftsize)
+axs[3][0].set_ylabel("Av. timesteps with OFMs",weight="bold",fontsize=ftsize+2)
 axs[3][0].set_yticks([0,5,10,15,20,25])
+axs[3][0].set_yticklabels(["0","5","10","15","20","25"],fontsize=ftsize)
+
+axs[3][0].set_xlabel("Craton edge distance",weight="bold",fontsize=ftsize+2)
+axs[3][0].set_xticks([50,100,150,200])
+axs[3][0].set_xticklabels(["50","100","150","inf"],fontsize=ftsize)
+
+axs[3][1].set_xlabel("Craton edge distance [km]",weight="bold",fontsize=ftsize+2)
+axs[3][1].set_xticks([50,100,150,200])
+axs[3][1].set_xticklabels(["50","100","150","inf"],fontsize=ftsize)
+
+axs[0][0].legend(loc='lower right',ncol=1,handlelength=1,fontsize=ftsize)
+axs[1][0].legend(loc='lower right',ncol=1,handlelength=1,fontsize=ftsize)
+axs[2][0].legend(loc='lower right',ncol=1,handlelength=1,fontsize=ftsize)
+axs[3][0].legend(loc='upper left',ncol=1,handlelength=1,fontsize=ftsize)
 
 ##### SAVE #####
 ## Save figure
@@ -276,9 +342,11 @@ plt.savefig(output_name + '_CERI_cratons.png',dpi=300)
 print ("Figure in: ", output_name + '_CERI_cratons.png')
 
 ## Print and save the data
-print ("Average total OFMs: ", total_OFMs)
-print ("Average total OFM1s: ", total_OFM1s)
-print ("Average total timesteps with OFMs: ", total_timesteps_OFMs)
+#print ("Average total OFMs: ", total_OFMs)
+#print ("Average total OFM1s: ", total_OFM1s)
+#print ("Average total OFM2s: ", total_OFM2s)
+#print ("Average total timesteps with OFM12s: ", total_timesteps_OFM12s)
+#print ("Average total timesteps with OFMs: ", total_timesteps_OFMs)
 # Data order:
 # NA-50km
 # NA-100km
@@ -292,5 +360,19 @@ total_OFMs.tofile(output_name + '_average_total_OFMs_CERI_cratons.csv', sep=' ')
 print ("Data in: ", output_name + '_average_total_OFMs_CERI_cratons.csv')
 total_OFM1s.tofile(output_name + '_average_total_OFM1s_CERI_cratons.csv', sep=' ')
 print ("Data in: ", output_name + '_average_total_OFM1s_CERI_cratons.csv')
+total_OFM2s.tofile(output_name + '_average_total_OFM2s_CERI_cratons.csv', sep=' ')
+print ("Data in: ", output_name + '_average_total_OFM2s_CERI_cratons.csv')
+total_OFM12s.tofile(output_name + '_average_total_OFM12s_CERI_cratons.csv', sep=' ')
+print ("Data in: ", output_name + '_average_total_OFM12s_CERI_cratons.csv')
+total_OFM12s_R.tofile(output_name + '_average_total_OFM12s_R_CERI_cratons.csv', sep=' ')
+print ("Data in: ", output_name + '_average_total_OFM12s_R_CERI_cratons.csv')
+total_OFM12s_L.tofile(output_name + '_average_total_OFM12s_L_CERI_cratons.csv', sep=' ')
+print ("Data in: ", output_name + '_average_total_OFM12s_L_CERI_cratons.csv')
+total_timesteps_OFM12s_R.tofile(output_name + '_average_total_timesteps_OFM12s_R_CERI_cratons.csv', sep=' ')
+print ("Data in: ", output_name + '_average_total_timesteps_OFM12s_R_CERI_cratons.csv')
+total_timesteps_OFM12s_L.tofile(output_name + '_average_total_timesteps_OFM12s_L_CERI_cratons.csv', sep=' ')
+print ("Data in: ", output_name + '_average_total_timesteps_OFM12s_L_CERI_cratons.csv')
+total_timesteps_OFM12s.tofile(output_name + '_average_total_timesteps_OFM12s_CERI_cratons.csv', sep=' ')
+print ("Data in: ", output_name + '_average_total_timesteps_OFM12s_CERI_cratons.csv')
 total_timesteps_OFMs.tofile(output_name + '_average_total_timesteps_OFMs_CERI_cratons.csv', sep=' ')
 print ("Data in: ", output_name + '_average_total_timesteps_OFMs_CERI_cratons.csv')
