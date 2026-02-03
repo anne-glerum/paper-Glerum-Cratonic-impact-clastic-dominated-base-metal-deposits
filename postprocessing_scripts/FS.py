@@ -16,14 +16,20 @@ from os.path import exists
 from os import mkdir
 
 # Path to models
-base = r"./"
+base = r"../"
 #model = "5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
-model = "5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
+#model = "5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
+#model = "5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
+#model = "5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton400000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
+#model = "5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
+#model = "5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
+#model = "5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
+model = "5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0"
 
 path = base + model
-if not exists(model):
+if not exists(path):
    print ("Creating new model dir")
-   mkdir(model)
+   ##mkdir(path)
 
 # original Camera settings
 #renderView1.CameraPosition = [384380.5030903542, -526868.7089745248, 530565.0653625994]
@@ -449,7 +455,7 @@ renderView1.CameraParallelScale = 351560.1389158084
 
 # save animation
 if plot_topo and plot_labels: 
-  SaveAnimation(model + '/FastScape_topography_'+str(topo_min)+ '_'+str(topo_max)+ '_' + str(topo_exag) + '.png', renderView1, ImageResolution=[1551, 810],
+  SaveAnimation(path + '/FastScape_topography_'+str(topo_min)+ '_'+str(topo_max)+ '_' + str(topo_exag) + '.png', renderView1, ImageResolution=[1551, 810],
       FrameWindow=[0, 101])
       #FrameWindow=[0, 51])
 
@@ -463,7 +469,7 @@ topography000Display.SetScalarBarVisibility(renderView1, False)
 
 # save animation
 if plot_topo: 
-  SaveAnimation(model + '/FastScape_topography_'+str(topo_min)+ '_'+str(topo_max)+'_' + str(topo_exag) + '_nolabels5.png', renderView1, ImageResolution=[1551, 810],
+  SaveAnimation(path + '/FastScape_topography_'+str(topo_min)+ '_'+str(topo_max)+'_' + str(topo_exag) + '_nolabels5.png', renderView1, ImageResolution=[1551, 810],
       FrameWindow=[0, 51])
 
 # set scalar coloring
@@ -540,7 +546,7 @@ renderView1.CameraParallelScale = 351560.1389158084
 topography000Display.SetScalarBarVisibility(renderView1, True)
 # save animation
 if plot_drainage and plot_labels: 
-  SaveAnimation(model + '/FastScape_drainagearea_' + str(topo_exag) + '.png', renderView1, ImageResolution=[1551, 810],
+  SaveAnimation(path + '/FastScape_drainagearea_' + str(topo_exag) + '.png', renderView1, ImageResolution=[1551, 810],
       FrameWindow=[0, 51])
 
 # hide color bar/color legend
@@ -555,7 +561,7 @@ renderView1.CameraParallelScale = 351560.1389158084
 
 # save animation
 if plot_drainage: 
-  SaveAnimation(model + '/FastScape_drainagearea_' + str(topo_exag) + '_nolabels5_.png', renderView1, ImageResolution=[1551, 810],
+  SaveAnimation(path + '/FastScape_drainagearea_' + str(topo_exag) + '_nolabels5_.png', renderView1, ImageResolution=[1551, 810],
       FrameWindow=[0, 51])
 
 ## set scalar coloring
@@ -643,7 +649,7 @@ if plot_drainage:
 #
 ## save animation
 #if plot_erosionrate and plot_labels: 
-#  SaveAnimation(model + '/FastScape_erosionrate_' + str(topo_exag) + '.png', renderView1, ImageResolution=[1551, 810],
+#  SaveAnimation(path + '/FastScape_erosionrate_' + str(topo_exag) + '.png', renderView1, ImageResolution=[1551, 810],
 #      FrameWindow=[0, 51])
 #
 ## hide color bar/color legend
@@ -657,7 +663,7 @@ if plot_drainage:
 #
 ## save animation
 #if plot_erosionrate: 
-#  SaveAnimation(model + '/FastScape_erosionrate_' + str(topo_exag) + '_nolabels5_.png', renderView1, ImageResolution=[1551, 810],
+#  SaveAnimation(path + '/FastScape_erosionrate_' + str(topo_exag) + '_nolabels5_.png', renderView1, ImageResolution=[1551, 810],
 #      FrameWindow=[0, 51])
 
 # set scalar coloring
@@ -710,7 +716,7 @@ renderView1.CameraParallelScale = 351560.1389158084
 
 # save animation
 if plot_catchment and plot_labels: 
-  SaveAnimation(model + '/FastScape_catchment_' + str(topo_exag) + '.png', renderView1, ImageResolution=[1512, 810],
+  SaveAnimation(path + '/FastScape_catchment_' + str(topo_exag) + '.png', renderView1, ImageResolution=[1512, 810],
       FrameWindow=[0, 51])
 
 # hide color bar/color legend
@@ -724,7 +730,7 @@ renderView1.CameraParallelScale = 351560.1389158084
 
 # save animation
 if plot_catchment: 
-  SaveAnimation(model + '/FastScape_catchment_' + str(topo_exag) + '_nolabels5_.png', renderView1, ImageResolution=[1512, 810],
+  SaveAnimation(path + '/FastScape_catchment_' + str(topo_exag) + '_nolabels5_.png', renderView1, ImageResolution=[1512, 810],
       FrameWindow=[0, 51])
 
 # set scalar coloring
@@ -777,7 +783,7 @@ renderView1.CameraParallelScale = 351560.1389158084
 
 # save animation
 if plot_erosionrate and plot_labels: 
-  SaveAnimation(model + '/FastScape_erosion_rate_' + str(topo_exag) + '.png', renderView1, ImageResolution=[1512, 810],
+  SaveAnimation(path + '/FastScape_erosion_rate_' + str(topo_exag) + '.png', renderView1, ImageResolution=[1512, 810],
       FrameWindow=[0, 51])
 
 # hide color bar/color legend
@@ -791,7 +797,7 @@ renderView1.CameraParallelScale = 351560.1389158084
 
 # save animation
 if plot_erosionrate: 
-  SaveAnimation(model + '/FastScape_erosion_rate_' + str(topo_exag) + '_nolabels5_.png', renderView1, ImageResolution=[1512, 810],
+  SaveAnimation(path + '/FastScape_erosion_rate_' + str(topo_exag) + '_nolabels5_.png', renderView1, ImageResolution=[1512, 810],
       FrameWindow=[0, 51])
 
 # set scalar coloring
@@ -847,7 +853,7 @@ renderView1.CameraParallelScale = 351560.1389158084
 
 # save animation
 if plot_erosion and plot_labels: 
-  SaveAnimation(model + '/FastScape_total_erosion_' + str(topo_exag) + '.png', renderView1, ImageResolution=[1512, 810],
+  SaveAnimation(path + '/FastScape_total_erosion_' + str(topo_exag) + '.png', renderView1, ImageResolution=[1512, 810],
       FrameWindow=[0, 51])
 
 # hide color bar/color legend
@@ -861,7 +867,7 @@ renderView1.CameraParallelScale = 351560.1389158084
 
 # save animation
 if plot_erosion: 
-  SaveAnimation(model + '/FastScape_total_erosion_' + str(topo_exag) + '_nolabels5_.png', renderView1, ImageResolution=[1512, 810],
+  SaveAnimation(path + '/FastScape_total_erosion_' + str(topo_exag) + '_nolabels5_.png', renderView1, ImageResolution=[1512, 810],
       FrameWindow=[0, 51])
 
 #### saving camera placements for all active views
