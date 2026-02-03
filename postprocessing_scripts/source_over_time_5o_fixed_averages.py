@@ -22,7 +22,8 @@ rc("axes", titlesize=15, labelsize=12)
 rc("legend", fontsize=7)
 
 # Path to models
-base = r"./"
+base = r"../"
+base = r"../../CERI/"
 
 # Model names
 models = [
@@ -42,30 +43,40 @@ models = [
 #'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-##'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton450000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
-'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+#'5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
+'5o_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+'5o_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+'5o_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+'5o_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+'5o_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+'5o_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+'5o_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+'5o_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+'5o_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
          ]
 
-#output_name = '5o_fixed_surfPnorm_htanriftcraton_inittopo_craton400km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5o_fixed_surfPnorm_htanriftcraton_inittopo_craton400km_W3W9_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5o_fixed_surfPnorm_htanriftcraton_inittopo_craton400km_W1W2W4-8_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
-#output_name = '5o_fixed_surfPnorm_htanriftcraton_inittopo_craton450km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5o_fixed_surfPnorm_htanriftcraton_inittopo_craton450km_W5_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5o_fixed_surfPnorm_htanriftcraton_inittopo_craton450km_W1W5W6W7W9_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5o_fixed_surfPnorm_htanriftcraton_inittopo_craton450km_W2W3W4W8_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
-output_name = '5o_fixed_surfPnorm_htanriftcraton_inittopo_craton500km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5o_fixed_surfPnorm_htanriftcraton_inittopo_craton500km_W3W5W9_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5o_fixed_surfPnorm_htanriftcraton_inittopo_craton500km_W4W8_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
 #output_name = '5o_fixed_surfPnorm_htanriftcraton_inittopo_craton500km_W1W2W3W5W6W7W9_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
+#output_name = '5o_fixed_surfPnorm_htanriftcraton_inittopo_craton400km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
+#output_name = '5o_fixed_surfPnorm_htanriftcraton_inittopo_craton450km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
+#output_name = '5o_fixed_surfPnorm_htanriftcraton_inittopo_craton500km_rain0.0001_Km210_Km70_Kf1e-5_vel10_'
+output_name = '5o_fixed_CERI_craton2000km_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_'
 
 
 labels = [
@@ -178,6 +189,7 @@ counter = 0
 n_models = 0
 max_source = -2e9
 average_max_source = 0
+max_source_for_each_model = []
 
 for p in paths:
     print(p)
@@ -209,6 +221,8 @@ for p in paths:
       max_source = max(source_area.max(),max_source)
       # Add the max source area of this run to the sum
       average_max_source += source_area.max()
+      # Append to the list of max source area for each run
+      max_source_for_each_model.append(source_area.max())
     else:
       print ("File does not exist: ", p)
 
@@ -222,6 +236,9 @@ print ("Max source area:", f"{(max_source/1e6):0.2f}", "km2. ")
 print ("Average max source area:", f"{(average_max_source/n_models/1e6):0.2f}", "km2. ")
 # The max of the average source area of each run
 print ("Max average source area:", f"{((average_source_area/n_models).max()/1e6):0.2f}", "km2. ")
+# The standard deviation of the max source area
+max_source_for_each_model_array = np.array(max_source_for_each_model)
+print ("Standard deviation max source area:", f"{(np.std(max_source_for_each_model_array)/1e6):0.2f}", "km2. ")
 
 # Plot the average source area over time (divide by nine to get the average)
 #plt.plot(mean_t/1e6,average_source_area/n_models/1e6,color=colors[counter],linestyle='solid',label=labels[counter],marker=markers[counter],markevery=dmark,fillstyle='none',linewidth=3)
@@ -250,5 +267,5 @@ plt.tight_layout()
 # Name the png according to the plotted field
 # Change as needed
 field='source_area_'
-plt.savefig(output_name + '_CERI_' + str(field) + '.png',dpi=300)
+####plt.savefig(output_name + '_CERI_' + str(field) + '.png',dpi=300)
 print ("Output in: ", output_name + '_CERI_' + str(field) + '.png')

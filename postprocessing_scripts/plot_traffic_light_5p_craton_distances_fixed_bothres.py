@@ -218,7 +218,7 @@ ax.text(7.04,0.13,'source+host',rotation='vertical',ha='center',fontsize=8,color
 #ax.text(8.1,3.85,'S+H+IF',rotation='vertical',ha='center',fontsize=15)
 #ax.text(9.1,3.85,'S+H+AF',rotation='vertical',ha='center',fontsize=15)
 ax.text(8.04,0.13,'OFM3',rotation='vertical',ha='center',fontsize=8,color=colors_green[5])
-ax.text(9.04,0.13,'OFM1&2',rotation='vertical',ha='center',fontsize=8,color=colors_darkgreen[3])
+ax.text(9.04,0.13,'OFM1+2',rotation='vertical',ha='center',fontsize=8,color=colors_darkgreen[3])
 
 # Second subplot
 # Transparent background
