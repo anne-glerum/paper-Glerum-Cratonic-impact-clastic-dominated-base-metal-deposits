@@ -26,6 +26,7 @@ print ("Matplotlib version: ", matplotlib.__version__)
 base = r"/Users/acglerum/Documents/Postdoc/SG_SB/Projects/CERI_cratons/"
 
 output_name = '5p_fixed_regime_diagram_dOFM_cuttonewOS_plusinf'
+output_name = '5p_fixed_regime_diagram_dOFM_cuttonewOS'
 
 # File name
 # real file
@@ -65,19 +66,19 @@ models = [
 '5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 ##@'5p_fixed_CERI_surfPnorm_htanriftcraton_inittopo_craton500000.0_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0',
 #
-'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+##'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed9872345_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
 #'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed9023857_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
 #'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed7646354_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
 #'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed5346276_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
 #'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed3458045_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
-'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
+##'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed2928465_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
 #'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed2349871_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
 #'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed2323432_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200',
 #'5p_fixed_CERI_craton2000km_SWI2_minvisc5e18_A0.25_seed1236549_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200'
 ]
 
 # Read the data file
-dataframe = pd.read_csv(base+tail, sep=",", comment='#')
+dataframe = pd.read_csv(base+'postprocessing_scripts/'+tail, sep=",", comment='#')
 
 # Some border faults live on till the end of the simulation, they were given a value of 50 My.
 # Same for rifts, some do not stabilize within the model time.
@@ -115,7 +116,7 @@ color_left_darker = (0.207843137254902, 0.309803921568627, 0.482352941176471)
 color_right_darker = (0.231372549019608, 0.462745098039216, 0.286274509803922) 
 
 # Create empty plot
-n_columns = 4
+n_columns = 3 #4
 n_rows = 3
 fig, axs = plt.subplots(n_rows,n_columns,figsize=(2*n_columns, 2*n_rows),dpi=300, sharex='col', sharey='row')
 fig.subplots_adjust(hspace = 0.05)
@@ -157,14 +158,14 @@ for m in models:
   column_number = 0
   model_index = 0
 
-  if Path(m).exists():
-    path = base + m
+  path = base + m
+  if Path(path).exists():
     stat_files = sorted(Path(path).glob('*stats_2*'))
     ASPECT_statistics_file = path + '/statistics'
   if len(stat_files) == 1:
 
     # Read the data file
-    filename = m + "/" + stat_files[0].name
+    filename = path + "/" + stat_files[0].name
     dataframe_stats = pd.read_csv(filename, sep=",") #,converters={'time': int,'n_OFM1': int,'n_OFM2': int, 'n_OFM3': int})
     if "craton400" in m:
       dataframe_stats['initial_craton_distance'] = 50
@@ -315,21 +316,21 @@ ftsize = 10
 axs[0,0].set_title("50 km",weight="bold",fontsize=ftsize)
 axs[0,1].set_title("100 km",weight="bold",fontsize=ftsize)
 axs[0,2].set_title("150 km",weight="bold",fontsize=ftsize)
-axs[0,3].set_title("inf",weight="bold",fontsize=ftsize)
+#axs[0,3].set_title("inf",weight="bold",fontsize=ftsize)
 fig.suptitle('Craton edge distance',weight="bold", fontsize=ftsize)
 for ax in axs.reshape(-1):
-  ax.tick_params(axis='both', labelsize=10)
+  ax.tick_params(axis='both', labelsize=0.8*ftsize)
   if ax.get_xlabel() == 'time':
-    ax.set_xlim(0,27) # My
+    ax.set_xlim(-2,27) # My
     ax.set_xticks([0,5,10,15,20,25])
-    ax.set_xlabel("Time [My]",weight="bold",fontsize=1.5*ftsize)
+    ax.set_xlabel("Time [My]",weight="bold",fontsize=1.*ftsize)
   else:
     print ("This x-axis label wasn't expected.")
   
   if ax.get_ylabel() == 'type_OFM':
-    ax.set_ylabel("OFM type [-]",weight="bold",fontsize=1.9*ftsize)
+    ax.set_ylabel("OFM type [-]",weight="bold",fontsize=1.*ftsize)
   elif ax.get_ylabel() == 'numtype_OFM':
-    ax.set_ylabel("OFM type [-]",weight="bold",fontsize=1.9*ftsize)
+    ax.set_ylabel("OFM type [-]",weight="bold",fontsize=1.*ftsize)
     ax.set_ylim(0.5,3.5)
     ax.set_yticks([1,2,3])
     ax.set_yticklabels(["OFM1", "OFM2", "OFM3"])
@@ -348,5 +349,5 @@ for ax in axs.reshape(-1):
 ## Save figure
 # Make sure the y-axes labels align left
 fig.align_ylabels(axs[:, 0])
-plt.savefig(output_name + '_CERI_cratons.png',dpi=300)    
+plt.savefig(base + 'postprocessing_scripts/' + output_name + '_CERI_cratons.png',dpi=300)
 print ("Output in: ", output_name + '_CERI_cratons.png')

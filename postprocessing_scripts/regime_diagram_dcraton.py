@@ -28,7 +28,6 @@ tail = r"5p_fixed_CERI_craton_analysis.txt"
 # real file
 tail = r"5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0.csv"
 tail = r"5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_cuttonewOS.csv"
-tail = r"5o_fixed_CERI_surfPnorm_htanriftcraton_inittopo_rain0.0001_Ksilt210_Ksand70_Kf1e-05_SL-200_vel10_tmax25000000.0_cuttonewOS_revisionupdates.csv"
 
 # Structure of input file: 3x9 rows of the following columns:
 # initial_craton_distance,initial_fault_geometry,start_left_border_fault,start_right_border_fault,end_left_border_fault,end_right_border_fault,start_migration,end_migration,migration_direction,start_oceanic_spreading,n_source_max,n_source_host_max,n_OFM3_max,n_OFM1_max,n_OFM2_max,n_OFM12_max
@@ -64,15 +63,15 @@ dataframe.loc[dataframe['initial_craton_distance'] == 2000, 'initial_craton_dist
 # Order of initial geometries
 # 5o
 order_geometries = [
-"Lside-ULCshear 2Lside-Rdip", #
-"Lside-ULCshear Lside-C Lside-Rdip", #
+"Lside-ULCshear 2Lside-Rdip",#
+"Lside-ULCshear Lside-C Lside-Rdip",#
 "Lside-ULCshear Lside-Rdip",#
-#"ULCshear-LD Lside-Rdip Lside-Ldip",#
+#"ULCshear-LD Lside-Rdip Lside-Ldip",
 "ULCshear-LD Lside-Rdip",#
-"ULCshear 3Lside-Rdip Rside-Ldip",
-"ULCshear 2Lside-Rdip",
+"ULCshear 3Lside-Rdip Rside-Ldip",#
+"ULCshear 2Lside-Rdip",#
 "ULCshear Lside-C",#
-"ULCshear Lside-Rdip", #
+"ULCshear Lside-Rdip",#
 "ULCshear 2Lside-Rdip Rside-Ldip",#
 "ULCshear Lside-C Rside-Ldip",#
 "ULCshear Lside-C 2Rside-Ldip",#
