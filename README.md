@@ -4,13 +4,13 @@ This repository belongs to the paper
 
 by
 
-Glerum, A.
+Glerum, A. C.
 Brune, S.,
 Magnall, J. M.,
 Weis, P. and
 Gleeson, S. A.
 
-currently under review.
+in Earth and Planetary Science Letters 680, 119881. doi: 10.1016/j.epsl.2026.119881. 
 
 # Documentation
 The numerical simulations presented in this paper were run with the geodynamics code ASPECT ([https://aspect.geodynamics.org/](https://aspect.geodynamics.org/)) coupled to the surface processes code FastScape ([https://fastscape.org/fastscapelib-fortran/](https://fastscape.org/fastscapelib-fortran/)).
